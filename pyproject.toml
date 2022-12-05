@@ -1,0 +1,23 @@
+[build-system]
+requires = ['hatchling']
+build-backend = "hatchling.build"
+
+[project]
+name = "gtools_Geoff_McNamara"
+version = "0.0.1"
+authors = [
+  {name="Geoff McNamara", email="geoff.mcnamara@gmail.com"},
+]
+description="This package provides a multitude of functions or classes to manipulate data into ascii color tables or build dashboards"
+readme="README.md"
+requires-python=">=3.7"
+classifiers=[
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: POSIX :: Linux",
+]
+
+[project.urls]
+"Homepage"="https://github.com/geoffmcnamara/gtools"
+"Bug Trakers"="https://github.com/geoffmcnamara/gtools/issues"
+
