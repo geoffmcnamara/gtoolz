@@ -1,7 +1,7 @@
-gtools_pkg
-==========
+gtools
+======
 
 .. toctree::
    :maxdepth: 4
 
-   src
+   gtools

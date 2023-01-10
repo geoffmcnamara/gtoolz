@@ -8,6 +8,7 @@ version = "0.0.1"
 authors = [
   {name="Geoff McNamara", email="geoff.mcnamara@gmail.com"},
 ]
+# exclude = [ "/docs/Makefile" ]
 description="This package provides a multitude of functions or classes to manipulate data into ascii color tables or build dashboards"
 readme="README.md"
 requires-python=">=3.7"
@@ -16,6 +17,10 @@ classifiers=[
   "License :: OSI Approved :: MIT License",
   "Operating System :: POSIX :: Linux",
 ]
+
+dependencies=[
+  'pandas',
+  'docopt']
 
 [project.urls]
 "Homepage"="https://github.com/geoffmcnamara/gtools"
