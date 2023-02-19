@@ -1,12 +1,12 @@
-# gmodules
+# gtoolz
 
 This repository is for holding python(3+) tools that I frequently need
 
-Simply run gtools.py to see some of the possible uses.
+Simply run nicetools.py to see some of the possible uses.
 
 Tool File:
 
-* gtools.py a collection of many tools to help produce charts or tables from data
+* gtoolz.py a collection of tools to help produce charts or tables from data
   * debugging tool
   * tools for colorizing text of boxes or tables
   * tools to tabulize data including pandas, list of lists, lists of dictionaries, csv files etc
@@ -17,17 +17,23 @@ Tool File:
   * tools to pull data from files lines of output and build tables, lists of lists, or pandas, etc
   * rudimentary progress bars or percentage bar
   * spinners while others tasks are carried out
-  * tools to read html tables and turn it into  colorfull ascii table with selected columns and/or filtered data
+  * tools to read html tables and turn it into colorfull ascii table with selected columns and/or filtered data
   * other tools to manipulate text or data
 
-This set of tools offers over 100 functions.
+This set of tools offers over 100 functions. 
 
-[gtools-demo](https://github.com/geoffmcnamara/gmodules/blob/main/gtools-demo.gif)
+You can get a sense of some of the functionality by running gtoolz from the command line.
 
 Example of use in code:
 
 ```python
-from gtools import printit, dbug, funcname, docvars, gselect, quick-plot, gtable  # etc
+import random
+from gtoolz import printit, dbug, funcname, docvars, gselect, quick-plot, gtable  # etc
+
+lines = []
+with Spinner("Working...", 'elapsed', elapsed_clr="yellow! on black"):
+  for n in range(5):
+    lines.append([f"This is line {n}", f"col1val")
 ```
 
 Enjoy
