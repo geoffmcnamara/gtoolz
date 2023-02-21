@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+"""
+purpose: to run quick demos (aka tests) on selected gtoolz functions or features
+options: none
+returns: nothing
+notes: this is a continual work in progress (WIP)
+author: geoff.mcnamara@gmail.com
+date: 20230220
+"""
 
 # import pytest
 import types

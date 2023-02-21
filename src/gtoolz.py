@@ -5756,6 +5756,7 @@ def gtable(lol, *args, **kwargs):
     skip = bool_val(['skip'], args, kwargs, dflt=False)  # skip non-compliant lines/rows?
     ignore_b = bool_val(['ignore'], args, kwargs, dflt=False)  # skip non-compliant lines/rows?
     cols = kvarg_val(["cols", "columns", "chunks", "splits"], kwargs, dflt=1)
+    cols_limit = kvarg_val(["cols_limit", "max_cols"], kwargs, dflt=0)
     lol_b = bool_val(["lol", 'data'], args, kwargs, dflt=False)
     rtrn = kvarg_val(["rtrn", "return", "rtrn_type"], kwargs, dflt="")
     if rtrn in ("lol", 'data'):
@@ -5792,6 +5793,8 @@ def gtable(lol, *args, **kwargs):
     import numpy as np
     # """--== Convert to lol ==--"""
     lol = cnvrt2lol(lol, colnames=colnames)
+    if int(cols_limit) > 0:
+        lol = [row[:int(cols_limit)] for row in lol]
     # if isinstance(lol[0], str) or isinstance(lol[0], int) or isinstance(lol[0], float):
     #     dbug("Did we get here?", 'ask')
     #     lol = [(lol)]  # lol maybe a simple list so turn it into an lol with one row
@@ -6933,8 +6936,11 @@ def cond_num(elem, *args, **kwargs):
     # dbug(funcname())
     # dbug(repr(elem))
     # """--== Config ==--"""
-    clr_b = bool_val(["neg", "color", "clr", "colorize", "pos"], args, kwargs, dflt=True)  # "neg" and 'pos'are remanants of past code
-    # dbug(clr_b)
+    clr_b = bool_val(["neg", "color", "clr", "colorize", "pos"], args, kwargs, dflt=False)  # "neg" and 'pos'are remanants of past code
+    # if clr_b:
+    #     dbug(args)
+    #     dbug(kwargs)
+    #     dbug(clr_b)
     rnd = kvarg_val(['round', 'rnd'], kwargs, dflt="")
     neg_color = kvarg_val(['neg_color'], kwargs, dflt='red! on rgb(0,0,0)')
     pos_color = kvarg_val(['pos_color'], kwargs, dflt='green! on rgb(0,0,0)')

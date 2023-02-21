@@ -716,16 +716,6 @@
         
 
         
-            <div class="itemName"><code><a href="#fstring" class="internal-link" title="gtoolz.fstring">fstring</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="#funcname" class="internal-link" title="gtoolz.funcname">funcname</a></code>
             </div>
         
@@ -1851,7 +1841,7 @@
     
     <td>Function</td>
     <td><code><a href="#askYN" class="internal-link" title="gtoolz.askYN">ask<wbr></wbr>YN</a></code></td>
-    <td>purpose: using msg as a prompt, this will ask for a simple Yes or No response and return a bool     Typically used with an "if " statement but can simply be used as: askYN() options:     - centered: bool     - timeout: int=0: int  # how long to wait in seconds     - auto: bool     - exit: bool     - quit: bool           # if response is in  ("q"...</td>
+    <td>purpose: using msg as a prompt, this will ask for a simple Yes or No response and return a bool     Typically used with an "if " statement but can simply be used as: askYN() options:     - centered: bool     - boxed: bool          # puts only the prompt in a box with a reply prompt centered under it     - timeout: int=0: int  # how long to wait in seconds     - auto: bool     - exit: bool     - quit: bool           # if response is in  ("q"...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2095,11 +2085,6 @@
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#fstring" class="internal-link" title="gtoolz.fstring">fstring</a></code></td>
-    <td>purpose: alternative to f-strings use: fsting(s) returns: formated s string use: not currently used but it was used in the early versions of python3 that lacked f-strings</td>
-  </tr><tr class="function">
-    
-    <td>Function</td>
     <td><code><a href="#funcname" class="internal-link" title="gtoolz.funcname">funcname</a></code></td>
     <td>purpose: returns current function name - primarily used for debugging</td>
   </tr><tr class="function">
@@ -2231,7 +2216,7 @@
     
     <td>Function</td>
     <td><code><a href="#handleOPTS" class="internal-link" title="gtoolz.handleOPTS">handle<wbr></wbr>OPTS</a></code></td>
-    <td>Usage:     {0} [-hEP] [--dir] [&lt;filename&gt;]     {0} -s &lt;func&gt;     {0} -S &lt;func&gt;     {0} -t [&lt;func&gt;]     {0} -T &lt;func&gt; [&lt;fargs&gt;...]</td>
+    <td>Usage:     {0} [-hEP] [--dir] [&lt;filename&gt;]     {0} -s &lt;func&gt;     {0} -S &lt;func&gt;     {0} -t [&lt;func&gt;]     {0} -T &lt;func&gt; [&lt;fargs&gt;]</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2541,7 +2526,7 @@
     
     <td>Function</td>
     <td><code><a href="#tst" class="internal-link" title="gtoolz.tst">tst</a></code></td>
-    <td>purpose: for development one testing only - subject to change at anytime returns: None notes: This is for testing only</td>
+    <td>purpose: for development one testing only - subject to change at anytime returns: None notes: This is for testing only This is just an example testing function. This example shows how you can quickly test whatever you want (any function) while you are still editing a file...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2717,6 +2702,7 @@ returns: "done" or None depending on use</p></div>
     Typically used with an "if " statement but can simply be used as: askYN()
 options:
     - centered: bool
+    - boxed: bool          # puts only the prompt in a box with a reply prompt centered under it
     - timeout: int=0: int  # how long to wait in seconds
     - auto: bool
     - exit: bool
@@ -3554,7 +3540,7 @@ options:
     -ask: bool        # forces a breakpoint, stops execution ans asks the user before continuing
     -here: bool       # will only return the DEBUG info (file, function. linenumber) as a string without printing - typically used like this boxed("my box", footer=dbug('here'))
     -boxed: bool      # boxes debug output
-    -box_color: str   # declares box_color default is 'red! on black'
+    -box_color: str   # declares box_color default is 'red! on grey40'
     -color: str       # declares text output color
     -centered: bool   # centers the debug output
     -lst: bool        # forces printing the variable contents as a list (like printit()) - allows displaying ansii codes properly
@@ -4123,32 +4109,6 @@ options:
 --    include='bottom' will include the end pattern line
 --    include='both' will include top and end pattern matching lines
 returns: lines between (or including) begin pattern and end pattern from filename (or a list of lines)</p></div>
-  </div>
-</div><div class="basefunction">
-  
-  
-  <a name="gtoolz.fstring">
-    
-  </a>
-  <a name="fstring">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">fstring</span>(s):
-    
-    <a class="headerLink" href="#fstring" title="gtoolz.fstring">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p class="pre">purpose: alternative to f-strings
-use: fsting(s)
-returns: formated s string
-use: not currently used but it was used in the early versions of python3 that lacked f-strings</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -4845,7 +4805,12 @@ examples:
 &gt; tsts = [{1: "one", 2: "two", 3: "three"},["one", "two", "three"], {"file1": "path/to/file1", "file2": "path/to/file2"} ]
 &gt; for tst in tsts:
 ...     ans = gselect(tst, rtrn="v")
-...     ans = gselect(tst, rtrn="k")</p></div>
+...     ans = gselect(tst, rtrn="k")
+-----------
+To run a function using gselect - write code similar to this:
+    selections = {"Clean up files": 'clean', "Copy file": 'copyfile'}
+    ans = gselect(selections, rtrn="v", quit=True)
+    globals()[ans]()  # this will run the function name returned .. eg: clean() or copyfile() obviously you can do a lot with this</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -5046,16 +5011,16 @@ use:
     {0} -s &lt;func&gt;
     {0} -S &lt;func&gt;
     {0} -t [&lt;func&gt;]
-    {0} -T &lt;func&gt; [&lt;fargs&gt;...]
+    {0} -T &lt;func&gt; [&lt;fargs&gt;]
 
 Options
-    -h                Help
-    --dir             prints all the functions here and exits
-    -t                runs all doctest calls
-    -T &lt;func&gt;         runs specified func
-    -v, --version     Prints version
-    -s &lt;func&gt;         Show code block
-    -S &lt;func&gt;         Show __doc__</p></div>
+    -h                     Help
+    --dir                  prints all the functions here and exits
+    -t                     runs all doctest calls
+    -T &lt;func&gt; [&lt;fargs&gt;]    runs specified func with optional args=fargs
+    -v, --version          Prints version
+    -s &lt;func&gt;              Show code block
+    -S &lt;func&gt;              Show __doc__</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -5463,7 +5428,7 @@ returns str(key_val) or default_val(which is "" if none is provided)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">kvarg_val_demo</span>():
+    <span class="py-keyword">def</span> <span class="py-defname">kvarg_val_demo</span>(*args, **kwargs):
     
     <a class="headerLink" href="#kvarg_val_demo" title="gtoolz.kvarg_val_demo">
       
@@ -5569,7 +5534,7 @@ use: list_files("/tmp")</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">main</span>():
+    <span class="py-keyword">def</span> <span class="py-defname">main</span>(main_args):
     
     <a class="headerLink" href="#main" title="gtoolz.main">
       
@@ -6869,7 +6834,7 @@ requires:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">tst</span>():
+    <span class="py-keyword">def</span> <span class="py-defname">tst</span>(*args, **kwargs):
     
     <a class="headerLink" href="#tst" title="gtoolz.tst">
       
@@ -6881,7 +6846,24 @@ requires:
     
     <div><p class="pre">purpose: for development one testing only - subject to change at anytime
 returns: None
-notes: This is for testing only</p></div>
+notes: This is for testing only
+This is just an example testing function.
+This example shows how you can quickly test whatever you want (any function) while you are still editing a file.
+You can completely remove this function.
+    or rename it
+    or call another function within it
+    or leave it as an example.
+    It demonstrates the use of the -T argument.
+This is a test function and can be called while editing in vim with...  :! ./% -T tst all,my,arguments,go=here
+    or  :! ./% -T tst This is farg1
+    or  :! ./% -T tst This is farg1  farg2
+    or  :! ./% -T tst This is farg1  farg2,my_kwarg=this_val
+    or  :! ./% -T tst This is farg1  "farg2, my_kwarg=this val"
+    or  :! ./% -T tst This is farg1  "farg2,my_kwarg=this val"
+Notes:  The args here are do not need to be separated by a space and there is no need to use any quotes unless your key value needs a space.
+        All variables will get quoted for you.
+        If you separate your function arguments with a space then you will need to quote all the arguments as one string
+        The there is a space(s) anywhere in the arguments just quote the while set of argument words</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -7295,7 +7277,7 @@ returns: rgb(r,g,b) text string instead of supplied color</p></div>
   <div class="container">
     <a href="index.html">API Documentation</a> for gtoolz,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2023-02-18 10:12:13.
+    22.9.1 at 2023-02-20 09:38:55.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
