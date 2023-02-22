@@ -451,7 +451,7 @@ def write_file(data, fname, *args, **kwargs):
     csv_lines = []      # this will become a list of comma delimited strings/lines and will include a header string/line as the first line
     content_lines = []  # lines read from the file (if it exists) - all non-comment lines
     comment_lines = []  # comments lines read from the file if it exists
-    file_type = "csv"   # this will either be a 'csv' or a 'dat' based on file name extension
+    # file_type = "csv"   # this will either be a 'csv' or a 'dat' based on file name extension
     """--== Convert ==--"""
     if isinstance(data, str):
         # dbug(f"Converting a data if str into a list... data: {data}")
@@ -462,12 +462,12 @@ def write_file(data, fname, *args, **kwargs):
             if isinstance(row, list):
                 row = comma_join(row)
         csv_lines.append(row)
-    if isinstance(colnames, list) and colnames != []:
+    # if isinstance(colnames, list) and colnames != []:
         # colnames was given
         # dbug(colnames)
-        hdr_line = comma_join(colnames)
+        # hdr_line = comma_join(colnames)
         # data.insert(0, ", ".join(colnames))
-    """--== Validate ==--"""
+    # """--== Validate ==--"""
     if not isinstance(colnames, list):
         dbug("Colnames must be a list ... colnames: {colnames} ... returning...")
         return
@@ -5468,6 +5468,33 @@ def flattenit(my_l):
     # ### EOB def flattenit(my_l): ### #
 
 
+# #####################################
+def fixlol(my_lol=[], *args, **kwargs):
+    # #################################
+    """
+    purpose: makes the length or every "row" in a list of lists the same number of elements (length)
+    options:
+        - length: int        # defaults to the length of the first row ie len(my_lol[0])
+        - blank: str|None    # defaults to None but can be any string eg blank="..."
+    returns: fixed lol with all rows the same length (number of elements)
+    used by gtable with option "fix"
+    """
+    length = len(my_lol[0])  # or what is declared
+    length = kvarg_val(["len", "length"], kwargs, dflt=length)
+    length = int(length)
+    blanks = kvarg_val(["blank", "blanks", "pad"], kwargs, dflt=None)
+    # """--== SEP_LINE ==--"""
+    # """--== SEP_LINE ==--"""
+    # """--== SEP_LINE ==--"""
+    my_lol = [row[:length] for row in my_lol]  # truncate first
+    # now pad each row with None
+    for num, row in enumerate(my_lol):
+        while len(row) < length:
+            my_lol[num].append(blanks)
+    return my_lol
+    # ### EOB def fixlol(my_lol=[], *args, **kwargs): ### #
+
+
 # ###################################
 def cnvrt2lol(data, *args, **kwargs):
     # ###############################
@@ -5477,6 +5504,8 @@ def cnvrt2lol(data, *args, **kwargs):
         - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames
         - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values
         - index: bool         # TODO
+        - fix: bool           # will "fix" all the rows of an lol to the length of the first row (be careful with this)
+        - blanks: str|None    # default=None blanks sets the string for elements added in row when fix option is used
     returns: a list of lists (rows of columns) with the first row having colnames
     """
     # """--== SEP_LINE ==--"""
@@ -5492,6 +5521,8 @@ def cnvrt2lol(data, *args, **kwargs):
     # idx_b = kvarg_val(["colnames"], kwargs, dflt=[])  # TODO
     # hdr_b = kvarg_val(["hdr"], kwargs, dflt=[])
     delimiter = kvarg_val(["delim", "delimiter"], kwargs, dflt=",")
+    fix_b = bool_val("fix", args, kwargs, dflt=False)
+    blanks = kvarg_val(["blank", "blanks"], kwargs, dflt=None)
     # """--== Init ==--"""
     lol = data
     # add_colnames_flag = False
@@ -5573,7 +5604,7 @@ def cnvrt2lol(data, *args, **kwargs):
         lol = [(lol)]  # lol maybe a simple list so turn it into an lol with one row
     # """--== deal with numpy's ==--"""
     if 'ndarray' in str(type(lol)):
-        import numpy as np
+        # import numpy as np
         lol = lol.tolist()
     # """--== make sure we have colnames ==--"""
     if len(colnames) > 0 and colnames != "done":
@@ -5582,6 +5613,8 @@ def cnvrt2lol(data, *args, **kwargs):
                 lol.insert(0, colnames)
                 colnames = "done"
     # dbug(f"Returning lol: {lol[:3]}")
+    if fix_b:
+        lol = fixlol(lol, blanks=blanks)
     return lol
     # ### EOB def cnvrt2lol(data, *args, **kwargs): # ###
 
@@ -5677,6 +5710,7 @@ def gtable(lol, *args, **kwargs):
         - cell_pad=' ': str    # you can set the padding char(s)
         - strip: bool          # strip all white space off of ever element in every row
         - blanks: str          # you can declare how blank cells (blank elements in a row) should appear
+        - fix: bool            # default=False - if true then everry row of the data will be made the length of the first row
         - ignore: bool         # default=False builds the table even if the number of columns is different on the rows - makes it easier to troublshoot
         - cols: int            # split a table into several tables or columns (aka chunks)
         - lol: bool            # default=False - will return the conditioned lol (rows of columns) instead of the default printable lines
@@ -5763,6 +5797,7 @@ def gtable(lol, *args, **kwargs):
         lol_b = True
     # reverse_b = bool_val(["rev", "rvsd", "reverse", "reversed"], args, kwargs, dflt=False)  # TODO - ie lol.reverse()
     nohdr_b = bool_val(["nohdr", "no_hdr", "nocolnames"], args, kwargs, dflt=False)  # removes first line (hdr/colnames) from table
+    fix_b = bool_val(['fix'], args, kwargs, dflt=False)  # make all rows same number of columns as first row
     # """--== Validate ==--"""
     if not isinstance(selected_cols, list):
         dbug(f"selected_cols: {selected_cols} must be a list ... please investigate... returning...")
@@ -5789,10 +5824,10 @@ def gtable(lol, *args, **kwargs):
     # cell_pad = " "  # add before and after @ elem - this has to come after sub_color(color)
     max_width = 0
     # """--== Imports ==--"""
-    import pandas as pd
-    import numpy as np
+    # import pandas as pd
+    # import numpy as np
     # """--== Convert to lol ==--"""
-    lol = cnvrt2lol(lol, colnames=colnames)
+    lol = cnvrt2lol(lol, colnames=colnames, fix=fix_b, blanks=blanks)
     if int(cols_limit) > 0:
         lol = [row[:int(cols_limit)] for row in lol]
     # if isinstance(lol[0], str) or isinstance(lol[0], int) or isinstance(lol[0], float):
