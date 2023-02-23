@@ -41,7 +41,7 @@ import inspect
 from inspect import (getframeinfo, currentframe)
 from docopt import docopt
 import time
-import requests
+# import requests
 import threading
 import configparser
 import itertools
@@ -1709,9 +1709,12 @@ def bool_val_demo():
 
 def cfg_val(keys, section, cfg_d, dflt=""):
     """
-    purpose: to retrieve cfg val while allowing diffent key name request to get a specifi key
+    purpose: to retrieve cfg val while allowing different key name request to get a specifi key
     options:
     returns: value
+    use:
+        cfg_d = handleCFG("/path/to/api.cfg")
+        api_key = cfg_val(["api", "key", "api_key"], 'testpypi', cfg_d, dflt="1234")
     """
     """--== Debugging ==--"""
     # dbug(section)
@@ -8786,6 +8789,7 @@ def get_html_tst():
         version: Prints chrome browser version
         disable-infobars: Prevents Chrome from displaying the notification ‘Chrome is being controlled by automated software
     """
+    import requests
     urls = ["http://www.python.org",
             "http://google.com",
             "http://olympus.realpython.org/profiles/poseidon",
@@ -11248,6 +11252,10 @@ def isempty(my_var):  # , *args, **kwargs):
     options: None
     returns: bool
     """
+    if isinstance(my_var, str):
+        if my_var == "None":
+            # yes, consider this empty
+            return True
     return not bool(my_var)
 
 

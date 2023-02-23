@@ -2,9 +2,21 @@
 
 This repository is for holding python(3+) tools that I frequently need
 
+## Install
+
+pip install gtoolz
+
+  or
+
+see: [https://github.com/geoffmcnamara/gtoolz]
+
+## Use
+
 Simply run gtoolz.py (or see ./test/test_gtoolz.py) to see some of the possible uses.
 
-## gtoolz.py a collection of tools to help produce collect data, produce charts or tables from any type of data
+## Features
+
+### gtoolz.py a collection of tools to help produce collect data, produce charts or tables from any type of data
 
   * a useful breakpoint type debugging tool is included (ie dbug(msg or variable... etc))
   * tools for colorizing text of boxes or tables
