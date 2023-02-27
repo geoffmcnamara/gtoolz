@@ -346,6 +346,26 @@
         
 
         
+            <div class="itemName"><code><a href="#chkbox_demo" class="internal-link" title="gtoolz.chkbox_demo">chkbox<wbr></wbr>_demo</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#chkboxes" class="internal-link" title="gtoolz.chkboxes">chkboxes</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#chunkit" class="internal-link" title="gtoolz.chunkit">chunkit</a></code>
             </div>
         
@@ -687,6 +707,16 @@
 
         
             <div class="itemName"><code><a href="#first_matched_line" class="internal-link" title="gtoolz.first_matched_line">first<wbr></wbr>_matched<wbr></wbr>_line</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#fixlol" class="internal-link" title="gtoolz.fixlol">fixlol</a></code>
             </div>
         
 
@@ -1725,6 +1755,16 @@
         
 
         
+            <div class="itemName"><code><a href="#__version__" class="internal-link" title="gtoolz.__version__">__version__</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#bg_colors_d" class="internal-link" title="gtoolz.bg_colors_d">bg<wbr></wbr>_colors<wbr></wbr>_d</a></code>
             </div>
         
@@ -1836,7 +1876,7 @@
     
     <td>Function</td>
     <td><code><a href="#add_or_replace" class="internal-link" title="gtoolz.add_or_replace">add<wbr></wbr>_or<wbr></wbr>_replace</a></code></td>
-    <td>purpose: Adds or replaces a line in a file where pattern occurs required: filename, action: str [before|after|replace|either] ,pattern, new_line action: before|after|replace|either (either will replace if it is found or add if it is not) options: -   backup: bool=True, -   ask: bool=False, -   centered: bool=False, -   shadowed: bool=False pattern: needs to be unique regex...</td>
+    <td>purpose: Adds or replaces a line in a file where pattern occurs required: filename, action: str [before|after|replace|either] ,pattern, new_line action: before|after|replace|either (either will replace if it is found or add if it is not) options: -   backup: bool=True, -   ask: bool=False, -   prnt: bool=False -   centered: bool=False, -   shadowed: bool=False pattern: needs to be unique regex...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -1891,12 +1931,22 @@
     
     <td>Function</td>
     <td><code><a href="#cfg_val" class="internal-link" title="gtoolz.cfg_val">cfg<wbr></wbr>_val</a></code></td>
-    <td>purpose: to retrieve cfg val while allowing diffent key name request to get a specifi key options: returns: value</td>
+    <td>purpose: to retrieve cfg val while allowing different key name request to get a specific key options: returns: value use:     cfg_d = handleCFG("/path/to/api.cfg")     api_key = cfg_val(["api", "key", "api_key"], 'testpypi', cfg_d, dflt="1234")     # above will find the api_key if it is defined in the file with any of the names in the list for section='testpypi'...</td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#chk_substr" class="internal-link" title="gtoolz.chk_substr">chk<wbr></wbr>_substr</a></code></td>
     <td>purpose: given a list of strings to check (chk_l) and a list of substrings to compare (strgs_l)         if any "compare" substring is in any string in check list of strings then             do action either 'exclude' or 'include' required:     - chk_l: list | str     - strgs_l: list options:     - action: str  # default is 'exclude' return: new_list usage:     # given a list of functions, exclude the ones that have contain any of the substrings in the exclude_l list     funcs_l = chk_substr(funcs_l, exclude_l, action='exclude')...</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#chkbox_demo" class="internal-link" title="gtoolz.chkbox_demo">chkbox<wbr></wbr>_demo</a></code></td>
+    <td>purpose: chkbox() demo returns: None</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#chkboxes" class="internal-link" title="gtoolz.chkboxes">chkboxes</a></code></td>
+    <td>purpose: display a list of empty checkboxes|ballot boxes with chkd_l boxes checked and xed_l boxes with and X required:     - my_l: list      # list of check box names     - chkd_l: list    # list of boxes to be checked options:     - dflt: str       # default='empty' - alternatives: default= or dflt= 'chk', 'chkd', 'checked', 'all_chkd', 'chk_all , 'xed' 'x_all', 'all_x'...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -1936,7 +1986,7 @@
     
     <td>Function</td>
     <td><code><a href="#cnvrt2lol" class="internal-link" title="gtoolz.cnvrt2lol">cnvrt2lol</a></code></td>
-    <td>purpose: accepts any type of "data" (ie str|list|pandas|list of dictionaries|csv_file_name etc) and converts to a list of lists (ie lol) options:     - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames     - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values     - index: bool         # TODO returns: a list of lists (rows of columns) with the first row having colnames...</td>
+    <td>purpose: accepts any type of "data" (ie str|list|pandas|list of dictionaries|csv_file_name etc) and converts to a list of lists (ie lol) options:     - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames     - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values     - index: bool         # TODO     - fix: bool           # will "fix" all the rows of an lol to the length of the first row (be careful with this)     - blanks: str|None    # default=None blanks sets the string for elements added in row when fix option is used returns: a list of lists (rows of columns) with the first row having colnames...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2075,6 +2125,11 @@
   </tr><tr class="function">
     
     <td>Function</td>
+    <td><code><a href="#fixlol" class="internal-link" title="gtoolz.fixlol">fixlol</a></code></td>
+    <td>purpose: makes the length or every "row" in a list of lists the same number of elements (length) options:     - length: int        # defaults to the length of the first row ie len(my_lol[0])     - blank: str|None    # defaults to None but can be any string eg blank="...</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
     <td><code><a href="#flattenit" class="internal-link" title="gtoolz.flattenit">flattenit</a></code></td>
     <td>purpose: "flattens nested lists options: none returns: list</td>
   </tr><tr class="function">
@@ -2106,7 +2161,7 @@
     
     <td>Function</td>
     <td><code><a href="#gclr_demo" class="internal-link" title="gtoolz.gclr_demo">gclr<wbr></wbr>_demo</a></code></td>
-    <td>purpose: demo of using gclr()  returns: None</td>
+    <td>purpose: demo of using gclr() returns: None</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2181,7 +2236,7 @@
     
     <td>Function</td>
     <td><code><a href="#grep_lines" class="internal-link" title="gtoolz.grep_lines">grep<wbr></wbr>_lines</a></code></td>
-    <td>purpose: searches lines for pattern options: -    ic: bool (insensitive case) -        rtrn_bool=False: bool    #  (whether to rtrn lines [default] or bool result) -        csv: bool                # will convert a list of lists to a list of csv style lines before searching -                                 #   and but returns the line as a list, just the way we got it returns: matched line(s) (or True False if rtrn_bool is True) Note: if only one line is matched then it will return that one line otherwise it will return a list of matched_lines...</td>
+    <td>purpose: searches lines (or file if lines is a filename) for pattern options: -    ic: bool (insensitive case) -        rtrn_bool=False: bool    #  (whether to rtrn lines [default] or bool result) -        csv: bool                # will convert a list of lists to a list of csv style lines before searching -                                 #   and but returns the line as a list, just the way we got it returns: matched line(s) (or True False if rtrn_bool is True) Note: if only one line is matched then it will return that one line otherwise it will return a list of matched_lines...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2216,7 +2271,7 @@
     
     <td>Function</td>
     <td><code><a href="#handleOPTS" class="internal-link" title="gtoolz.handleOPTS">handle<wbr></wbr>OPTS</a></code></td>
-    <td>Usage:     {0} [-hEP] [--dir] [&lt;filename&gt;]     {0} -s &lt;func&gt;     {0} -S &lt;func&gt;     {0} -t [&lt;func&gt;]     {0} -T &lt;func&gt; [&lt;fargs&gt;]</td>
+    <td>Usage:     {0} [-hEP] [--dir] [&lt;filename&gt;]     {0} -s &lt;func&gt;     {0} -S &lt;func&gt;     {0} -t [&lt;func&gt;]     {0} -T &lt;func&gt; [&lt;fargs&gt;]     {0} --version</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2396,7 +2451,7 @@
     
     <td>Function</td>
     <td><code><a href="#replace_all" class="internal-link" title="gtoolz.replace_all">replace<wbr></wbr>_all</a></code></td>
-    <td>purpose: replaces ever dict key with dict value in a string     with_d eg: {'   ', '  ', 'foo', 'bar'} returns: str  TODO need more doc info here</td>
+    <td>purpose: replaces every dict key with dict value in a string     with_d eg: {'   ', '  ', 'foo', 'bar'} returns: str  TODO need more doc info here</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2531,7 +2586,7 @@
     
     <td>Function</td>
     <td><code><a href="#usr_input" class="internal-link" title="gtoolz.usr_input">usr<wbr></wbr>_input</a></code></td>
-    <td>purpose: allow user input with editing options::     - prompt: str = "Your input: "     - edit: bool     - dft: str     - centered: bool     - shift: int     - update: dict     - length: int = 0       # all lines will display with the same length returns: edit or input data as str or dict if update option...</td>
+    <td>purpose: allow user input with editing options::     - prompt: str = "Your input: "     - edit: bool     - dft: str     - centered: bool     - shift: int     - update: dict     - length: int = 0       # all lines will display with the same length returns: edit or input data as str or dict if update option Notes:      - this function is typically called by usr_update()     - see usr_update()...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2541,7 +2596,7 @@
     
     <td>Function</td>
     <td><code><a href="#usr_update" class="internal-link" title="gtoolz.usr_update">usr<wbr></wbr>_update</a></code></td>
-    <td>purpose: given a dict, and a list of keys to change - allow user update(s) to values in  my_d dictionary     go through the list of keys to fix and prompt user for new value, present the current value as default args: my_d: dict    # dict to have updated       - fix_l=[]: list   # list of keys to prompt user for change; if empty, use all the my_d keys returns: my_d (with user updates) NOTE: what is in the passed dict values is what will be presented as the default...</td>
+    <td>purpose: given a dict, and a list of keys to change - allow user update(s) to values in  my_d dictionary     go through the list of keys to fix and prompt user for new value, present the current value as default args: my_d: dict        # dict to have updated options:       - fix: list       # default=[]      - list of keys to prompt user for change; if empty, use all the my_d keys       - centered: bool  # default=False   - whether to center everything on the screen       - edit: bool      # defualt=False   - whether to allow text edit in place or the default of input replacement input       - no_edits: list  # default=[]      - list of keys that are presented but not editable       - quit: bool      # default=False   - whether to immediately quit on an entry of "q" or "Q", or "quit" returns: my_d (with user updates) Notes:     - what is in the passed dict values is what will be presented as the default...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2561,7 +2616,7 @@
     
     <td>Function</td>
     <td><code><a href="#write_file" class="internal-link" title="gtoolz.write_file">write<wbr></wbr>_file</a></code></td>
-    <td>purpose: writes data to a file typically as a csv file (or a .dat file) - creates a new file or appends an existing file options:     - colnames: list (adds hdr line if not currently there)     - comment_lines: str | list     - bak: bool     - ind: bool     - prnt: bool     - ask: bool     - append: bool   # whether to append data - the default=False whereby submitted data will overwrite the file Notes:     - only use this to write a data file = either csv (or a dat file which is a csv file with the header commented)     - data should be a list of lists (rows of cols)     - assumes first line is comma delimited colnames or use colnames option (in a dat file the first line will be commented)     - all comments will go to/near the top...</td>
+    <td>purpose: writes data to a file typically as a csv file (or a .dat file) - creates a new file or appends an existing file options:     - colnames: list (adds hdr line if not currently there)     - comment_lines: str | list     - bak: bool      # make a backup file     - indx: bool     # not used yet - future flag for adding an index col (first column) or not     - prnt: bool     # turns on print     - ask: bool      # ask before actually writing data to file (before overwriting the file)     - append: bool   # whether to append data - the default=False whereby submitted data will overwrite the file     - dat: bool      # this is a special flag to declare that the first line (hdr) is made a comment starting it with "#" returns: bool        # true if successful write Notes:     - only use this to write a data file = either csv (or a dat file which is a csv file with the header commented)     - data should be a list of lists (rows of cols)     - assumes first line is comma delimited colnames or use colnames option (in a dat file the first line will be commented)     - all comments will go to/near the top     - if the file ends with the "...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2581,6 +2636,11 @@
     
     <td>Constant</td>
     <td><code><a href="#SCRIPT" class="internal-link" title="gtoolz.SCRIPT">SCRIPT</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="variable">
+    
+    <td>Variable</td>
+    <td><code><a href="#__version__" class="internal-link" title="gtoolz.__version__">__version__</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="variable">
     
@@ -2672,6 +2732,7 @@ action: before|after|replace|either (either will replace if it is found or add i
 options:
 -   backup: bool=True,
 -   ask: bool=False,
+-   prnt: bool=False
 -   centered: bool=False,
 -   shadowed: bool=False
 pattern: needs to be unique regex?
@@ -3007,9 +3068,13 @@ returns: None</p></div>
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="pre">purpose: to retrieve cfg val while allowing diffent key name request to get a specifi key
+    <div><p class="pre">purpose: to retrieve cfg val while allowing different key name request to get a specific key
 options:
-returns: value</p></div>
+returns: value
+use:
+    cfg_d = handleCFG("/path/to/api.cfg")
+    api_key = cfg_val(["api", "key", "api_key"], 'testpypi', cfg_d, dflt="1234")
+    # above will find the api_key if it is defined in the file with any of the names in the list for section='testpypi'</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -3044,6 +3109,80 @@ return: new_list
 usage:
     # given a list of functions, exclude the ones that have contain any of the substrings in the exclude_l list
     funcs_l = chk_substr(funcs_l, exclude_l, action='exclude')</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="gtoolz.chkbox_demo">
+    
+  </a>
+  <a name="chkbox_demo">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">chkbox_demo</span>(*args, **kwargs):
+    
+    <a class="headerLink" href="#chkbox_demo" title="gtoolz.chkbox_demo">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">purpose: chkbox() demo
+returns: None</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="gtoolz.chkboxes">
+    
+  </a>
+  <a name="chkboxes">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">chkboxes</span>(my_l, chkd_l=[], *args, **kwargs):
+    
+    <a class="headerLink" href="#chkboxes" title="gtoolz.chkboxes">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">purpose: display a list of empty checkboxes|ballot boxes with chkd_l boxes checked and xed_l boxes with and X
+required:
+    - my_l: list      # list of check box names
+    - chkd_l: list    # list of boxes to be checked
+options:
+    - dflt: str       # default='empty' - alternatives: default= or dflt= 'chk', 'chkd', 'checked', 'all_chkd', 'chk_all , 'xed' 'x_all', 'all_x' ...
+    - xed: list   # list of elems to "X"
+    - boxed: bool
+    - centered: bool
+    - prnt: bool
+    - color|clr: str      # default="" - text color
+    - masterbox_clr: str  # default='white! on black' - outside master box color
+    - chkmark_clr: str    # default='green!' - check mark color 
+    - xmark_clr: str      # default='red!' - X mark color 
+    - chkbox_color: str   # default="" - check boxes color
+    - title: str
+    - footer: str
+returns: list  # printable lines
+notes:
+use:
+    ans = []
+    my_l = ["one", "two", "three"]
+    chkd_l = []
+    while ans not in ("q", "Q", ""):
+        cls()
+        chkboxes(my_l, chkd_l, 'prnt', 'centered', 'boxed', title="What has been done", footer=dbug('here'))
+        ans = gselect(my_l, centered=centered_b)
+        chkd_L.append(ans)</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -3253,6 +3392,8 @@ options:
     - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames
     - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values
     - index: bool         # TODO
+    - fix: bool           # will "fix" all the rows of an lol to the length of the first row (be careful with this)
+    - blanks: str|None    # default=None blanks sets the string for elements added in row when fix option is used
 returns: a list of lists (rows of columns) with the first row having colnames</p></div>
   </div>
 </div><div class="basefunction">
@@ -4059,6 +4200,34 @@ returns: matching lines</p></div>
 </div><div class="basefunction">
   
   
+  <a name="gtoolz.fixlol">
+    
+  </a>
+  <a name="fixlol">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">fixlol</span>(my_lol=[], *args, **kwargs):
+    
+    <a class="headerLink" href="#fixlol" title="gtoolz.fixlol">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">purpose: makes the length or every "row" in a list of lists the same number of elements (length)
+options:
+    - length: int        # defaults to the length of the first row ie len(my_lol[0])
+    - blank: str|None    # defaults to None but can be any string eg blank="..."
+returns: fixed lol with all rows the same length (number of elements)
+used by gtable with option "fix"</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
   <a name="gtoolz.flattenit">
     
   </a>
@@ -4268,7 +4437,7 @@ returns: color coded [and text]</p></div>
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="pre">purpose: demo of using gclr() 
+    <div><p class="pre">purpose: demo of using gclr()
 returns: None</p></div>
   </div>
 </div><div class="basefunction">
@@ -4744,7 +4913,7 @@ returns: None</p></div>
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="pre">purpose: searches lines for pattern
+    <div><p class="pre">purpose: searches lines (or file if lines is a filename) for pattern
 options:
 -    ic: bool (insensitive case)
 -        rtrn_bool=False: bool    #  (whether to rtrn lines [default] or bool result)
@@ -4893,6 +5062,7 @@ options:
     - cell_pad=' ': str    # you can set the padding char(s)
     - strip: bool          # strip all white space off of ever element in every row
     - blanks: str          # you can declare how blank cells (blank elements in a row) should appear
+    - fix: bool            # default=False - if true then everry row of the data will be made the length of the first row
     - ignore: bool         # default=False builds the table even if the number of columns is different on the rows - makes it easier to troublshoot
     - cols: int            # split a table into several tables or columns (aka chunks)
     - lol: bool            # default=False - will return the conditioned lol (rows of columns) instead of the default printable lines
@@ -5012,6 +5182,7 @@ use:
     {0} -S &lt;func&gt;
     {0} -t [&lt;func&gt;]
     {0} -T &lt;func&gt; [&lt;fargs&gt;]
+    {0} --version
 
 Options
     -h                     Help
@@ -6061,7 +6232,7 @@ created: 20220423 gwm</p></div>
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="pre">purpose: replaces ever dict key with dict value in a string
+    <div><p class="pre">purpose: replaces every dict key with dict value in a string
     with_d eg: {'   ', '  ', 'foo', 'bar'}
 returns: str 
 TODO need more doc info here</p></div>
@@ -6895,7 +7066,10 @@ options::
     - shift: int
     - update: dict
     - length: int = 0       # all lines will display with the same length
-returns: edit or input data as str or dict if update option</p></div>
+returns: edit or input data as str or dict if update option
+Notes: 
+    - this function is typically called by usr_update()
+    - see usr_update()</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -6932,7 +7106,7 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">usr_update</span>(my_d, fix_l=[], *args, **kwargs):
+    <span class="py-keyword">def</span> <span class="py-defname">usr_update</span>(my_d, *args, **kwargs):
     
     <a class="headerLink" href="#usr_update" title="gtoolz.usr_update">
       
@@ -6944,11 +7118,19 @@ returns: None</p></div>
     
     <div><p class="pre">purpose: given a dict, and a list of keys to change - allow user update(s) to values in  my_d dictionary
     go through the list of keys to fix and prompt user for new value, present the current value as default
-args: my_d: dict    # dict to have updated
-      - fix_l=[]: list   # list of keys to prompt user for change; if empty, use all the my_d keys
+args: my_d: dict        # dict to have updated
+options:
+      - fix: list       # default=[]      - list of keys to prompt user for change; if empty, use all the my_d keys
+      - centered: bool  # default=False   - whether to center everything on the screen
+      - edit: bool      # defualt=False   - whether to allow text edit in place or the default of input replacement input
+      - no_edits: list  # default=[]      - list of keys that are presented but not editable
+      - quit: bool      # default=False   - whether to immediately quit on an entry of "q" or "Q", or "quit"
 returns: my_d (with user updates)
-NOTE: what is in the passed dict values is what will be presented as the default.
-aka: user_edit()</p></div>
+Notes:
+    - what is in the passed dict values is what will be presented as the default.
+    - aka: user_edit()
+    - normally usr_update() calls this function
+    - this function calls usr_input(), ie: it superceded usr_input</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -7050,16 +7232,19 @@ returns: None</p></div>
 options:
     - colnames: list (adds hdr line if not currently there)
     - comment_lines: str | list
-    - bak: bool
-    - ind: bool
-    - prnt: bool
-    - ask: bool
+    - bak: bool      # make a backup file
+    - indx: bool     # not used yet - future flag for adding an index col (first column) or not
+    - prnt: bool     # turns on print
+    - ask: bool      # ask before actually writing data to file (before overwriting the file)
     - append: bool   # whether to append data - the default=False whereby submitted data will overwrite the file
+    - dat: bool      # this is a special flag to declare that the first line (hdr) is made a comment starting it with "#"
+returns: bool        # true if successful write
 Notes:
     - only use this to write a data file = either csv (or a dat file which is a csv file with the header commented)
     - data should be a list of lists (rows of cols)
     - assumes first line is comma delimited colnames or use colnames option (in a dat file the first line will be commented)
-    - all comments will go to/near the top</p></div>
+    - all comments will go to/near the top
+    - if the file ends with the ".dat" extension it will be treated as a 'dat' file</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -7172,6 +7357,30 @@ returns: rgb(r,g,b) text string instead of supplied color</p></div>
 </div><div class="basevariable">
   
   
+  <a name="gtoolz.__version__">
+    
+  </a>
+  <a name="__version__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">__version__</span>: <code>str</code> =
+    
+    <a class="headerLink" href="#__version__" title="gtoolz.__version__">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="basevariable">
+  
+  
   <a name="gtoolz.bg_colors_d">
     
   </a>
@@ -7277,7 +7486,7 @@ returns: rgb(r,g,b) text string instead of supplied color</p></div>
   <div class="container">
     <a href="index.html">API Documentation</a> for gtoolz,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2023-02-20 09:38:55.
+    22.9.1 at 2023-02-27 16:11:15.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

@@ -49,7 +49,7 @@ import pandas as pd
 
 
 # ### GLOBALS ### #
-# console = Console()
+__version__ = '0.1.1'
 dtime = datetime.now().strftime("%Y%m%d-%H%M")
 FULL_PATH_SCRIPT = __file__
 SCRIPT = os.path.basename(__file__)
@@ -419,16 +419,19 @@ def write_file(data, fname, *args, **kwargs):
     options:
         - colnames: list (adds hdr line if not currently there)
         - comment_lines: str | list
-        - bak: bool
-        - ind: bool
-        - prnt: bool
-        - ask: bool
+        - bak: bool      # make a backup file
+        - indx: bool     # not used yet - future flag for adding an index col (first column) or not
+        - prnt: bool     # turns on print
+        - ask: bool      # ask before actually writing data to file (before overwriting the file)
         - append: bool   # whether to append data - the default=False whereby submitted data will overwrite the file
+        - dat: bool      # this is a special flag to declare that the first line (hdr) is made a comment starting it with "#"
+    returns: bool        # true if successful write
     Notes:
         - only use this to write a data file = either csv (or a dat file which is a csv file with the header commented)
         - data should be a list of lists (rows of cols)
         - assumes first line is comma delimited colnames or use colnames option (in a dat file the first line will be commented)
         - all comments will go to/near the top
+        - if the file ends with the ".dat" extension it will be treated as a 'dat' file
     """
     """--== Debugging ==--"""
     # dbug(funcname())
@@ -437,20 +440,21 @@ def write_file(data, fname, *args, **kwargs):
     # dbug(kwargs)
     """--== Config ==--"""
     prnt = bool_val(["print", "prnt", "show", "verbose"], args, kwargs, dflt=True)  # True for now TODO
-    # ask_b = bool_val(["ask"], args, kwargs, dflt=True)  # True for now TODO
+    ask_b = bool_val(["ask"], args, kwargs, dflt=False)
     # id_flag = bool_val(["orig_id_flag", "id_flag", "indx", "idx", "id"], args, kwargs, dflt=False)
     bak = bool_val(["bak"], args, kwargs, dflt=True)
     # comment_lines = kvarg_val(["comment_lines"], kwargs, dflt=[])
     colnames = kvarg_val(["colnames", "col_names", "cols"], kwargs, dflt=[])
     append_b = bool_val(["append", "a"], args, kwargs, dflt=False)
+    dat_b = bool_val(["dat", 'dat_file'], args, kwargs, dflt=False)
     """--== Local Import(s) ==--"""
     # import csv
     """--== Init ==--"""
     # writefile = fname
     data_lines = []
-    csv_lines = []      # this will become a list of comma delimited strings/lines and will include a header string/line as the first line
-    content_lines = []  # lines read from the file (if it exists) - all non-comment lines
-    comment_lines = []  # comments lines read from the file if it exists
+    csv_lines = []        # this will become a list of comma delimited strings/lines and will include a header string/line as the first line
+    content_lines = []    # lines read from the file (if it exists) - all non-comment lines
+    comment_lines = []    # comments lines read from the file if it exists
     # file_type = "csv"   # this will either be a 'csv' or a 'dat' based on file name extension
     """--== Convert ==--"""
     if isinstance(data, str):
@@ -479,7 +483,7 @@ def write_file(data, fname, *args, **kwargs):
             # dbug(new_row)
             data_lines.append(new_row)
     else:
-        dbug("Data is not a list of lists and it should be. data: {data}")
+        dbug(f"Data is not a list of lists and it should be. data: {data}... returning...")
         return
     if len(data[0]) < 2:  # arbitrary
         dbug("Data should have more content: {data[:3]}")
@@ -496,7 +500,7 @@ def write_file(data, fname, *args, **kwargs):
                 content_lines.append(ln)
     # if not append_b:
     #     dbug(data_lines)
-    if fname.endswith(".dat"):
+    if fname.endswith(".dat") or dat_b:
         # file_type = "dat"
         # hdr_line = content_lines[0].lstrip("#")
         data_lines = data_lines[1:]
@@ -522,6 +526,9 @@ def write_file(data, fname, *args, **kwargs):
         printit(f"File: {fname} has been backed up to: {fname}.bak", 'centered')
     if append_b:
         # do_append_file()
+        if ask_b:
+            if not askYN(f"Do you want to continue with writing to file: {fname}?", 'y'):
+                return False
         with open(fname, "a") as f:
             for ln in data:
                 if not ln.endswith("\n"):
@@ -541,6 +548,9 @@ def write_file(data, fname, *args, **kwargs):
         # dbug(new_lines, 'lst')
         # """--== SEP_LINE ==--"""
         # dbug('ask')
+        if ask_b:
+            if not askYN(f"Do you want to continue with writing to file: {fname}?", 'y'):
+                return False
         with open(fname, "w") as f:
             for ln in new_lines:
                 if isinstance(ln, list):
@@ -550,7 +560,7 @@ def write_file(data, fname, *args, **kwargs):
                 f.write(ln)
     if prnt:
         printit(f"The file fname: {fname} has be re-written...", 'centered')
-    return data
+    return True
     # ### EOB def write_file() ### #
 
 
@@ -1709,12 +1719,13 @@ def bool_val_demo():
 
 def cfg_val(keys, section, cfg_d, dflt=""):
     """
-    purpose: to retrieve cfg val while allowing different key name request to get a specifi key
+    purpose: to retrieve cfg val while allowing different key name request to get a specific key
     options:
     returns: value
     use:
         cfg_d = handleCFG("/path/to/api.cfg")
         api_key = cfg_val(["api", "key", "api_key"], 'testpypi', cfg_d, dflt="1234")
+        # above will find the api_key if it is defined in the file with any of the names in the list for section='testpypi'
     """
     """--== Debugging ==--"""
     # dbug(section)
@@ -1800,6 +1811,7 @@ def handleCFG(cfg_file="", *args, **kwargs):
             title = ""
     """
     # dbug(funcname())
+    # dbug(cfg_file)
     # dbug(args)
     # dbug(kwargs)
     """--== Config ==--"""
@@ -1836,10 +1848,9 @@ def handleCFG(cfg_file="", *args, **kwargs):
         return None
     config = configparser.ConfigParser()
     # cfg_file = "/home/geoffm/dev/data/devices.conf"  # for debugging
-    # dbug(cat_file(cfg_file))
     try:
         config.read(cfg_file, encoding='utf-8')
-        # config.read(cfg_file)
+        config.read(cfg_file)
     except Exception as Error:
         dbug(f"Problem with cfg_file: {cfg_file} Error: {Error}")
     # dbug(config.sections())
@@ -1849,9 +1860,9 @@ def handleCFG(cfg_file="", *args, **kwargs):
         # DEFAULT is treated differently by configparser... got me why
         # I don't suggest using it as values don't seem to be parsed the same way (needs quoting??)
         # lowercase 'default' will work fine - use it instead?
-        for key in config['DEFAULT']:
-            cfg_d['DEFAULT'] = {}
-            val = config['DEFAULT'][key]
+        default_d = dict(config.items('DEFAULT'))
+        cfg_d['DEFAULT'] = {}
+        for key, val in default_d.items():
             cfg_d['DEFAULT'][key] = val
     for section in config.sections():
         cfg_d[section] = {}
@@ -1883,6 +1894,7 @@ def handleOPTS(args):
         {0} -S <func>
         {0} -t [<func>]
         {0} -T <func> [<fargs>]
+        {0} --version
 
     Options
         -h                     Help
@@ -1955,6 +1967,7 @@ def handleOPTS(args):
             else:
                 globals()[fname](*args_d['args'], **args_d['kwargs'])
         # dbug("Done", 'ask')
+        return
         """--== SEP_LINE ==--"""
         def get_args(arg_s):
             if arg_s is None:
@@ -4877,7 +4890,7 @@ def get_columns(*args, **kwargs):
 
 def replace_all(msg, with_d):
     """
-    purpose: replaces ever dict key with dict value in a string
+    purpose: replaces every dict key with dict value in a string
         with_d eg: {'\t', '  ', 'foo', 'bar'}
     returns: str 
     TODO need more doc info here
@@ -5801,6 +5814,7 @@ def gtable(lol, *args, **kwargs):
     # reverse_b = bool_val(["rev", "rvsd", "reverse", "reversed"], args, kwargs, dflt=False)  # TODO - ie lol.reverse()
     nohdr_b = bool_val(["nohdr", "no_hdr", "nocolnames"], args, kwargs, dflt=False)  # removes first line (hdr/colnames) from table
     fix_b = bool_val(['fix'], args, kwargs, dflt=False)  # make all rows same number of columns as first row
+    # dbug(fix_b, 'ask')
     # """--== Validate ==--"""
     if not isinstance(selected_cols, list):
         dbug(f"selected_cols: {selected_cols} must be a list ... please investigate... returning...")
@@ -5830,6 +5844,7 @@ def gtable(lol, *args, **kwargs):
     # import pandas as pd
     # import numpy as np
     # """--== Convert to lol ==--"""
+    # dbug(f"Using fix_b: {fix_b} blanks: {blanks}")
     lol = cnvrt2lol(lol, colnames=colnames, fix=fix_b, blanks=blanks)
     if int(cols_limit) > 0:
         lol = [row[:int(cols_limit)] for row in lol]
@@ -7269,7 +7284,7 @@ def run_cmd_demo():
 
 def grep_lines(lines, pattern, *args, **kwargs):
     """
-    purpose: searches lines for pattern
+    purpose: searches lines (or file if lines is a filename) for pattern
     options:
     -    ic: bool (insensitive case)
     -        rtrn_bool=False: bool    #  (whether to rtrn lines [default] or bool result)
@@ -7527,7 +7542,7 @@ def select_file(path="./",
     ptrns = kvarg_val(['pattern', 'patterns', 'pat', 'ptrn', 'ptrns'], kwargs, dflt=pattern)
     prompt = kvarg_val('prompt', kwargs, dflt="Please select: ")
     mtime = bool_val(['ll', 'long', 'long_list', 'mtime'], args, kwargs, dftt=False)
-    centered = bool_val(['centered', 'center'], args, kwargs, dflt= center)
+    centered = bool_val(['centered', 'center'], args, kwargs, dflt=center)
     # choose = bool_val(['choose', 'select', 'pick'], args, kwargs, dflt=True)
     dirs_b = bool_val(['dirs_b', 'dirs', 'dir'], args, kwargs, dflt=False)
     dirs_only = bool_val(['dirs_only', 'dirsonly', 'dironly', 'dir_only', 'only_dirs'], args, kwargs, dflt=False)
@@ -7644,7 +7659,7 @@ def escape_ansi(line, *args, **kvargs):
                 new_line = re.compile(r"\[\d+.*m")
                 # new_line = ansi_escape.sub("", ncline)
                 # dbug(new_line)
-                #new_line = ansi_escape2.sub("", ncline)
+                # new_line = ansi_escape2.sub("", ncline)
                 # dbug(new_line)
                 new_lines.append(new_line)
                 # new_lines.append(escape_ansi(new_line))
@@ -7660,7 +7675,7 @@ def escape_ansi(line, *args, **kvargs):
 
 def gclr_demo(*args, **kwarg):
     """
-    purpose: demo of using gclr() 
+    purpose: demo of using gclr()
     returns: None
     """
     msg = "my [red]msg[/] is red"
@@ -8998,6 +9013,7 @@ def add_or_replace(filename, action, pattern, new_line, *args, backup=True, **kw
     options:
     -   backup: bool=True,
     -   ask: bool=False,
+    -   prnt: bool=False
     -   centered: bool=False,
     -   shadowed: bool=False
     pattern: needs to be unique regex?
@@ -9064,7 +9080,7 @@ def add_or_replace(filename, action, pattern, new_line, *args, backup=True, **kw
             if prnt:
                 printit(lines, 'boxed', title=f"Action: {action}. Proposed replace/new content ", centered=center_b, shadowed=shadow_b, footer=dbug('here'))
         if ask:
-            if askYN(centered(f"Shall we change [{action}] to the new content? ", "y")):
+            if askYN(f"Shall we change [{action}] to the new content? ", "y", centered=center_b):
                 writing_file = open(filename, "w")
                 writing_file.write(new_file_content)
                 writing_file.close()
@@ -10150,6 +10166,9 @@ def usr_input(prompt="Your input: ", *args, **kwargs):
         - update: dict
         - length: int = 0       # all lines will display with the same length
     returns: edit or input data as str or dict if update option
+    Notes: 
+        - this function is typically called by usr_update()
+        - see usr_update()
     """
     # """--== Debugging ==--"""
     # dbug(funcname())
@@ -10286,16 +10305,24 @@ def usr_input_demo(*args, **kwargs):
 
 
 # ###########################################
-def usr_update(my_d, fix_l=[], *args, **kwargs):
+def usr_update(my_d, *args, **kwargs):
     # #######################################
     """
     purpose: given a dict, and a list of keys to change - allow user update(s) to values in  my_d dictionary
         go through the list of keys to fix and prompt user for new value, present the current value as default
-    args: my_d: dict    # dict to have updated
-          - fix_l=[]: list   # list of keys to prompt user for change; if empty, use all the my_d keys
+    args: my_d: dict        # dict to have updated
+    options:
+          - fix: list       # default=[]      - list of keys to prompt user for change; if empty, use all the my_d keys
+          - centered: bool  # default=False   - whether to center everything on the screen
+          - edit: bool      # defualt=False   - whether to allow text edit in place or the default of input replacement input
+          - no_edits: list  # default=[]      - list of keys that are presented but not editable
+          - quit: bool      # default=False   - whether to immediately quit on an entry of "q" or "Q", or "quit"
     returns: my_d (with user updates)
-    NOTE: what is in the passed dict values is what will be presented as the default.
-    aka: user_edit()
+    Notes:
+        - what is in the passed dict values is what will be presented as the default.
+        - aka: user_edit()
+        - normally usr_update() calls this function
+        - this function calls usr_input(), ie: it superceded usr_input
     """
     # """--== Debugging ==--"""
     # dbug(funcname())
@@ -10303,11 +10330,15 @@ def usr_update(my_d, fix_l=[], *args, **kwargs):
     # dbug(kwargs)
     """--== Config ==--"""
     # max_size = kvarg_val(["max", " max_size"], kwargs, dflt=40)
+    fix_l = kvarg_val(["fix", "fix_list", "fix_l", "fix_lst", "update", "update_lst"], kwargs, dflt=[])
     edit_b = bool_val(["edit", "editable", "edit_txt", "edit_text"], args, kwargs, dflt=False)
     centered_b = bool_val(["center", "centered", "cntr"], args, kwargs, dflt=False)
-    noedits_l = kvarg_val(["noedits", "no_edits"], kwargs, dflt=[])  # which keys will not be allowed editing of any form but will be presented/displayed
+    noedits_l = kvarg_val(["noedits", "no_edits", "excludes", 'except'], kwargs, dflt=[])  # which keys will not be allowed editing of any form but will be presented/displayed
+    quit_b = bool_val(["quit", "q", "exit"], args, kwargs, dflt=False)
+    chunks_b = bool_val(["chunks"], args, kwargs, dflt=False)
     # dbug(centered_b)
     # """--== Init ==--"""
+    prompt = "Please enter new value for: "
     fix_d = {}
     if len(fix_l) == 0:
         # fix_l was not supplied so make it equal to list(my_d.keys())
@@ -10322,32 +10353,55 @@ def usr_update(my_d, fix_l=[], *args, **kwargs):
     max_v = maxof(list(fix_d.values()))
     # dbug(max_v)
     if (max_k + max_v) > scr_cols:
-        dbug("Houston we have a problem... not enough room on the screen...")
-        return
+        if chunks_b:
+            max_v = scr_cols - (nclen(prompt) + 10)  # arbitrary
+            dbug(f'max_v is set to {max_v}')
+        else:
+            dbug("Houston we have a problem... not enough room on the screen... consider the 'chunks' option")
+            return
     new_d = my_d.copy()
     # """--== Process ==--"""
-    # dbug(fix_l)
+    # dbug(f"fix_l: {fix_l} noedits_l: {noedits_l} edit_b: {edit_b}")
     for k, v in fix_d.items():
         # dbug(f"k: {k} v: {v}")
         if v == "":  # this actually will get taken care of in usr_input but doing it anyway
             v = " "
         if k in noedits_l:
             noedit = True
-            # dbug(f"making noedit: {noedit} k: {k}")
+            dbug(f"making noedit: {noedit} k: {k}")
         else:
             noedit = False
             # dbug(f"k: {k} not found in noedits_l: {noedits_l}")
-        prompt = "Please enter new value for: "  # [{k:{max_k}}]"
+        # dbug(f"chkg nclen(v): {nclen(v)}")
+        if nclen(v) > max_v and chunks_b:
+            printit(v, 'boxed', title=f"This line will be broken into chunks (len: {max_v}) for editing.", footer=dbug('here'), centered=centered_b)
+            my_lines = wrapit(v, length=max_v)
+            lines_d = {}
+            for num, line in enumerate(my_lines):
+                # dbug(f"adding line: {line} to lines_d")
+                lines_d[num] = line
+            # new_lines = usr_update(lines_d, 'edit', quit=quit, centered=centered_b)
+            new_lines = usr_update(lines_d, 'edit')
+            # dbug(new_lines)
+            ans = " ".join(list(new_lines.values()))
+            new_d[k] = ans
+            printit(ans, 'boxed', title="New replacement added", footer=dbug('here'), centered=centered_b)
+            continue
         if edit_b:
+            # allows in-place editing
             # dbug(f"max_k: {max_k} max_v: {max_v}")
             prompt += f"[{k:<{max_k}}]: "
             ans = usr_input(prompt=prompt, default=v, centered=centered_b, max_v=max_v, edit=edit_b, noedit=noedit)
+            # dbug(ans)
         else:
+            # allow replacement input only
             # dbug(f"max_k: {max_k} max_v: {max_v} k: {k} v: {v}")
             prompt += f"[{k:<{max_k}}]: "
             ans = usr_input(edit=edit_b, prompt=prompt, centered=centered_b, dflt=v, max_v=max_v, noedit=noedit)
             ans = str(ans)
-            if ans.lower() == "q":
+            # dbug(ans)
+        if quit_b:
+            if ans in ("q", "Q", "quit"):
                 # do_close(center=True, box_color="red on black")
                 break
         new_d[k] = ans
@@ -11545,6 +11599,156 @@ def dtree_demo(*args, **kwargs):
 #     printit(allmodules)
 
 
+def chkboxes(my_l, chkd_l=[], *args, **kwargs):
+    """
+    purpose: display a list of empty checkboxes|ballot boxes with chkd_l boxes checked and xed_l boxes with and X
+    required:
+        - my_l: list      # list of check box names
+        - chkd_l: list    # list of boxes to be checked
+    options:
+        - dflt: str       # default='empty' - alternatives: default= or dflt= 'chk', 'chkd', 'checked', 'all_chkd', 'chk_all , 'xed' 'x_all', 'all_x' ...
+        - xed: list   # list of elems to "X"
+        - boxed: bool
+        - centered: bool
+        - prnt: bool
+        - color|clr: str      # default="" - text color
+        - masterbox_clr: str  # default='white! on black' - outside master box color
+        - chkmark_clr: str    # default='green!' - check mark color 
+        - xmark_clr: str      # default='red!' - X mark color 
+        - chkbox_color: str   # default="" - check boxes color
+        - title: str
+        - footer: str
+    returns: list  # printable lines
+    notes:
+    use:
+        ans = []
+        my_l = ["one", "two", "three"]
+        chkd_l = []
+        while ans not in ("q", "Q", ""):
+            cls()
+            chkboxes(my_l, chkd_l, 'prnt', 'centered', 'boxed', title="What has been done", footer=dbug('here'))
+            ans = gselect(my_l, centered=centered_b)
+            chkd_L.append(ans)
+    """
+    import unicodedata
+    # """--== Debugging ==--"""
+    # dbug(funcname())
+    # dbug(my_l)
+    # dbug(chkd_l)
+    # dbug(args)
+    # dbug(kwargs)
+    # """--== Config ==--"""
+    dflt = kvarg_val(["dflt", 'default'], kwargs, dflt='empty')
+    xed_l = kvarg_val(["xed_l", "xs", "xes", "x's", "xed"], kwargs, dflt=[])
+    centered_b = bool_val(["centered", "center"], args, kwargs, dflt=False)
+    boxed_b = bool_val(["boxed", "box"], args, kwargs, dflt=False)
+    prnt = bool_val(["prnt", "print", "show"], args, kwargs, dflt=False)
+    # dbug(prnt)
+    chkbox_clr = kvarg_val(["box_clr", "box_color"], kwargs, dflt="")
+    master_box_clr = kvarg_val(["master_box_clr", "master_box_color", "masterbox_clr", 'main_box_clr', 'mainbox_clr'], kwargs, dflt="white! on black")
+    clr = kvarg_val(["clr", "color"], kwargs, dflt="")
+    chkmark_clr = kvarg_val(["checkmark_clr", 'chkmark_clr', 'checkmark_color'], kwargs, dflt="green!")
+    xmark_clr = kvarg_val(["xmark_clr", 'xmark_clr', 'xmark_color'], kwargs, dflt="red!")
+    style = kvarg_val(["style"], kwargs, dflt="ballot")
+    # ballot_b = bool_val(["ballot"], args, kwargs, dflt=True)
+    chkbox_b = bool_val(["check_box", 'chk_box', 'chkbox', 'chkbx', 'simple'], args, kwargs, dflt=False)
+    title = kvarg_val("title", kwargs, dflt = "")
+    footer = kvarg_val("footer", kwargs, dflt = "")
+    # dbug(style)
+    # dbug("\u2713")  # check mark
+    # dbug("\u2714")  # bold check mark
+    # dbug("\u2715")  # X
+    # dbug("\u2716")  # bold X
+    # dbug("\u2717")  # stylized X
+    # dbug("\u2718")  # bold stylized X
+    # """--== Init ==--"""
+    CLR = gclr(clr)
+    CHKBOX_CLR = gclr(chkbox_clr)
+    CHKMARK_CLR = gclr(chkmark_clr)
+    XMARK_CLR = gclr(xmark_clr)
+    # style_d syntax     [empty_box, chkd_box,  xed_box]
+    # note 2716 is bold X 2718 is italisized X
+    style_d = {'ballot': [f"{CHKBOX_CLR}{chr(9744)} {RESET}",
+                          f"{CHKBOX_CLR}{chr(9745)} {RESET}",
+                          f"{CHKBOX_CLR}{chr(9746)}{RESET}"],
+               'checkbox': [f"{CHKBOX_CLR}[_]{RESET}",
+                            f"{CHKBOX_CLR}[{CHKMARK_CLR}" + "\u2714" + f"{RESET}{CHKBOX_CLR}]{RESET}",
+                            f"{CHKBOX_CLR}[{XMARK_CLR}" + "\u2716" + f"{RESET}{CHKBOX_CLR}]{RESET}",
+                            ]
+               }
+    # dbug(style)
+    if style.lower() in ("ballot"):  # or ballot_b:
+        style = 'ballot'
+    if style.lower() in ('check_box', 'chkbox', 'chk_box', 'chk_bx', 'checkbox', 'simple') or chkbox_b:
+        style = 'checkbox'
+    # dbug(style)
+    style_l = style_d[style]
+    # """--== SEP_LINE ==--"""
+    lines = []
+    for item in my_l:
+        # box = "[" + "_" + "]"
+        if dflt.lower() in ("empty", "", 'mpty', 'none'):
+            box = style_l[0]
+        if dflt.lower() in ("checked", 'chkd', 'all_chkd', 'all_chk', 'chk_all', 'chkf_all'):
+            box = style_l[1]
+        if dflt.lower() in ("xed", 'xd', 'x', 'all_x', 'all_xd', 'all_xed', 'all_xes' 'all_xs'):
+            box = style_l[2]
+        if item in xed_l:
+            # box = "[" + "\u2718" + "]"
+            box = style_l[2]
+        if item in chkd_l:
+            box = style_l[1]
+        lines.append(f"{box}  {RESET}{CLR}{item}{RESET}")
+        lines = gblock(lines)
+    lines = printit(lines, boxed=boxed_b, prnt=prnt, centered=centered_b, title=title, footer=footer, box_clr=master_box_clr, clr=clr)
+    return lines
+    # ### EOB def chkbox(my_l, chkd_l=[], xed_l=[], *args, **kwargs): ### #
+
+
+def chkbox_demo(*args, **kwargs):
+    """
+    purpose: chkbox() demo
+    returns: None
+    """
+    # """--== Debugging ==--"""
+    dbug(funcname())
+    # """--== Config ==--"""
+    centered_b = True
+    # """--== Init ==--"""
+    my_l = ["one", "two", "three"]
+    chkd_l = []
+    ans = "none"
+    # """--== SEP_LINE ==--"""
+    while True:
+        cls()
+        printit("Making all boxes X'ed. The default if for them to be empty...", 'centered')
+        chkboxes(my_l, chkd_l, 'all_xed', 'prnt', 'centered', 'boxed', dflt="x", title="chkbox() demo", footer=dbug('here'))
+        ans = gselect(my_l, centered=centered_b)
+        # dbug(ans)
+        if ans in ("q", "Q", ""):
+            # dbug(ans)
+            break
+        chkd_l.append(ans)
+    # dbug("Done")
+    # """--== SEP_LINE ==--"""
+    gtitle(80, "--== SEP_LINE ==--", fc="-")
+    xed_l = ["three"]
+    chkd_l = []
+    ans = "none"
+    while True:
+        cls()
+        printit("Making 'three' X'ed", 'centered')
+        # dbug(ans)
+        chkboxes(my_l, chkd_l, 'prnt', 'centered', 'boxed', 'chkbox', xed_l=xed_l, footer=dbug('here'))
+        ans = gselect(my_l, centered=centered_b)
+        # dbug(ans)
+        if ans in ("q", "Q", ""):
+            # dbug(ans)
+            break
+        chkd_l.append(ans)
+    return
+
+
 # ##### Main Code #######
 def main(main_args):  # ######
     # ###################
@@ -11586,8 +11790,8 @@ def main(main_args):  # ######
 
 
 if __name__ == "__main__":
-    docopt_args = docopt(handleOPTS.__doc__)
-    do_logo()
+    docopt_args = docopt(handleOPTS.__doc__, version=SCRIPT + "\nversion: " + __version__)
+    # do_logo()
     handleOPTS(docopt_args)
     main(docopt_args)
-    do_close()
+    # do_close()

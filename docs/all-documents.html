@@ -139,7 +139,15 @@
             <div class="type">Module</div>
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">No module docstring; 0/4 variable, 0/3 constant, 146/148 functions, 4/4 classes documented</span></div>
+            <div class="summary"><span class="undocumented">No module docstring; 0/5 variable, 0/3 constant, 149/151 functions, 4/4 classes documented</span></div>
+          </li><li id="gtoolz.__version__">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.__version__</div>
+            <div class="url">index.html#__version__</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
           </li><li id="gtoolz.dtime">
             
             <div class="fullName">gtoolz<wbr></wbr>.dtime</div>
@@ -475,7 +483,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: writes data to a file typically as a csv file (or a .dat file) - creates a new file or appends an existing file options:     - colnames: list (adds hdr line if not currently there)     - comment_lines: str | list     - bak: bool     - ind: bool     - prnt: bool     - ask: bool     - append: bool   # whether to append data - the default=False whereby submitted data will overwrite the file Notes:     - only use this to write a data file = either csv (or a dat file which is a csv file with the header commented)     - data should be a list of lists (rows of cols)     - assumes first line is comma delimited colnames or use colnames option (in a dat file the first line will be commented)     - all comments will go to/near the top...</div>
+            <div class="summary">purpose: writes data to a file typically as a csv file (or a .dat file) - creates a new file or appends an existing file options:     - colnames: list (adds hdr line if not currently there)     - comment_lines: str | list     - bak: bool      # make a backup file     - indx: bool     # not used yet - future flag for adding an index col (first column) or not     - prnt: bool     # turns on print     - ask: bool      # ask before actually writing data to file (before overwriting the file)     - append: bool   # whether to append data - the default=False whereby submitted data will overwrite the file     - dat: bool      # this is a special flag to declare that the first line (hdr) is made a comment starting it with "#" returns: bool        # true if successful write Notes:     - only use this to write a data file = either csv (or a dat file which is a csv file with the header commented)     - data should be a list of lists (rows of cols)     - assumes first line is comma delimited colnames or use colnames option (in a dat file the first line will be commented)     - all comments will go to/near the top     - if the file ends with the "...</div>
           </li><li id="gtoolz.transcript_start">
             
             <div class="fullName">gtoolz<wbr></wbr>.transcript<wbr></wbr>_start</div>
@@ -635,7 +643,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: to retrieve cfg val while allowing diffent key name request to get a specifi key options: returns: value</div>
+            <div class="summary">purpose: to retrieve cfg val while allowing different key name request to get a specific key options: returns: value use:     cfg_d = handleCFG("/path/to/api.cfg")     api_key = cfg_val(["api", "key", "api_key"], 'testpypi', cfg_d, dflt="1234")     # above will find the api_key if it is defined in the file with any of the names in the list for section='testpypi'...</div>
           </li><li id="gtoolz.docvars">
             
             <div class="fullName">gtoolz<wbr></wbr>.docvars</div>
@@ -667,7 +675,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Usage:     {0} [-hEP] [--dir] [&lt;filename&gt;]     {0} -s &lt;func&gt;     {0} -S &lt;func&gt;     {0} -t [&lt;func&gt;]     {0} -T &lt;func&gt; [&lt;fargs&gt;]</div>
+            <div class="summary">Usage:     {0} [-hEP] [--dir] [&lt;filename&gt;]     {0} -s &lt;func&gt;     {0} -S &lt;func&gt;     {0} -t [&lt;func&gt;]     {0} -T &lt;func&gt; [&lt;fargs&gt;]     {0} --version</div>
           </li><li id="gtoolz.centered">
             
             <div class="fullName">gtoolz<wbr></wbr>.centered</div>
@@ -1011,7 +1019,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: replaces ever dict key with dict value in a string     with_d eg: {'   ', '  ', 'foo', 'bar'} returns: str  TODO need more doc info here</div>
+            <div class="summary">purpose: replaces every dict key with dict value in a string     with_d eg: {'   ', '  ', 'foo', 'bar'} returns: str  TODO need more doc info here</div>
           </li><li id="gtoolz.boxed">
             
             <div class="fullName">gtoolz<wbr></wbr>.boxed</div>
@@ -1172,6 +1180,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: "flattens nested lists options: none returns: list</div>
+          </li><li id="gtoolz.fixlol">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.fixlol</div>
+            <div class="url">index.html#fixlol</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: makes the length or every "row" in a list of lists the same number of elements (length) options:     - length: int        # defaults to the length of the first row ie len(my_lol[0])     - blank: str|None    # defaults to None but can be any string eg blank="...</div>
           </li><li id="gtoolz.cnvrt2lol">
             
             <div class="fullName">gtoolz<wbr></wbr>.cnvrt2lol</div>
@@ -1179,7 +1195,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: accepts any type of "data" (ie str|list|pandas|list of dictionaries|csv_file_name etc) and converts to a list of lists (ie lol) options:     - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames     - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values     - index: bool         # TODO returns: a list of lists (rows of columns) with the first row having colnames...</div>
+            <div class="summary">purpose: accepts any type of "data" (ie str|list|pandas|list of dictionaries|csv_file_name etc) and converts to a list of lists (ie lol) options:     - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames     - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values     - index: bool         # TODO     - fix: bool           # will "fix" all the rows of an lol to the length of the first row (be careful with this)     - blanks: str|None    # default=None blanks sets the string for elements added in row when fix option is used returns: a list of lists (rows of columns) with the first row having colnames...</div>
           </li><li id="gtoolz.cnvrt2lol_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.cnvrt2lol<wbr></wbr>_demo</div>
@@ -1283,7 +1299,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: searches lines for pattern options: -    ic: bool (insensitive case) -        rtrn_bool=False: bool    #  (whether to rtrn lines [default] or bool result) -        csv: bool                # will convert a list of lists to a list of csv style lines before searching -                                 #   and but returns the line as a list, just the way we got it returns: matched line(s) (or True False if rtrn_bool is True) Note: if only one line is matched then it will return that one line otherwise it will return a list of matched_lines...</div>
+            <div class="summary">purpose: searches lines (or file if lines is a filename) for pattern options: -    ic: bool (insensitive case) -        rtrn_bool=False: bool    #  (whether to rtrn lines [default] or bool result) -        csv: bool                # will convert a list of lists to a list of csv style lines before searching -                                 #   and but returns the line as a list, just the way we got it returns: matched line(s) (or True False if rtrn_bool is True) Note: if only one line is matched then it will return that one line otherwise it will return a list of matched_lines...</div>
           </li><li id="gtoolz.list_files">
             
             <div class="fullName">gtoolz<wbr></wbr>.list<wbr></wbr>_files</div>
@@ -1323,7 +1339,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: demo of using gclr()  returns: None</div>
+            <div class="summary">purpose: demo of using gclr() returns: None</div>
           </li><li id="gtoolz.nclen">
             
             <div class="fullName">gtoolz<wbr></wbr>.nclen</div>
@@ -1523,7 +1539,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: Adds or replaces a line in a file where pattern occurs required: filename, action: str [before|after|replace|either] ,pattern, new_line action: before|after|replace|either (either will replace if it is found or add if it is not) options: -   backup: bool=True, -   ask: bool=False, -   centered: bool=False, -   shadowed: bool=False pattern: needs to be unique regex...</div>
+            <div class="summary">purpose: Adds or replaces a line in a file where pattern occurs required: filename, action: str [before|after|replace|either] ,pattern, new_line action: before|after|replace|either (either will replace if it is found or add if it is not) options: -   backup: bool=True, -   ask: bool=False, -   prnt: bool=False -   centered: bool=False, -   shadowed: bool=False pattern: needs to be unique regex...</div>
           </li><li id="gtoolz.regex_col">
             
             <div class="fullName">gtoolz<wbr></wbr>.regex<wbr></wbr>_col</div>
@@ -1627,7 +1643,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: allow user input with editing options::     - prompt: str = "Your input: "     - edit: bool     - dft: str     - centered: bool     - shift: int     - update: dict     - length: int = 0       # all lines will display with the same length returns: edit or input data as str or dict if update option...</div>
+            <div class="summary">purpose: allow user input with editing options::     - prompt: str = "Your input: "     - edit: bool     - dft: str     - centered: bool     - shift: int     - update: dict     - length: int = 0       # all lines will display with the same length returns: edit or input data as str or dict if update option Notes:      - this function is typically called by usr_update()     - see usr_update()...</div>
           </li><li id="gtoolz.usr_input_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.usr<wbr></wbr>_input<wbr></wbr>_demo</div>
@@ -1643,7 +1659,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: given a dict, and a list of keys to change - allow user update(s) to values in  my_d dictionary     go through the list of keys to fix and prompt user for new value, present the current value as default args: my_d: dict    # dict to have updated       - fix_l=[]: list   # list of keys to prompt user for change; if empty, use all the my_d keys returns: my_d (with user updates) NOTE: what is in the passed dict values is what will be presented as the default...</div>
+            <div class="summary">purpose: given a dict, and a list of keys to change - allow user update(s) to values in  my_d dictionary     go through the list of keys to fix and prompt user for new value, present the current value as default args: my_d: dict        # dict to have updated options:       - fix: list       # default=[]      - list of keys to prompt user for change; if empty, use all the my_d keys       - centered: bool  # default=False   - whether to center everything on the screen       - edit: bool      # defualt=False   - whether to allow text edit in place or the default of input replacement input       - no_edits: list  # default=[]      - list of keys that are presented but not editable       - quit: bool      # default=False   - whether to immediately quit on an entry of "q" or "Q", or "quit" returns: my_d (with user updates) Notes:     - what is in the passed dict values is what will be presented as the default...</div>
           </li><li id="gtoolz.usr_update_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.usr<wbr></wbr>_update<wbr></wbr>_demo</div>
@@ -1788,6 +1804,22 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: demo of using dtree()" return: None</div>
+          </li><li id="gtoolz.chkboxes">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.chkboxes</div>
+            <div class="url">index.html#chkboxes</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: display a list of empty checkboxes|ballot boxes with chkd_l boxes checked and xed_l boxes with and X required:     - my_l: list      # list of check box names     - chkd_l: list    # list of boxes to be checked options:     - dflt: str       # default='empty' - alternatives: default= or dflt= 'chk', 'chkd', 'checked', 'all_chkd', 'chk_all , 'xed' 'x_all', 'all_x'...</div>
+          </li><li id="gtoolz.chkbox_demo">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.chkbox<wbr></wbr>_demo</div>
+            <div class="url">index.html#chkbox_demo</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: chkbox() demo returns: None</div>
           </li><li id="gtoolz.main">
             
             <div class="fullName">gtoolz<wbr></wbr>.main</div>
