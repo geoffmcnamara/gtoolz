@@ -9187,7 +9187,7 @@ def add_or_replace(filename, action, pattern, new_line, *args, backup=True, **kw
     contents = "".join(contents)
     # printit(boxed(new_content, title=" Proposed new/replacement content "), 'center', 'shadow')
     if ask:
-        if askYN(printit(f"Pattern: [{pattern}] found: [{pattern_found}]. Shall we change [action: {action}] to the new content?: ", "y", 'str', 'centered', prnt=False)):
+        if askYN(printit(f"Pattern: [{pattern}] found: [{pattern_found}] in {filename}. Shall we change [action: {action}] to the new content?: ", "y", 'str', 'centered', prnt=False)):
             f = open(filename, "w")
             f.write(contents)
             f.close()
@@ -11599,7 +11599,7 @@ def dtree_demo(*args, **kwargs):
 #     printit(allmodules)
 
 
-def chkboxes(my_l, chkd_l=[], *args, **kwargs):
+def chklst(my_l, chkd_l=[], *args, **kwargs):
     """
     purpose: display a list of empty checkboxes|ballot boxes with chkd_l boxes checked and xed_l boxes with and X
     required:
@@ -11613,11 +11613,13 @@ def chkboxes(my_l, chkd_l=[], *args, **kwargs):
         - prnt: bool
         - color|clr: str      # default="" - text color
         - masterbox_clr: str  # default='white! on black' - outside master box color
-        - chkmark_clr: str    # default='green!' - check mark color 
-        - xmark_clr: str      # default='red!' - X mark color 
+        - chkmark_clr: str    # default='green!' - check mark color
+        - xmark_clr: str      # default='red!' - X mark color
         - chkbox_color: str   # default="" - check boxes color
         - title: str
         - footer: str
+        - cols: int           # number of columns
+        - indx|nums|indexed|numbered: bool  # whether to number the items
     returns: list  # printable lines
     notes:
     use:
@@ -11626,7 +11628,7 @@ def chkboxes(my_l, chkd_l=[], *args, **kwargs):
         chkd_l = []
         while ans not in ("q", "Q", ""):
             cls()
-            chkboxes(my_l, chkd_l, 'prnt', 'centered', 'boxed', title="What has been done", footer=dbug('here'))
+            chklst(my_l, chkd_l, 'prnt', 'centered', 'boxed', title="What has been done", footer=dbug('here'))
             ans = gselect(my_l, centered=centered_b)
             chkd_L.append(ans)
     """
@@ -11654,6 +11656,8 @@ def chkboxes(my_l, chkd_l=[], *args, **kwargs):
     chkbox_b = bool_val(["check_box", 'chk_box', 'chkbox', 'chkbx', 'simple'], args, kwargs, dflt=False)
     title = kvarg_val("title", kwargs, dflt = "")
     footer = kvarg_val("footer", kwargs, dflt = "")
+    cols = kvarg_val("cols", kwargs, dflt=1)
+    indx = bool_val(["numbered", "indx", "indexed", "nums"], args, kwargs, dflt=False)
     # dbug(style)
     # dbug("\u2713")  # check mark
     # dbug("\u2714")  # bold check mark
@@ -11700,9 +11704,13 @@ def chkboxes(my_l, chkd_l=[], *args, **kwargs):
             box = style_l[1]
         lines.append(f"{box}  {RESET}{CLR}{item}{RESET}")
         lines = gblock(lines)
+    if indx:
+        lines = [f"{num:>2}. {line}" for num, line in enumerate(lines, start=1)]
+    if cols > 1:
+        lines = gcolumnize(lines, cols=cols)
     lines = printit(lines, boxed=boxed_b, prnt=prnt, centered=centered_b, title=title, footer=footer, box_clr=master_box_clr, clr=clr)
     return lines
-    # ### EOB def chkbox(my_l, chkd_l=[], xed_l=[], *args, **kwargs): ### #
+    # ### EOB def chklst(my_l, chkd_l=[], xed_l=[], *args, **kwargs): ### #
 
 
 def chkbox_demo(*args, **kwargs):
