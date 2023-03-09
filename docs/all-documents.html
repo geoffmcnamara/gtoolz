@@ -139,7 +139,7 @@
             <div class="type">Module</div>
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">No module docstring; 0/5 variable, 0/3 constant, 149/151 functions, 4/4 classes documented</span></div>
+            <div class="summary"><span class="undocumented">No module docstring; 0/5 variable, 0/3 constant, 150/152 functions, 4/4 classes documented</span></div>
           </li><li id="gtoolz.__version__">
             
             <div class="fullName">gtoolz<wbr></wbr>.__version__</div>
@@ -715,7 +715,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: to provide a boxed closing message default msg is below options:     - quote: str             # should a random quote from filename provided be included     - quoote_box_color: str  # box color for quote default="White...</div>
+            <div class="summary">purpose: to provide a boxed closing message default msg is below options:     - box_clr: str           # color of main box     - quote: str             # should a random quote from filename provided be included     - quoote_box_color: str  # box color for quote default="White...</div>
           </li><li id="gtoolz.convert_temp">
             
             <div class="fullName">gtoolz<wbr></wbr>.convert<wbr></wbr>_temp</div>
@@ -731,7 +731,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: presents a boxed logo for the begining of a program requires: nothing but you should provide some default content: str|list options:      - content: str|list,      - prnt: bool,      - figlet: bool,       - center: bool,       - shadow: bool,       - box_color: str,       - color: str,      - fotune: bool &lt;-- requires the fortune app...</div>
+            <div class="summary">purpose: presents a boxed logo for the begining of a program requires: nothing but you should provide some default content: str|list options:      - content: str|list,      - prnt: bool,      - figlet: bool,      - center: bool,      - shadow: bool,      - box_color: str,      - color: str,      - fotune: bool &lt;-- requires the fortune app...</div>
           </li><li id="gtoolz.do_logo_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.do<wbr></wbr>_logo<wbr></wbr>_demo</div>
@@ -995,7 +995,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: turns line(s) into a list of strings with full words less than or equal to length input is sentence which can be a string or list returns lines list wrapped using length and color if provided NOTE: all color codes will get stripped out before processing     requires import of wrapper...</div>
+            <div class="summary">purpose: turns line(s) into a list of strings with full words less than or equal to length input is sentence which can be a string or list returns lines from a list text wrapped using specified length and colorize text if stipulated NOTE: all color codes will get stripped out text before processing...</div>
           </li><li id="gtoolz.wrapit_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.wrapit<wbr></wbr>_demo</div>
@@ -1019,7 +1019,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: replaces every dict key with dict value in a string     with_d eg: {'   ', '  ', 'foo', 'bar'} returns: str  TODO need more doc info here</div>
+            <div class="summary">purpose: replaces every string in a dict key with dict value in a string     with_d eg: {'   ', '  ', 'foo', 'bar'} example use could be to replace foul words with less offensive terms returns: str  TODO need more doc info here...</div>
           </li><li id="gtoolz.boxed">
             
             <div class="fullName">gtoolz<wbr></wbr>.boxed</div>
@@ -1308,6 +1308,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: prints a list of enumerated basename filenames (sorted by name) input:     dirs=list|str options:     pattern: str|list = "*"  # glob pattern     return_msgs&lt;bolean&gt; = False     prnt&lt;bolean&gt; = False     dirs: bool               # include dirs     dir_only: bool           # only dirs     links: bool              # include links returns:     a sorted list of those names     or     return_msgs and sorted names use: list_files("/tmp")...</div>
+          </li><li id="gtoolz.list_files_demo">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.list<wbr></wbr>_files<wbr></wbr>_demo</div>
+            <div class="url">index.html#list_files_demo</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: a demo of using list_files returns: None</div>
           </li><li id="gtoolz.select_file">
             
             <div class="fullName">gtoolz<wbr></wbr>.select<wbr></wbr>_file</div>
@@ -1315,7 +1323,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: select a file (or dir) from using pattern(s) required: options:     - path: str|list  (defaults to "./")     - pattern: str|list     - prompt: str     - mtime: bool      # include mtime in listing     - centered     - dirs: bool       # include dirs     - dirs_only: bool  # only directories     - prnt: bool     - shadow     - footer     - width=0 use: f = select_file("/home/user","*...</div>
+            <div class="summary">purpose: select a file (or dir) from using pattern(s) required: options:     - path: str|list  (defaults to "./")     - pattern: str|list     - prompt: str     - mtime: bool      # include mtime in listing     - centered     - dirs: bool       # include dirs     - dirs_only: bool  # only directories     - prnt: bool     - shadow     - footer     - sortby: str      # if str in ("mtime", "mdate", "date") then sortby mtime     - with_mtime       # include mtime next to filename     - width=0 use: f = select_file("/home/user","*...</div>
           </li><li id="gtoolz.reduce_line">
             
             <div class="fullName">gtoolz<wbr></wbr>.reduce<wbr></wbr>_line</div>
@@ -1323,7 +1331,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: reduce a line to no more than max_len with and no broken words     then return the reduced_line, and remaining_line returns: tuple - this_line(reduced) and the remaining part of the line Note - used in wrapit()...</div>
+            <div class="summary">purpose: reduce a line to no more than max_len with and no broken words     then return the reduced_line, and remaining_line returns: tuple - this_line(reduced) and the remaining part of the line Note - this is used in wrapit() ...</div>
           </li><li id="gtoolz.escape_ansi">
             
             <div class="fullName">gtoolz<wbr></wbr>.escape<wbr></wbr>_ansi</div>
@@ -1395,7 +1403,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">I wrote this because I am constantly building csv files with a header line consider add_or_replace() function Required:     file     content=str|list Options:     after=pattern     before=pattern     replace=pattern     position=##     if none of those content is appended to the file     if header is also included it will be added to the begining of the file if it does not already exitst used_to_be: add_line()...</div>
+            <div class="summary">I wrote this because I am constantly building csv files with a header line (also consider add_or_replace() function) Required:     file     content=str|list Options:     after=pattern     before=pattern     replace=pattern     position=##     if none of those content is appended to the file     if header is also included it will be added to the begining of the file if it does not already exitst used_to_be: add_line()...</div>
           </li><li id="gtoolz.sorted_add">
             
             <div class="fullName">gtoolz<wbr></wbr>.sorted<wbr></wbr>_add</div>
@@ -1547,7 +1555,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">regex for a patern in a word|column file_lines can be a filename or lines (list) col starts at 0 to be consistent with coding standards returns lines where pat matches col number word ie words[col]</div>
+            <div class="summary">purpose: regex for a pattern in a word|column     file_lines can be a filename or lines (list) returns: lines where pat matches col number word ie words[col] notes:    col starts at 0 to be consistent with coding standards...</div>
           </li><li id="gtoolz.rootname">
             
             <div class="fullName">gtoolz<wbr></wbr>.rootname</div>
@@ -1563,7 +1571,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: determine is my_lol is actually a list of lists required: list - my_lol options: none return: bool True | False</div>
+            <div class="summary">purpose: determine is my_lol is actually a list of lists required: list - my_lol options: none return: bool True | False note:     - if you want to know if your matrix is a list of list of a list of list (eg: rows, columns, of boxes)       use: islolol = all([islol(elem) for elem in mtrx])   # True or False...</div>
           </li><li id="gtoolz.islod">
             
             <div class="fullName">gtoolz<wbr></wbr>.islod</div>
@@ -1795,7 +1803,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: print a simple directory tree options:     - files: bool  # default=False     - prnt: bool   # default=False  should we print out the lines     - excludes: list | str  # default=[] this is a pattern or list of patterns to skip     - boxed: bool  # boxes all the lines     - length: int  # default=3  # size of the "fill" returns: list (lines for printing)...</div>
+            <div class="summary">purpose: print a simple directory tree options:     - files: bool           # default=False     - prnt: bool            # default=False  should we print out the lines     - excludes: list | str  # default=[] this is a pattern or list of patterns to skip     - boxed: bool           # boxes all the lines     - title: str            # default=f"Directory: {dir_name} Show files: {files_b}"     - footer: str           # default=f"Excludes: {excludes} " + dbug('here')"     - centered: bool        # boxes all the lines     - length: int           # default=3  # size of the "fill"     - box_clr: str          # color of box if that option is True returns: list (lines for printing)...</div>
           </li><li id="gtoolz.dtree_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.dtree<wbr></wbr>_demo</div>
@@ -1812,10 +1820,10 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: display a list of empty checkboxes|ballot boxes with chkd_l boxes checked and xed_l boxes with and X required:     - my_l: list      # list of check box names     - chkd_l: list    # list of boxes to be checked options:     - dflt: str       # default='empty' - alternatives: default= or dflt= 'chk', 'chkd', 'checked', 'all_chkd', 'chk_all , 'xed' 'x_all', 'all_x'...</div>
-          </li><li id="gtoolz.chkbox_demo">
+          </li><li id="gtoolz.chklst_demo">
             
-            <div class="fullName">gtoolz<wbr></wbr>.chkbox<wbr></wbr>_demo</div>
-            <div class="url">index.html#chkbox_demo</div>
+            <div class="fullName">gtoolz<wbr></wbr>.chklst<wbr></wbr>_demo</div>
+            <div class="url">index.html#chklst_demo</div>
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>

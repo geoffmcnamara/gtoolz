@@ -49,7 +49,7 @@ import pandas as pd
 
 
 # ### GLOBALS ### #
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 dtime = datetime.now().strftime("%Y%m%d-%H%M")
 FULL_PATH_SCRIPT = __file__
 SCRIPT = os.path.basename(__file__)
@@ -340,6 +340,7 @@ class Spinner:
             sys.stdout.write("\x1b[?25h")     # Restore cursor
             sys.stdout.write('\r')
             sys.stdout.flush()
+            time.sleep(0.2)
             print()  # ??? tries to force the cursor to the next line
     # ### class Spinner: ### #
 
@@ -857,7 +858,7 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
         ask_b = True
         # rtrn_msg = "Enter or 'y' to continue... anything else to exit... "
         rtrn_msg = ""
-        to_prnt = f"DEBUG: [{filename}:{fname}:{lineno}] {rtrn_msg}"
+        to_prnt = f"DEBUG: [{filename}:{fname}:{lineno}] {rtrn_msg}\nContinue: "
         if not askYN(to_prnt):
             sys.exit()
         return
@@ -1111,7 +1112,8 @@ def gselect(selections, *args, **kwargs):
     - footer
     - color
     - box_color
-    - width
+    - width: int|str   # if this is an integer it will provide the width in columns for the gselect. 
+                       # If it is a string it *must* have a "%" sign in it. The width will then become the percentage of the available screen columns 
     returns: str | list  -- either key(s) or value(s) as a *string* <---IMPORTANT  or list (if multiple), your choice
     Notes:
         - to understand this function know first that everything is turned into a dictionary first. A list would become a dictionary with  the keys being 1,2,3...
@@ -1227,6 +1229,13 @@ def gselect(selections, *args, **kwargs):
         # dbug(cols)
         # dbug(sep)
         lines = gcolumnize(lines, cols=cols, color=color, sep=sep)
+    if "%" in str(width):
+        scr_cols = get_columns()
+        # dbug(scr_cols)
+        # dbug(f"scr_cols * .80 = {scr_cols * .08}")
+        width = width.replace("%", "")
+        width = int(scr_cols * (int(width)/100))
+        # dbug(width, 'ask')
     if int(width) > 0:
         # dbug(width)
         lines = gcolumnize(lines, width=width, color=color, sep=sep)
@@ -1238,6 +1247,9 @@ def gselect(selections, *args, **kwargs):
         prompt = prompt + " or q)uit"
     if default != "":
         prompt += f" default: [{default}] "
+    if prompt.endswith(":") or prompt.endswith(": "):
+        prompt = prompt.rstrip()
+        prompt = prompt.rstrip(":")
     prompt += ": "
     """--== SEP_LINE ==--"""
     # dbug(f"multi: {multi} default: {default}")
@@ -2339,6 +2351,7 @@ def do_close(msg="", *args, hchr="=", color="", box_color="", rc=0, **kwargs):
     """
     purpose: to provide a boxed closing message default msg is below
     options:
+        - box_clr: str           # color of main box
         - quote: str             # should a random quote from filename provided be included
         - quoote_box_color: str  # box color for quote default="White! on black"
         - centered: bool         # center the output on the screen
@@ -2358,6 +2371,7 @@ def do_close(msg="", *args, hchr="=", color="", box_color="", rc=0, **kwargs):
     quote_box_color = kvarg_val(["qbox_clr", "quote_box_color", "quote_box_clr"], kwargs, dflt="white! on black")
     centered = bool_val(['center', 'centered'], args, kwargs, dflt=True)
     shadowed = bool_val(['shadow', 'shadowed'], args, kwargs)
+    box_color = kvarg_val(["box_clr", 'box_color', "bx_clr", "bxclr"], kwargs, dflt="")
     figlet = bool_val(['figlet'], args, kwargs)
     # """--== Init ==--"""
     dflt_msg = "Wanted: Software Developer. Python experience is a plus. Pay commensurate with skill set. Apply within."
@@ -2425,10 +2439,10 @@ def do_logo(content="", *args, hchr="-", prnt=True, figlet=False, center=True, s
         - content: str|list, 
         - prnt: bool, 
         - figlet: bool, 
-         - center: bool, 
-         - shadow: bool, 
-         - box_color: str, 
-         - color: str, 
+        - center: bool, 
+        - shadow: bool, 
+        - box_color: str, 
+        - color: str, 
         - fotune: bool <-- requires the fortune app
         . quote: str   <-- requires a filename with quote lines within it - one will be randomly selected
     if content = "" and /usr/local/etc/logo.nts does not exist then we use "Your Organization Name"
@@ -2445,7 +2459,7 @@ def do_logo(content="", *args, hchr="-", prnt=True, figlet=False, center=True, s
     quote = kvarg_val('quote', kwargs, dflt="")
     fortune = bool_val('fortune', args, kwargs)
     color = kvarg_val('color', kwargs)
-    box_color = kvarg_val('box_color', kwargs)
+    box_color = kvarg_val(['box_color', 'box_clr'], kwargs)
     prnt = bool_val('prnt', args, kwargs, dflt=True)
     title = kvarg_val('title', kwargs, dflt="")
     footer = kvarg_val('footer', kwargs, dflt="")
@@ -3425,7 +3439,7 @@ def gcolumnize(msg_l, *args, **kwargs):
         - footer = "": str  # only invoked if prnt == True
         - positions: list   # list of either triplets or lists with 3 values, (row, col, position)
                 --- position can easily be declared as 1-9 -> see gblock().__doc__
-    return: lines: list # suitable for printit()
+    returns: lines: list # suitable for printit()
     notes:
     - handles simple lists or a list of blocks/boxes (a list of lines)
     - If it is a list of lists (like several boxes made up of lines ) then
@@ -3473,17 +3487,13 @@ def gcolumnize(msg_l, *args, **kwargs):
     Two potato    Now close the door
     Three potato
     """
-    """--== debugging ==--"""
+    """--== Debugging ==--"""
     # dbug(funcname())
     # dbug(msg_l)
     # dbug(args)
     # dbug(kwargs)
     # for box in msg_l:
     #     printit(box)
-    # """--== TODO ==--"""
-    # TODO ???? somehow pivot and make column blocks????
-    # list(map(list, zip(*msg_l))
-    # see columned in t.py
     # """--== Config ==--"""
     pad = kvarg_val("pad", kwargs, dflt=" ")
     sep_chrs = kvarg_val(['sep', 'sepchr', 'sepchrs', 'sep_chr', 'sep_chrs'], kwargs, dflt=" ")
@@ -3491,9 +3501,10 @@ def gcolumnize(msg_l, *args, **kwargs):
     cntr_cols = kvarg_val(["cntr_cols", "center_cols", "cols_cntr", "cols_center"], kwargs, dflt=[])
     # my_lol = msg_l
     prnt = bool_val(['prnt', 'print', 'show'], args, kwargs, dflt=False)
-    # dbug(prnt)
     boxed_b = bool_val(['boxed', 'box'], args, kwargs, dflt=False)
-    boxed = boxed_b
+    # dbug(boxed_b)
+    # boxed = boxed_b
+    # dbug(boxed)
     box_color = kvarg_val(['box_color', 'box_clr', 'border_color', 'border_style'], kwargs, dflt="")  # white! on grey(50)?
     color = kvarg_val(["color", "clr", "txt_clr"], kwargs, dflt="")                                   # white! ?
     centered_b = bool_val(['center', 'centered', 'cntr', 'cntrd'], args, kwargs, dflt=False)
@@ -3530,46 +3541,90 @@ def gcolumnize(msg_l, *args, **kwargs):
         # dbug(cols)
         # lines = columned(msg_l, width=width, cols=cols, footer=dbug('here'), box_color="white! on grey50", color="white!", centered=centered)
         # dbug(width)
-        lines = columned(msg_l, width=width, cols=cols, footer=dbug('here'), box_color=box_color, color=color, centered=centered, sep=sep_chrs)
+        lines = columned(msg_l, width=width, cols=cols, footer=dbug('here'), box_color=box_color, color=color, centered=centered_b, sep=sep_chrs)
         # dbug("Returning lines")
-        if prnt:
-            printit(lines, boxed=boxed, centered=centered, box_color=box_color, color=color, title=title, footer=footer)
+        printit(lines, prnt=prnt, boxed=boxed_b, centered=centered_b, box_color=box_color, color=color, title=title, footer=footer)
         # dbug(f"Returning lines: {lines}")
         return lines
     # """--== is this an lol of an lol ie rows of boxes of lines ==--"""
     # dbug("This may be a list of lists of lists... ie: rows of boxes of lines")
     # islolol = any(isinstance(elem, list) for elem in my_lol[0])  # True or False... is this a list of lists
     islolol = all([islol(elem) for elem in msg_l])   # True or False... is this a list of lists within an lol
+    rows_cols_of_boxes = False
     if islolol:
-        # dbug("This is a lol within an lol - it is likely a list of boxes/blocks")
+        for elem in msg_l:
+            # possible a list of boxes
+            for item in elem:
+                # possibly  a box with lines
+                for each in item:
+                    # test to see if it really is line strings
+                    if isinstance(each, str):
+                        rows_cols_of_boxes = True
+        # if all([islos(elem) for elem in msg_l]):
+        if rows_cols_of_boxes:
+            # dbug(f"Must be an lolos msg_l: {msg_l[:10]}")
+            # dbug("This is a lol within an lol - it is likely a list of boxes/blocks")
+            # """--== SEP_LINE ==--"""
+            # assumption here is that [mtrx] is an lol list of rows with columns for a dashboard type display
+            mtrx = msg_l
+            rows = len(mtrx)
+            cols = len(mtrx[0])
+            cols = maxof(mtrx, 'elems')
+            max_col_lens = [0] * cols
+            max_row_h = [0] * rows  # init max_row_h
+            """--== SEP_LINE ==--"""
+            mtrx = fixlol(mtrx, dflt=gblock(" "))
+            pvt_mtrx = fixlol(mtrx, 'pivot')
+            """--== SEP_LINE ==--"""
+            col_boxes = []
+            num_rows = rows - 1
+            num_cols = cols - 1
+            # dbug("Lets begin...")
+            for col_num, col in enumerate(pvt_mtrx):
+                # dbug(col_num)
+                max_col_lens[col_num] = maxof(col)
+                for box in col:
+                    if nclen(box[0]) > max_col_lens[col_num]:
+                        max_col_lens[col_num] = nclen(box[0])
+                my_col = []
+                for row_num, box in enumerate(col):
+                    # establish default positions
+                    pos_str = ""
+                    if row_num == 0:             # "top"
+                        pos_str += "top "
+                    if row_num > 0 and row_num < num_rows:
+                        pos_str += "middle "
+                    if row_num == num_rows:      # "bottom"
+                        pos_str += "bottom "
+                    if col_num == 0:             # "left"
+                        pos_str += "left "
+                    if col_num > 0 and col_num < num_cols:
+                        pos_str += "center "
+                    if col_num == num_cols:      # "right"
+                        pos_str += "right "
+                    my_col += gblock(box, height=max_row_h[row_num], width=max_col_lens[col_num], position=pos_str)
+                col_boxes.append(gblock(my_col))
+                col_len = maxof(col, "length")
+                if col_len > max_col_lens[col_num]:
+                    max_col_lens[col_num] = col_len
+            # """--== SEP_LINE ==--"""
+            # dbug("We got here...")
+            # prnt = True  # debugging
+            my_cols = gcolumnize(col_boxes, prnt=prnt, boxed=boxed_b, centered=centered_b, box_clr=box_color, title=title, footer=footer)  # , footer=dbug('here'))
+            # dbug("Returning my_cols")
+            return  my_cols
+            # """--== SEP_LINE ==--"""
         # dbug(cols)
-        if all([islos(elem) for elem in msg_l]):
-            dbug(f"Must be an lolos msg_l: {msg_l[:10]}")
-        # if all(islos(elem) for elem in msg_l):  # debugging
-            # dbug("This must be a list of blocks/boxe... s")
-        # dbug(width)
         row_col_len_lol = []   # this will hold the max len for each col in each row
-        # rows and cols of boxes
-        # rows = len(my_lol)     # this is the number of rows
         rows = len(msg_l)     # this is the number of rows
-        # for row_num, row in enumerate(my_lol):
         for row_num, row in enumerate(msg_l):
-            # this will be cols of boxes
             row_col_len_lol.append([])  # initialize an empty list to col lens for this row
-            # row_max_len = 0
-            # row_col_nums.append(len(row))  # gets the number of cols in this row
             for col in row:
-                # this will be a "box"
                 col_len = maxof(col)
                 row_col_len_lol[row_num].append(col_len)  # each col len is appended
-                # row_max_len += maxof(col)  # max len of this box/col
-        # dbug(row_max_len)
-        # dbug(row_col_nums)
-        # dbug(row_col_len_lol)
         max_cols = 0
         if cols > 0:
             max_cols = cols
-        # dbug(max_cols)
         max_allcols_len = 0
         for row_num, row in enumerate(row_col_len_lol):
             if len(row) > max_cols:
@@ -3598,106 +3653,9 @@ def gcolumnize(msg_l, *args, **kwargs):
             lines.extend(row)
             # printit(row, title=f"row {n} in rows")
         # printit(lines, title="Worked?")
-        # dbug(centered_b)
         lines = printit(lines, boxed=boxed_b, centered=centered_b, title=title, footer=footer, box_color=box_color, color=color, prnt=prnt)
         # dbug("Returning lines")
         return lines
-        # """--== SEP_LINE ==--"""
-        # dbug('What happens now??? Remaing lines why and TODO')
-        my_lines = []
-        for lns in rows:
-            my_lines += lns
-        # """--== SEP_LINE ==--"""
-        if cols == 0:
-            cols = len(msg_l[0])  # number of cols - assumes the first row has the right number of cols which may not be the case
-        # dbug(rows)
-        len_rows = len(rows)
-        # dbug(len_rows)
-        # dbug(cols)
-        rows_cols_dims = [[0 for i in range(cols)] for j in range(len_rows)]  # initialize matrix(rows, cols)
-        rows_cols_pos = matrix(len_rows, cols, dflt_val=1)
-        # dbug(rows_cols_pos)
-        # dbug(positions)
-        for pos in positions:
-            r = pos[0]
-            c = pos[1]
-            p = pos[2]
-            rows_cols_pos[r][c] = p
-        # dbug(rows_cols_dims)
-        # populate all the dims for each row, col
-        # row_maxs = [0 for i in range(rows)]  # each row gets a max height
-        row_maxs = []
-        col_maxs = []
-        # dbug(row_maxs)
-        col_maxs = [0 for i in range(cols)]  # initialize each col gets a max length
-        # dbug(col_maxs)
-        # dbug(type(col_maxs))
-        for r, row in enumerate(rows_cols_dims):
-            # col_lengths = []
-            row_heights = []
-            for c, col in enumerate(row):
-                # length = maxof(my_lol[r][c])
-                length = maxof(msg_l[r][c])
-                if length > col_maxs[c]:
-                    col_maxs[c] = length
-                """--== calc row height and append to list of row_heights ==--"""
-                # height = len(my_lol[r][c])
-                height = len(msg_l[r][c])
-                # dbug(height)
-                row_heights.append(height)
-                """--== now put length and height into an array/matrix of dims ==--"""
-                # dbug(f"Adding to rows_cols_dims[{r}][{c}]: len: {length} and height: {height}")
-                rows_cols_dims[r][c] = [length, height]  # set [len, height] for box in row=r and col=c
-            row_maxs.append(max(row_heights))
-        # """--== SEP_LINE ==--"""
-        # dbug(row_maxs)
-        # dbug(col_maxs)
-        # dbug(type(rows_cols_dims))
-        # dbug(type(rows_cols_dims[0]))
-        # dbug(rows_cols_dims)
-        rows = []
-        # for r, row in enumerate(my_lol):
-        for r, row in enumerate(msg_l):
-            cols = []
-            for c, col in enumerate(row):
-                # msg = my_lol[r][c]
-                msg = msg_l[r][c]
-                length = col_maxs[c]
-                height = row_maxs[r]
-                # dbug(height)
-                pos = rows_cols_pos[r][c]
-                # dbug()
-                # printit(msg)
-                # dbug()
-                dbug(f"calling gblock msg[:2]: {msg[:2]}")
-                new_box = gblock(msg, length=col_maxs[c], height=row_maxs[r], position=pos)
-                # dbug(f"used gblock where title: {title} and footer: {footer}")
-                length = col_maxs[c]
-                height = row_maxs[r]
-                cols.append(new_box)
-                # boxed(new_box, 'prnt', title="tst",footer=f"{length}-{height}")  # debugging only
-            rows.append(cols)
-        my_lol = rows
-        # """--== SEP_LINE ==--"""
-        lines = []
-        # max_len = maxof(my_lol, 'len')
-        # max_height = maxof(my_lol, 'height')
-        for row in my_lol:
-            # dbug(centered_b)
-            lines += gcolumnize(row, center=True, width=width)
-        if prnt:
-            # dbug("running printit")
-            # dbug(centered_b)
-            # dbug(boxed_b)
-            printit(lines, centered=centered_b, boxed=boxed_b, box_color=box_color, color=color, title=title, footer=footer)
-        # dbug(prnt)
-        # dbug(centered_b)
-        # dbug(boxed_b)
-        # dbug(prnt)
-        new_lines = printit(lines, centered=centered_b, boxed=boxed_b, box_color=box_color, color=color, title=title, footer=footer, prnt=prnt)
-        # dbug(f"hmmmmmmmmm prnt: {prnt} if true... it printed... boxed: {boxed_b}")
-        # dbug(f"Returning new_lines [this islolol]")
-        return new_lines
     # """--== not a list of lists of lists ==--"""
     # dbug("ok so it is not rows of boxes - it is a single row with boxes (or lines)")
     # dbug(centered_b)
@@ -3815,7 +3773,34 @@ def gcolumnize_demo():
         Great for build quick dashboards
     """
     # dbug(funcname())
+    # """--== Config ==--"""
+    # ask_b = bool_val(["ask"], args, kwargs, dflt=True)
     # """--== SEP_LINE ==--"""
+    prnt = False
+    block1 = gblock("[one]", width=20, height=6, fill="1", pos=1, prnt=prnt)
+    block2 = gblock("[two]", width=20, height=6, fill="2", pos=2, prnt=prnt)
+    block3 = gblock("[three]", width=20, height=6, fill="3", pos=3, prnt=prnt)
+    block4 = gblock(boxed("[four]"), 'boxed', width=20, height=6, fill="4", pos=4, prnt=prnt)
+    block5 = gblock("[five]", 'boxed', width=20, height=6, fill="5", pos=5, prnt=prnt)
+    block6 = gblock("[six]", 'boxed', width=20, height=6, fill="6", pos=6, prnt=prnt)
+    block7 = gblock("[seven]", width=20, height=6, fill="7", pos=7, prnt=prnt)
+    block8 = gblock("[eight]", width=20, height=6, fill="8", pos=8, prnt=prnt)
+    block9 = gblock("[nine]", width=20, height=6, fill="9", pos=9, prnt=prnt)
+    print("="*50)
+    simple_l =[block1, block2, block3, block4, block5, block6, block7, block8, block9]
+    gcolumnize(simple_l, 'prnt', cols=3)
+    # """--== SEP_LINE ==--"""
+    boxes = [boxed("one"), boxed("two"), boxed("three"), boxed("four"), boxed("five"), boxed("six")]
+    tst_boxes = [boxed("one") + boxed("two"), boxed("three"), boxed("four") + boxed("five") + boxed("six")]
+    roc_boxes = [[boxed("one"), boxed("two")],
+                 [boxed("three"), boxed("four")],
+                 [boxed("five") + boxed("six")]]
+    args = '[boxed("one"), boxed("two"), boxed("three"), boxed("four"), boxed("five"), boxed("six")]'
+    dbug(args)
+    gcolumnize(boxes, 'prnt', 'boxed', 'centered', box_clr="white on blue", footer=dbug('here'), title=" one list of boxes - 2 cols", cols=2)
+    gcolumnize(tst_boxes, 'prnt', 'boxed', 'centered', box_clr="yellow! on black", footer=dbug('here'), title="tst_boxes: [1+2, 3, 4+5] type=list")
+    gcolumnize(roc_boxes, 'prnt', 'boxed', 'centered', box_clr="yellow! on black", footer=dbug('here'), title="roc_boxes: [[1, 2], [3, 4], [5 + 6]] type=list")
+    dbug('ask')
     tst_boxes = [boxed("one"), boxed("two"), boxed("three")]
     gcolumnize(tst_boxes, 'prnt', 'boxed', footer=dbug('here'))
     gcolumnize(tst_boxes, 'prnt', 'boxed', footer=dbug('here'), cols=2)
@@ -4773,9 +4758,8 @@ def wrapit(sentence, length=20, *args, **kwargs):
     """
     purpose: turns line(s) into a list of strings with full words less than or equal to length
     input is sentence which can be a string or list
-    returns lines list wrapped using length and color if provided
-    NOTE: all color codes will get stripped out before processing
-        requires import of wrapper
+    returns lines from a list text wrapped using specified length and colorize text if stipulated
+    NOTE: all color codes will get stripped out text before processing
     """
     # """--== Debugging ==--"""
     # dbug(funcname())
@@ -4890,8 +4874,9 @@ def get_columns(*args, **kwargs):
 
 def replace_all(msg, with_d):
     """
-    purpose: replaces every dict key with dict value in a string
+    purpose: replaces every string in a dict key with dict value in a string
         with_d eg: {'\t', '  ', 'foo', 'bar'}
+    example use could be to replace foul words with less offensive terms
     returns: str 
     TODO need more doc info here
     """
@@ -5492,6 +5477,7 @@ def fixlol(my_lol=[], *args, **kwargs):
     options:
         - length: int        # defaults to the length of the first row ie len(my_lol[0])
         - blank: str|None    # defaults to None but can be any string eg blank="..."
+        - transpose|pivot: bool   # default=False - if set true the lol will be transposed or pivoted before returning
     returns: fixed lol with all rows the same length (number of elements)
     used by gtable with option "fix"
     """
@@ -5499,14 +5485,22 @@ def fixlol(my_lol=[], *args, **kwargs):
     length = kvarg_val(["len", "length"], kwargs, dflt=length)
     length = int(length)
     blanks = kvarg_val(["blank", "blanks", "pad"], kwargs, dflt=None)
-    # """--== SEP_LINE ==--"""
-    # """--== SEP_LINE ==--"""
-    # """--== SEP_LINE ==--"""
+    pivot = bool_val(["pivot", "transpose", "pvt"], args, kwargs, dflt=False)
+    # """--== Process ==--"""
     my_lol = [row[:length] for row in my_lol]  # truncate first
     # now pad each row with None
     for num, row in enumerate(my_lol):
         while len(row) < length:
             my_lol[num].append(blanks)
+    if pivot:
+        # list(map(list, zip(*msg_l))  # to pivot??? need to research this TODO
+        transposed = list()
+        for i in range(len(my_lol[0])):
+            row = list()
+            for sublist in my_lol:
+                row.append(sublist[i])
+            transposed.append(row)
+        my_lol = transposed
     return my_lol
     # ### EOB def fixlol(my_lol=[], *args, **kwargs): ### #
 
@@ -5814,7 +5808,7 @@ def gtable(lol, *args, **kwargs):
     # reverse_b = bool_val(["rev", "rvsd", "reverse", "reversed"], args, kwargs, dflt=False)  # TODO - ie lol.reverse()
     nohdr_b = bool_val(["nohdr", "no_hdr", "nocolnames"], args, kwargs, dflt=False)  # removes first line (hdr/colnames) from table
     fix_b = bool_val(['fix'], args, kwargs, dflt=False)  # make all rows same number of columns as first row
-    # dbug(fix_b, 'ask')
+    # dbug(fix_b)
     # """--== Validate ==--"""
     if not isinstance(selected_cols, list):
         dbug(f"selected_cols: {selected_cols} must be a list ... please investigate... returning...")
@@ -5986,7 +5980,7 @@ def gtable(lol, *args, **kwargs):
                 #     row = row[:firstrow_len]
                 #     dbug(f"Now row: {row}")
                 # continue  # TODO debugging only
-                dbug("Returning None...")
+                # dbug("Problem with len or rows(s_. Returning None...")
                 return None
     # dbug(selected_cols)
     # dbug([row for row in lol if 'PNC' in row])
@@ -6177,62 +6171,67 @@ def gtable(lol, *args, **kwargs):
         # dbug(hdr)
         filterby_col = list(filterby_d.keys())[0]
         # filterby_i = None
-        filterby_i = hdr.index(filterby_col)  # filterby col index number
-        # dbug(filterby_i)
-        # dbug(len(hdr))
-        for n, col in enumerate(hdr):
-            if filterby_col == col:
-                # dbug(f"Found filterby_col: {filterby_col} == col: {col} n: {n}")
-                filterby_i = n
-                break
-        # dbug(filterby_i)
-        if filterby_i is None:
-            dbug(f"Failed to find filterby_col: {filterby_col} in hrd: {hdr}")
-        filterby_str = list(filterby_d.values())[0]
-        # dbug(f"filterby_str: {filterby_str} filterby_col: {filterby_col} filterby_i: {filterby_i}")
-        # dbug(f"lol[:2]: {lol[:2]}")
-        # dbug(filterby_str)
-        # """--== Init ==--"""
-        pat = ""  # default: non-regex
-        # """--== convert filterby ==--"""
-        if rgx_b:
-            pat = filterby_str  # now we have a regex search
-            # ci_b = False
-            # dbug("filterby must be a regex so we will treat it as one")
-        # """--== process ==--"""
-        new_lol = []
-        if ci_b:
-            # ci = case-insensitive
-            filterby_str = filterby_str.lower()
-        for row in lol:
-            elem = str(row[filterby_i])
-            # dbug(f"elem: {elem} filterby_d: {filterby_d} filterby_col: {filterby_col} filterby_i: {filterby_i} filterby_str: {filterby_str} hdr: {hdr} ci_b: {ci_b}")
-            # if isinstance(elem, str):
-            #     to_match = [elem]
-            # elem = str(row[filterby_i])
-            if ci_b:  # case_insensitive
-                elem = elem.lower()
-            # dbug(f"filterby_str: {filterby_str} elem: {elem} ")
-            # """--== check for match ==--"""
-            if len(pat) > 1:
-                # dbug(f"chkg rgx_b: {rgx_b} pat: {pat} elem: {elem} ci_b: {ci_b}")
-                if re.search(pat, elem):
-                    # dbug(f"Found that pat: {pat} matches elme: {elem} ci_b: {ci_b}")
-                    new_lol.append(row)
-                    # dbug("Continuing...")
-                    continue
-            if filterby_str in elem:
-                # dbug("not a regex (so it is (contains) 'like %pat%' database search')")
+        # dbug(filterby_col)
+        # dbug(hdr)
+        if not filterby_col in hdr:
+            dbug(f"filterby_col: {filterby_col} not found in hdr: {hdr}")
+        else:
+            filterby_i = hdr.index(filterby_col)  # filterby col index number
+            # dbug(filterby_i)
+            # dbug(len(hdr))
+            for n, col in enumerate(hdr):
+                if filterby_col == col:
+                    # dbug(f"Found filterby_col: {filterby_col} == col: {col} n: {n}")
+                    filterby_i = n
+                    break
+            # dbug(filterby_i)
+            if filterby_i is None:
+                dbug(f"Failed to find filterby_col: {filterby_col} in hrd: {hdr}")
+            filterby_str = list(filterby_d.values())[0]
+            # dbug(f"filterby_str: {filterby_str} filterby_col: {filterby_col} filterby_i: {filterby_i}")
+            # dbug(f"lol[:2]: {lol[:2]}")
+            # dbug(filterby_str)
+            # """--== Init ==--"""
+            pat = ""  # default: non-regex
+            # """--== convert filterby ==--"""
+            if rgx_b:
+                pat = filterby_str  # now we have a regex search
+                # ci_b = False
+                # dbug("filterby must be a regex so we will treat it as one")
+            # """--== process ==--"""
+            new_lol = []
+            if ci_b:
+                # ci = case-insensitive
+                filterby_str = filterby_str.lower()
+            for row in lol:
+                elem = str(row[filterby_i])
+                # dbug(f"elem: {elem} filterby_d: {filterby_d} filterby_col: {filterby_col} filterby_i: {filterby_i} filterby_str: {filterby_str} hdr: {hdr} ci_b: {ci_b}")
+                # if isinstance(elem, str):
+                #     to_match = [elem]
+                # elem = str(row[filterby_i])
+                if ci_b:  # case_insensitive
+                    elem = elem.lower()
                 # dbug(f"filterby_str: {filterby_str} elem: {elem} ")
-                # dbug(f"Appending row: {row}")
-                new_lol.append(row)
-        if len(new_lol) == 0:
-            dbug(f"No matching records found using pattern: {filterby_str} on column: {filterby_col}", centered=centered)
-            return None
-        new_lol.insert(0, hdr)
-        lol = new_lol
-        # dbug(f"Returning new_lol[:3] {lol[:3]}")
-        # return new_lol
+                # """--== check for match ==--"""
+                if len(pat) > 1:
+                    # dbug(f"chkg rgx_b: {rgx_b} pat: {pat} elem: {elem} ci_b: {ci_b}")
+                    if re.search(pat, elem):
+                        # dbug(f"Found that pat: {pat} matches elme: {elem} ci_b: {ci_b}")
+                        new_lol.append(row)
+                        # dbug("Continuing...")
+                        continue
+                if filterby_str in elem:
+                    # dbug("not a regex (so it is (contains) 'like %pat%' database search')")
+                    # dbug(f"filterby_str: {filterby_str} elem: {elem} ")
+                    # dbug(f"Appending row: {row}")
+                    new_lol.append(row)
+            if len(new_lol) == 0:
+                dbug(f"No matching records found using pattern: {filterby_str} on column: {filterby_col}", centered=centered)
+                return None
+            new_lol.insert(0, hdr)
+            lol = new_lol
+            # dbug(f"Returning new_lol[:3] {lol[:3]}")
+            # return new_lol
         # """--== EOB filterby ==--"""
     # dbug(lol[:3])
     # """--== condition any numbers ==--"""
@@ -7401,6 +7400,9 @@ def list_files(dirs, file_pat="*", *args, **kwargs):
     links = bool_val('links', args, kwargs, dflt=False)  # should links be followed
     dirs_b = bool_val(["dirs_b", "dirs"], args, kwargs, dflt=False)
     dirs_only = bool_val(["dirsonly", "dirs_only", "dironly", "dir_only"], args, kwargs, dflt=False)
+    sortby = kvarg_val(['sortby'], kwargs, dflt='name')
+    with_mtime = bool_val(["with_mtime", "with_mdate"], args,  kwargs, dflt=False)
+    # dbug(with_mtime)
     # """--== Inits ==--"""
     msgs = []
     files_l = []
@@ -7437,7 +7439,21 @@ def list_files(dirs, file_pat="*", *args, **kwargs):
                     if os.path.isfile(file):
                         files_l.append(file)
                         msgs.append("{:>2})  {}".format(n, file))
-            files_l = sorted(files_l)
+            if sortby.lower() == 'name':
+                files_l = sorted(files_l)
+            if sortby.lower() in ("date", "mtime", "mdate"):
+                files_with_mtime = [(f, os.path.getmtime(f)) for f in files_l]
+                files_mtime_l = sorted(files_with_mtime, key=lambda x: x[1])
+                if with_mtime:
+                    len_mdate = 19
+                    max_len = maxof(files_mtime_l) - (len_mdate + 4)
+                    new_files_l = []
+                    for file in files_mtime_l:
+                        mdate = datetime.fromtimestamp(file[1])
+                        mdate = str(mdate)[:len_mdate]
+                        new_files_l.append(f"{file[0]:{max_len}} {mdate}")
+                    files_l = new_files_l
+                    # dbug(files_l, 'ask')
             if len(files_l) > 0:
                 msg = "Found these files:"
                 for f in files_l:
@@ -7447,6 +7463,19 @@ def list_files(dirs, file_pat="*", *args, **kwargs):
     # else:
     return files_l
     # ### EOB def list_files(dirs, file_pat="*", *args, **kwargs): ### #
+
+
+def list_files_demo(*args, **kwargs):
+    """
+    purpose: a demo of using list_files
+    returns: None
+    """
+    lines = list_files("/etc")
+    printit(lines)
+    """--== SEP_LINE ==--"""
+    lines = list_files("/etc", sortby='mtime', with_mdate=True)
+    printit(lines)
+
 
 
 # # ##########################################################
@@ -7532,6 +7561,8 @@ def select_file(path="./",
         - prnt: bool
         - shadow
         - footer
+        - sortby: str      # if str in ("mtime", "mdate", "date") then sortby mtime
+        - with_mtime       # include mtime next to filename
         - width=0
     use: f = select_file("/home/user","*.txt")
     prints a file list and then asks for a choice
@@ -7547,8 +7578,10 @@ def select_file(path="./",
     dirs_b = bool_val(['dirs_b', 'dirs', 'dir'], args, kwargs, dflt=False)
     dirs_only = bool_val(['dirs_only', 'dirsonly', 'dironly', 'dir_only', 'only_dirs'], args, kwargs, dflt=False)
     width = kvarg_val(["displaywidth", "width"], kwargs, dflt=0)
+    sortby = kvarg_val(['sortby'], kwargs, dflt='name')
+    with_mtime = bool_val(["with_mtime", "with_mdate"], args,  kwargs, dflt=False)
     # """--== Process ==--"""
-    file_l = list_files(path, ptrns=ptrns, dirs_b=dirs_b, dirs_only=dirs_only)
+    file_l = list_files(path, ptrns=ptrns, dirs_b=dirs_b, dirs_only=dirs_only, sortby=sortby, with_mtime=with_mtime)
     # dbug(file_l)
     # if not choose:
     #     # just use list_files() instead
@@ -7561,7 +7594,6 @@ def select_file(path="./",
             mtime = time.ctime(mtime)
             base_filename += f" ({mtime})"
         file_d[base_filename] = file
-    # from rtools import rselect
     if width == 0:
         width = int(get_columns() * .8)
     if title == "":
@@ -7581,7 +7613,7 @@ def reduce_line(line, max_len, pad):
     purpose: reduce a line to no more than max_len with and no broken words
         then return the reduced_line, and remaining_line
     returns: tuple - this_line(reduced) and the remaining part of the line
-    Note - used in wrapit() ?
+    Note - this is used in wrapit() 
     """
     this_line = ""
     remaining_line = ""
@@ -7770,10 +7802,6 @@ def cinput(prompt, *args, **kwargs):
         - quit|exit|close: bool   # will quit with do_close() if availaable or just sys.exit()
     returns: user response
     """
-    # dbug(funcname())
-    # dbug(prompt)
-    # dbug(args)
-    # dbug(kwargs)
     # """--== Config ==--"""
     quit = bool_val(['quit', 'exit', 'close'], args, kwargs, dflt=False)
     shift = kvarg_val('shift', kwargs, dflt=0)
@@ -8054,7 +8082,7 @@ def add_content(file, content="", header="", **kvargs):
     # ########################################################
     """
     I wrote this because I am constantly building csv files with a header line
-    consider add_or_replace() function
+    (also consider add_or_replace() function)
     Required:
         file
         content=str|list
@@ -8964,7 +8992,7 @@ def shadowed(lines=[], style=4, color="grey"):
         for n in range(0,5):
             printit(centered(shadowed(boxed(msg + f"\nstyle: {n}"),style=n)))
     """
-    reset = sub_color('reset')
+    RESET = sub_color('reset')
     if isinstance(lines, str):
         lines = lines.split('\n')
     styles = []
@@ -8990,15 +9018,14 @@ def shadowed(lines=[], style=4, color="grey"):
             line = line + " "  # add a space to help when centering
         if cnt == 1:
             # shadow_chrs[0] = chr(9612)
-            line = line + color + shadow_chrs[0]
+            line = line + color + shadow_chrs[0] + RESET
         if cnt > 1:
             # shadow_chrs[1] = chr(9612)
-            line = line + color + shadow_chrs[1]
+            line = line + color + shadow_chrs[1] + RESET
         new_lines.append(line)
         cnt += 1
     # now add bottom shadow line
-    # new_lines.append(" " + color + shadow_chrs[2] + shadow_chrs[3] * (width - 2) + shadow_chrs[3] + reset)
-    new_lines.append(" " + color + shadow_chrs[2] + shadow_chrs[3] * (width - 2) + shadow_chrs[4] + reset)
+    new_lines.append(" " + color + shadow_chrs[2] + shadow_chrs[3] * (width - 2) + shadow_chrs[4] + RESET)
     return new_lines
     # ### EOB def shadowed(lines=[], style=4, color="grey"): ### #
 
@@ -9210,10 +9237,10 @@ def add_or_replace(filename, action, pattern, new_line, *args, backup=True, **kw
 def regex_col(file_lines, pat="", col=7, sep=""):
     # ###########################################
     """
-    regex for a patern in a word|column
-    file_lines can be a filename or lines (list)
-    col starts at 0 to be consistent with coding standards
-    returns lines where pat matches col number word ie words[col]
+    purpose: regex for a pattern in a word|column
+        file_lines can be a filename or lines (list)
+    returns: lines where pat matches col number word ie words[col]
+    notes:    col starts at 0 to be consistent with coding standards
     """
     if isinstance(file_lines, list):
         lines = file_lines
@@ -9288,6 +9315,9 @@ def islol(my_lol, *args, **kwargs):
     required: list - my_lol
     options: none
     return: bool True | False
+    note:
+        - if you want to know if your matrix is a list of list of a list of list (eg: rows, columns, of boxes)
+          use: islolol = all([islol(elem) for elem in mtrx])   # True or False... is this a list of lists within an lol
     """
     # """--== Config ==--"""
     # show = bool_val(["show"], args, kwargs, dflt=False)
@@ -9328,7 +9358,6 @@ def islod(my_lod, *args, **kwargs):
     #    return True
     # else:
     #    return False
-
 
 
 def islos(my_los=["a", "list", "of", "strings"], *args, **kwargs):
@@ -9519,6 +9548,14 @@ def maxof_demo():
     purpose: Demos of using ruleit() function
     returns: None
     """
+    box1 = boxed("one")
+    box2 = boxed(["two 2", "2"])
+    boxes = [box1, box2]
+    for box in boxes:
+        printit(box)
+    max_len_boxes = maxof(boxes)
+    printit(f"maxof(boxes): {max_len_boxes}")
+    # """--== SEP_LINE ==--"""
     lines = []
     my_l = ["one", "two", f"this is {gclr('red')}three", "four"]
     lines.append(f"maxof my_l: {my_l} is: {maxof(my_l)}")
@@ -9627,7 +9664,7 @@ def gblock(msgs_l, *args, **kwargs):
     # """--== Config ==--"""
     width = kvarg_val(["width", "length", "w"], kwargs, dflt=0)
     height = kvarg_val(["height", "h"], kwargs, dflt=0)
-    position = kvarg_val(["just", "justify", "position"], kwargs, dflt=1)  # can be str | list
+    position = kvarg_val(["just", "justify", "position", "pos"], kwargs, dflt=1)  # can be str | list
     positions = kvarg_val(["positions"], kwargs, dflt=[1, 2, 3])  # list ... applies when msgs_l is actually an list of lists of boxes
     pad = kvarg_val(["pad", "fill"], kwargs, dflt=" ")
     prnt = bool_val(["prnt", "print", "show"], args, kwargs, dflt=False)
@@ -9651,7 +9688,7 @@ def gblock(msgs_l, *args, **kwargs):
     my_group = []
     group = msgs_l
     if any([islos(x) for x in group]) and islol(group):
-        # dbug("this must be a group of cols as some elems are a list of strings (los)")
+        # dbug("This must be a group of cols as some elems are a list of strings (los)")
         for x in group:
             if islol(x):
                 # found a column with more than one box so lets treat it that way
@@ -9661,6 +9698,8 @@ def gblock(msgs_l, *args, **kwargs):
                 my_group.append(x)
         msgs_l = my_group
     # """--== Init ==--"""
+    pad = str(pad)
+    justify =  ""
     vjust = 'top'
     pad = gclr(color) + pad
     if all([islol(elem) for elem in msgs_l]):
@@ -9669,7 +9708,7 @@ def gblock(msgs_l, *args, **kwargs):
         for elem in msgs_l:
             # dbug(f"This must be a row ... elem: {elem} ")
             if all([islos(item) for item in elem]):
-                # this must be a list containing a list of strings (los)
+                # dbug("This must be a list containing a list of strings (los)")
                 # convert this to rows by adding them on top of each other
                 if len(elem) == 1:
                     for item in elem:
@@ -9684,27 +9723,27 @@ def gblock(msgs_l, *args, **kwargs):
     if isinstance(msgs_l, str) and "\n" in msgs_l:
         msgs_l = msgs_l.split("\n")
     # """--== SEP_LINE ==--"""
-    if not islol(msgs_l):
-        # dbug("simple list?")
-        max_width = maxof(msgs_l)
-        if width < max_width:
-            width = max_width
-        new_list = []
-        for elem in msgs_l:
-            elem = str(elem)
-            # dbug(type(elem), 'ask')
-            diff = width - nclen(elem)
-            fill = pad * diff
-            if str(position) in ("left", "1", "4", "7"):
-                new_elem = elem + fill
-            if str(position) in ("center", "2", "5", "8"):
-                fill = fill * (diff // 2)
-                new_elem = fill + elem + fill
-            if str(position) in ("right", "3", "6", "9"):
-                new_elem = elem + fill
-            new_list.append(new_elem)
-        # dbug(f"Returning new_list: {new_list}")
-        msgs_l = new_list
+    # if not islol(msgs_l):
+    #     # dbug("simple list?")
+    #     max_width = maxof(msgs_l)
+    #     if width < max_width:
+    #         width = max_width
+    #     new_list = []
+    #     for elem in msgs_l:
+    #         elem = str(elem)
+    #         # dbug(type(elem), 'ask')
+    #         diff = width - nclen(elem)
+    #         fill = pad * diff
+    #         if str(position) in ("left", "1", "4", "7"):
+    #             new_elem = elem + fill
+    #         if str(position) in ("center", "2", "5", "8"):
+    #             fill = fill * (diff // 2)
+    #             new_elem = fill + elem + fill
+    #         if str(position) in ("right", "3", "6", "9"):
+    #             new_elem = elem + fill
+    #         new_list.append(new_elem)
+    #     # dbug(f"Returning new_list: {new_list}")
+    #     msgs_l = new_list
     if islol(msgs_l):
         # dbug("Treating msgs_l as a lol ... not a simple list?", 'ask' )
         if any([islol(elem) for elem in msgs_l]):
@@ -9770,7 +9809,9 @@ def gblock(msgs_l, *args, **kwargs):
             return None
         return row_box
     # """--== SEP_LINE ==--"""
-    # now place the box in the proper position
+    # dbug(f"Now place the box in the proper position msgs_l: {msgs_l}")
+    if isinstance(msgs_l, str):
+        msgs_l = [msgs_l]
     msg_len = maxof(msgs_l)
     msg_height = len(msgs_l)
     max_len = msg_len
@@ -9812,7 +9853,7 @@ def gblock(msgs_l, *args, **kwargs):
         fill = pad * diff
         if justify == 'left':
             try:
-                msg = msg + fill
+                msg = str(msg) + fill
             except Exception as Error:
                 dbug(Error)
         if justify == 'center':
@@ -9864,6 +9905,7 @@ def gblock(msgs_l, *args, **kwargs):
         # return None
     # """--== SEP_LINE ==--"""
     rtrn_lines = printit(new_lines2, boxed=boxed_b, centered=centered, title=title, footer=footer, box_color=box_color, color=color, prnt=prnt, pad=pad, txt_center=txt_center)
+    # dbug("Returning rtrn_lines")
     return rtrn_lines
     # ### EOB def gblock(msgs_l, *args, **kwargs): ### #
 
@@ -9874,9 +9916,34 @@ def gblock_demo():
     returns: None
     """
     unevn_lines = ["one", "line two", "this is the third line", "forth"]
+    boxed_lines = boxed(unevn_lines)
     dbug(unevn_lines, 'lst')
     blcked_lines = gblock(unevn_lines)
     printit(blcked_lines, 'shadowed')
+    add_margin = 10
+    positions = [1,2,3,4,5,6,7,8,9]
+    width = maxof(boxed_lines) + add_margin
+    height = len(boxed_lines) + add_margin
+    all_bxs = []
+    for pos in positions:
+        blcked_lines = gblock(boxed_lines, width=width, height=height, pad="x", position=pos, title=f"pos: {pos}")
+        printit(blcked_lines, 'boxed', title=f"gblocked lines pos={pos}", footer=f"width: {width} height: {height} ")
+        # ruleit()
+        all_bxs.append(blcked_lines)
+    cnt = 0
+    row = []
+    rcb_mtrx = []
+    for bx in all_bxs:
+        cnt  += 1
+        row.append(bx)
+        if cnt % 3 == 0:
+            gcolumnize(row, cols=3, prnt=True)
+            dbug('ask')
+            rcb_mtrx.append(row)
+            row = []
+            cnt = 0
+    gcolumnize(all_bxs, 'prnt')
+    dbug('ask')
     row1 = boxed("row 1")
     dbug(row1, 'lst')
     row2 = boxed("row 2")
@@ -10207,7 +10274,6 @@ def usr_input(prompt="Your input: ", *args, **kwargs):
     # dbug(shift)
     # dbug(prompt)
     # """--== Process ==--"""
-    #
     # """--== standard input ==--"""
     if not edit and len(update) == 0:
         # dbug(f"shift: {shift} max_val_len: {max_val_len} nclen(default): {nclen(default)}")
@@ -10220,6 +10286,7 @@ def usr_input(prompt="Your input: ", *args, **kwargs):
             prompt = centered(prompt, shift=shift)[0]
             # dbug(f"prompt: {prompt} centered_b: {centered_b}")
         if noedit_b:
+            # dbug()
             printit(prompt)
             return default
         response = input(prompt) or default
@@ -10232,7 +10299,7 @@ def usr_input(prompt="Your input: ", *args, **kwargs):
     # """--== edit default input ==--"""
     # dbug(f"edit: {edit} update: {update} centered: {centered_b} shift: {shift} default={default}")
     if edit:
-        # dbug(f"edit: {edit} update: {update} centered: {centered_b} shift: {shift} default={default}")
+        # dbug(f"edit: {edit} update: {update} centered: {centered_b} shift: {shift} default={default} noedit_b: {noedit_b} prompt: {prompt}")
         readline.set_startup_hook(lambda: readline.insert_text(edit_text))
         shift = shift - (max_val_len // 2)
         response = ""
@@ -10242,6 +10309,7 @@ def usr_input(prompt="Your input: ", *args, **kwargs):
                 prompt = centered(prompt, shift=shift)[0]
             if noedit_b:
                 # yes, you may want to display the question but not allow an edit...
+                # dbug(prompt + default)
                 printit(prompt + default)
                 return default
             # dbug(prompt)
@@ -10330,7 +10398,7 @@ def usr_update(my_d, *args, **kwargs):
     # dbug(kwargs)
     """--== Config ==--"""
     # max_size = kvarg_val(["max", " max_size"], kwargs, dflt=40)
-    fix_l = kvarg_val(["fix", "fix_list", "fix_l", "fix_lst", "update", "update_lst"], kwargs, dflt=[])
+    fix_l = kvarg_val(["fix", "fix_list", "fix_l", "to_fix", "fix_lst", "update", "to_update", "update_lst"], kwargs, dflt=[])
     edit_b = bool_val(["edit", "editable", "edit_txt", "edit_text"], args, kwargs, dflt=False)
     centered_b = bool_val(["center", "centered", "cntr"], args, kwargs, dflt=False)
     noedits_l = kvarg_val(["noedits", "no_edits", "excludes", 'except'], kwargs, dflt=[])  # which keys will not be allowed editing of any form but will be presented/displayed
@@ -10350,30 +10418,41 @@ def usr_update(my_d, *args, **kwargs):
     max_k = maxof(list(fix_d.keys()))
     # dbug(max_k)
     # dbug(list(my_d.keys()))
+    # dbug(fix_d)
+    # dbug(list(fix_d.values()))
     max_v = maxof(list(fix_d.values()))
+    # dbug(list(fix_d.keys()))
     # dbug(max_v)
+    # dbug(prompt)
     if (max_k + max_v) > scr_cols:
         if chunks_b:
+            dbug(prompt)
             max_v = scr_cols - (nclen(prompt) + 10)  # arbitrary
             dbug(f'max_v is set to {max_v}')
         else:
-            dbug("Houston we have a problem... not enough room on the screen... consider the 'chunks' option")
+            dbug("Houston we have a problem... not enough room on the screen... consider the 'chunks' to break up large values into smaller chunks option")
+            # dbug(chunks_b)
+            # dbug(max_k)
+            # dbug(max_v)
+            # dbug(scr_cols)
             return
     new_d = my_d.copy()
     # """--== Process ==--"""
     # dbug(f"fix_l: {fix_l} noedits_l: {noedits_l} edit_b: {edit_b}")
+    # dbug(prompt)
     for k, v in fix_d.items():
         # dbug(f"k: {k} v: {v}")
         if v == "":  # this actually will get taken care of in usr_input but doing it anyway
             v = " "
         if k in noedits_l:
             noedit = True
-            dbug(f"making noedit: {noedit} k: {k}")
+            # dbug(f"making noedit: {noedit} k: {k}")
         else:
             noedit = False
             # dbug(f"k: {k} not found in noedits_l: {noedits_l}")
         # dbug(f"chkg nclen(v): {nclen(v)}")
         if nclen(v) > max_v and chunks_b:
+            # dbug(prompt)
             printit(v, 'boxed', title=f"This line will be broken into chunks (len: {max_v}) for editing.", footer=dbug('here'), centered=centered_b)
             my_lines = wrapit(v, length=max_v)
             lines_d = {}
@@ -10390,14 +10469,16 @@ def usr_update(my_d, *args, **kwargs):
         if edit_b:
             # allows in-place editing
             # dbug(f"max_k: {max_k} max_v: {max_v}")
-            prompt += f"[{k:<{max_k}}]: "
-            ans = usr_input(prompt=prompt, default=v, centered=centered_b, max_v=max_v, edit=edit_b, noedit=noedit)
+            my_prompt = prompt + f"[{k:<{max_k}}]: "
+            # dbug(my_prompt)
+            ans = usr_input(prompt=my_prompt, default=v, centered=centered_b, max_v=max_v, edit=edit_b, noedit=noedit)
             # dbug(ans)
         else:
             # allow replacement input only
             # dbug(f"max_k: {max_k} max_v: {max_v} k: {k} v: {v}")
-            prompt += f"[{k:<{max_k}}]: "
-            ans = usr_input(edit=edit_b, prompt=prompt, centered=centered_b, dflt=v, max_v=max_v, noedit=noedit)
+            my_prompt = prompt + f"[{k:<{max_k}}]: "
+            # dbug(my_prompt)
+            ans = usr_input(edit=edit_b, prompt=my_prompt, centered=centered_b, dflt=v, max_v=max_v, noedit=noedit)
             ans = str(ans)
             # dbug(ans)
         if quit_b:
@@ -11517,11 +11598,15 @@ def dtree(dir_name="./", *args, **kwargs):
     """
     purpose: print a simple directory tree
     options:
-        - files: bool  # default=False
-        - prnt: bool   # default=False  should we print out the lines
+        - files: bool           # default=False
+        - prnt: bool            # default=False  should we print out the lines
         - excludes: list | str  # default=[] this is a pattern or list of patterns to skip
-        - boxed: bool  # boxes all the lines
-        - length: int  # default=3  # size of the "fill"
+        - boxed: bool           # boxes all the lines
+        - title: str            # default=f"Directory: {dir_name} Show files: {files_b}"
+        - footer: str           # default=f"Excludes: {excludes} " + dbug('here')"
+        - centered: bool        # boxes all the lines
+        - length: int           # default=3  # size of the "fill"
+        - box_clr: str          # color of box if that option is True
     returns: list (lines for printing)
     """
     # """--== Debugging ==--"""
@@ -11535,9 +11620,17 @@ def dtree(dir_name="./", *args, **kwargs):
     # dbug(prnt)
     files_b = bool_val(["files", "f"], args, kwargs, dflt=False)
     boxed_b = bool_val(["boxed", "box"], args, kwargs, dflt=False)
+    box_clr = kvarg_val(['box_clr', 'box_color'], kwargs, dflt="white! on black")
+    centered_b = bool_val(["centered", "center", "cntr"], args, kwargs, dflt=False)
     excludes = kvarg_val(["exclude", "excludes", "filer", "filters"], kwargs, dflt=[])
     length = kvarg_val(["length"], kwargs, dflt=3)
+    title = kvarg_val("title", kwargs, dflt="")
+    footer = kvarg_val("title", kwargs, dflt="")
     # """--== Init ==--"""
+    if title == "":
+        title = f"Directory: {dir_name} Show files: {files_b}"
+    if footer == "":
+        footer = f"Excludes: {excludes} " + dbug('here')
     start_str = "|"
     start_mark = "+"
     fill_str = " " * (length)
@@ -11569,10 +11662,10 @@ def dtree(dir_name="./", *args, **kwargs):
                         skip = True
                 if not skip:
                     lines.append(((level + 1) * (start_str + fill_str)) + start_mark + mark_str + file)
-    if boxed_b:
-        lines = boxed(lines)
-    if prnt:
-        printit(lines, title=f"Directory: {dir_name} Show files: {files_b}", footer=f"Excludes: {excludes} " + dbug('here'))
+    lines = printit(lines, title=f"Directory: {dir_name} Show files: {files_b}",
+                    prnt=prnt,  boxed=boxed_b, centered=centered_b, 
+                    box_clr=box_clr,
+                    footer=footer)
     return lines
 
 
@@ -11582,12 +11675,9 @@ def dtree_demo(*args, **kwargs):
     return: None
     """
     dirs = ["/etc/apt", "/sys/dev", "/sys/block"]
+    excludes = ["^[au]"]
     for dir in dirs:
-        dtree(dir, 'prnt')
-        askYN()
-        dtree(dir, 'prnt', 'files')
-        askYN()
-        dtree(dir, 'prnt', 'files', excludes=["^[au]", "^\d+"])
+        dtree(dir, 'files', 'prnt', 'boxed', 'centered', excludes=excludes)
     return None
 
 
@@ -11599,7 +11689,9 @@ def dtree_demo(*args, **kwargs):
 #     printit(allmodules)
 
 
+# ###########################################
 def chklst(my_l, chkd_l=[], *args, **kwargs):
+    # #######################################
     """
     purpose: display a list of empty checkboxes|ballot boxes with chkd_l boxes checked and xed_l boxes with and X
     required:
@@ -11629,8 +11721,10 @@ def chklst(my_l, chkd_l=[], *args, **kwargs):
         while ans not in ("q", "Q", ""):
             cls()
             chklst(my_l, chkd_l, 'prnt', 'centered', 'boxed', title="What has been done", footer=dbug('here'))
-            ans = gselect(my_l, centered=centered_b)
-            chkd_L.append(ans)
+            ans =  cinput("Select which it you would like to work on (q)uit: ")
+            if ans in ("q", "Q", ""):
+                break
+            chkd_l.append(ans)
     """
     import unicodedata
     # """--== Debugging ==--"""
@@ -11713,7 +11807,7 @@ def chklst(my_l, chkd_l=[], *args, **kwargs):
     # ### EOB def chklst(my_l, chkd_l=[], xed_l=[], *args, **kwargs): ### #
 
 
-def chkbox_demo(*args, **kwargs):
+def chklst_demo(*args, **kwargs):
     """
     purpose: chkbox() demo
     returns: None
@@ -11730,7 +11824,7 @@ def chkbox_demo(*args, **kwargs):
     while True:
         cls()
         printit("Making all boxes X'ed. The default if for them to be empty...", 'centered')
-        chkboxes(my_l, chkd_l, 'all_xed', 'prnt', 'centered', 'boxed', dflt="x", title="chkbox() demo", footer=dbug('here'))
+        chklst(my_l, chkd_l, 'all_xed', 'prnt', 'centered', 'boxed', dflt="x", title="chkbox() demo", footer=dbug('here'))
         ans = gselect(my_l, centered=centered_b)
         # dbug(ans)
         if ans in ("q", "Q", ""):
@@ -11747,7 +11841,7 @@ def chkbox_demo(*args, **kwargs):
         cls()
         printit("Making 'three' X'ed", 'centered')
         # dbug(ans)
-        chkboxes(my_l, chkd_l, 'prnt', 'centered', 'boxed', 'chkbox', xed_l=xed_l, footer=dbug('here'))
+        chklst(my_l, chkd_l, 'prnt', 'centered', 'boxed', 'chkbox', xed_l=xed_l, footer=dbug('here'))
         ans = gselect(my_l, centered=centered_b)
         # dbug(ans)
         if ans in ("q", "Q", ""):

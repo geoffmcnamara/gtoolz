@@ -346,7 +346,7 @@
         
 
         
-            <div class="itemName"><code><a href="#chkbox_demo" class="internal-link" title="gtoolz.chkbox_demo">chkbox<wbr></wbr>_demo</a></code>
+            <div class="itemName"><code><a href="#chklst" class="internal-link" title="gtoolz.chklst">chklst</a></code>
             </div>
         
 
@@ -356,7 +356,7 @@
         
 
         
-            <div class="itemName"><code><a href="#chklst" class="internal-link" title="gtoolz.chklst">chklst</a></code>
+            <div class="itemName"><code><a href="#chklst_demo" class="internal-link" title="gtoolz.chklst_demo">chklst<wbr></wbr>_demo</a></code>
             </div>
         
 
@@ -1186,6 +1186,16 @@
         
 
         
+            <div class="itemName"><code><a href="#list_files_demo" class="internal-link" title="gtoolz.list_files_demo">list<wbr></wbr>_files<wbr></wbr>_demo</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#long_proc" class="internal-link" title="gtoolz.long_proc">long<wbr></wbr>_proc</a></code>
             </div>
         
@@ -1871,7 +1881,7 @@
     
     <td>Function</td>
     <td><code><a href="#add_content" class="internal-link" title="gtoolz.add_content">add<wbr></wbr>_content</a></code></td>
-    <td>I wrote this because I am constantly building csv files with a header line consider add_or_replace() function Required:     file     content=str|list Options:     after=pattern     before=pattern     replace=pattern     position=##     if none of those content is appended to the file     if header is also included it will be added to the begining of the file if it does not already exitst used_to_be: add_line()...</td>
+    <td>I wrote this because I am constantly building csv files with a header line (also consider add_or_replace() function) Required:     file     content=str|list Options:     after=pattern     before=pattern     replace=pattern     position=##     if none of those content is appended to the file     if header is also included it will be added to the begining of the file if it does not already exitst used_to_be: add_line()...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -1940,13 +1950,13 @@
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#chkbox_demo" class="internal-link" title="gtoolz.chkbox_demo">chkbox<wbr></wbr>_demo</a></code></td>
-    <td>purpose: chkbox() demo returns: None</td>
+    <td><code><a href="#chklst" class="internal-link" title="gtoolz.chklst">chklst</a></code></td>
+    <td>purpose: display a list of empty checkboxes|ballot boxes with chkd_l boxes checked and xed_l boxes with and X required:     - my_l: list      # list of check box names     - chkd_l: list    # list of boxes to be checked options:     - dflt: str       # default='empty' - alternatives: default= or dflt= 'chk', 'chkd', 'checked', 'all_chkd', 'chk_all , 'xed' 'x_all', 'all_x'...</td>
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#chklst" class="internal-link" title="gtoolz.chklst">chklst</a></code></td>
-    <td>purpose: display a list of empty checkboxes|ballot boxes with chkd_l boxes checked and xed_l boxes with and X required:     - my_l: list      # list of check box names     - chkd_l: list    # list of boxes to be checked options:     - dflt: str       # default='empty' - alternatives: default= or dflt= 'chk', 'chkd', 'checked', 'all_chkd', 'chk_all , 'xed' 'x_all', 'all_x'...</td>
+    <td><code><a href="#chklst_demo" class="internal-link" title="gtoolz.chklst_demo">chklst<wbr></wbr>_demo</a></code></td>
+    <td>purpose: chkbox() demo returns: None</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2056,7 +2066,7 @@
     
     <td>Function</td>
     <td><code><a href="#do_close" class="internal-link" title="gtoolz.do_close">do<wbr></wbr>_close</a></code></td>
-    <td>purpose: to provide a boxed closing message default msg is below options:     - quote: str             # should a random quote from filename provided be included     - quoote_box_color: str  # box color for quote default="White...</td>
+    <td>purpose: to provide a boxed closing message default msg is below options:     - box_clr: str           # color of main box     - quote: str             # should a random quote from filename provided be included     - quoote_box_color: str  # box color for quote default="White...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2076,7 +2086,7 @@
     
     <td>Function</td>
     <td><code><a href="#do_logo" class="internal-link" title="gtoolz.do_logo">do<wbr></wbr>_logo</a></code></td>
-    <td>purpose: presents a boxed logo for the begining of a program requires: nothing but you should provide some default content: str|list options:      - content: str|list,      - prnt: bool,      - figlet: bool,       - center: bool,       - shadow: bool,       - box_color: str,       - color: str,      - fotune: bool &lt;-- requires the fortune app...</td>
+    <td>purpose: presents a boxed logo for the begining of a program requires: nothing but you should provide some default content: str|list options:      - content: str|list,      - prnt: bool,      - figlet: bool,      - center: bool,      - shadow: bool,      - box_color: str,      - color: str,      - fotune: bool &lt;-- requires the fortune app...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2096,7 +2106,7 @@
     
     <td>Function</td>
     <td><code><a href="#dtree" class="internal-link" title="gtoolz.dtree">dtree</a></code></td>
-    <td>purpose: print a simple directory tree options:     - files: bool  # default=False     - prnt: bool   # default=False  should we print out the lines     - excludes: list | str  # default=[] this is a pattern or list of patterns to skip     - boxed: bool  # boxes all the lines     - length: int  # default=3  # size of the "fill" returns: list (lines for printing)...</td>
+    <td>purpose: print a simple directory tree options:     - files: bool           # default=False     - prnt: bool            # default=False  should we print out the lines     - excludes: list | str  # default=[] this is a pattern or list of patterns to skip     - boxed: bool           # boxes all the lines     - title: str            # default=f"Directory: {dir_name} Show files: {files_b}"     - footer: str           # default=f"Excludes: {excludes} " + dbug('here')"     - centered: bool        # boxes all the lines     - length: int           # default=3  # size of the "fill"     - box_clr: str          # color of box if that option is True returns: list (lines for printing)...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2301,7 +2311,7 @@
     
     <td>Function</td>
     <td><code><a href="#islol" class="internal-link" title="gtoolz.islol">islol</a></code></td>
-    <td>purpose: determine is my_lol is actually a list of lists required: list - my_lol options: none return: bool True | False</td>
+    <td>purpose: determine is my_lol is actually a list of lists required: list - my_lol options: none return: bool True | False note:     - if you want to know if your matrix is a list of list of a list of list (eg: rows, columns, of boxes)       use: islolol = all([islol(elem) for elem in mtrx])   # True or False...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2357,6 +2367,11 @@
     <td>Function</td>
     <td><code><a href="#list_files" class="internal-link" title="gtoolz.list_files">list<wbr></wbr>_files</a></code></td>
     <td>purpose: prints a list of enumerated basename filenames (sorted by name) input:     dirs=list|str options:     pattern: str|list = "*"  # glob pattern     return_msgs&lt;bolean&gt; = False     prnt&lt;bolean&gt; = False     dirs: bool               # include dirs     dir_only: bool           # only dirs     links: bool              # include links returns:     a sorted list of those names     or     return_msgs and sorted names use: list_files("/tmp")...</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#list_files_demo" class="internal-link" title="gtoolz.list_files_demo">list<wbr></wbr>_files<wbr></wbr>_demo</a></code></td>
+    <td>purpose: a demo of using list_files returns: None</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2436,12 +2451,12 @@
     
     <td>Function</td>
     <td><code><a href="#reduce_line" class="internal-link" title="gtoolz.reduce_line">reduce<wbr></wbr>_line</a></code></td>
-    <td>purpose: reduce a line to no more than max_len with and no broken words     then return the reduced_line, and remaining_line returns: tuple - this_line(reduced) and the remaining part of the line Note - used in wrapit()...</td>
+    <td>purpose: reduce a line to no more than max_len with and no broken words     then return the reduced_line, and remaining_line returns: tuple - this_line(reduced) and the remaining part of the line Note - this is used in wrapit() ...</td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#regex_col" class="internal-link" title="gtoolz.regex_col">regex<wbr></wbr>_col</a></code></td>
-    <td>regex for a patern in a word|column file_lines can be a filename or lines (list) col starts at 0 to be consistent with coding standards returns lines where pat matches col number word ie words[col]</td>
+    <td>purpose: regex for a pattern in a word|column     file_lines can be a filename or lines (list) returns: lines where pat matches col number word ie words[col] notes:    col starts at 0 to be consistent with coding standards...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2451,7 +2466,7 @@
     
     <td>Function</td>
     <td><code><a href="#replace_all" class="internal-link" title="gtoolz.replace_all">replace<wbr></wbr>_all</a></code></td>
-    <td>purpose: replaces every dict key with dict value in a string     with_d eg: {'   ', '  ', 'foo', 'bar'} returns: str  TODO need more doc info here</td>
+    <td>purpose: replaces every string in a dict key with dict value in a string     with_d eg: {'   ', '  ', 'foo', 'bar'} example use could be to replace foul words with less offensive terms returns: str  TODO need more doc info here...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2511,7 +2526,7 @@
     
     <td>Function</td>
     <td><code><a href="#select_file" class="internal-link" title="gtoolz.select_file">select<wbr></wbr>_file</a></code></td>
-    <td>purpose: select a file (or dir) from using pattern(s) required: options:     - path: str|list  (defaults to "./")     - pattern: str|list     - prompt: str     - mtime: bool      # include mtime in listing     - centered     - dirs: bool       # include dirs     - dirs_only: bool  # only directories     - prnt: bool     - shadow     - footer     - width=0 use: f = select_file("/home/user","*...</td>
+    <td>purpose: select a file (or dir) from using pattern(s) required: options:     - path: str|list  (defaults to "./")     - pattern: str|list     - prompt: str     - mtime: bool      # include mtime in listing     - centered     - dirs: bool       # include dirs     - dirs_only: bool  # only directories     - prnt: bool     - shadow     - footer     - sortby: str      # if str in ("mtime", "mdate", "date") then sortby mtime     - with_mtime       # include mtime next to filename     - width=0 use: f = select_file("/home/user","*...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2606,7 +2621,7 @@
     
     <td>Function</td>
     <td><code><a href="#wrapit" class="internal-link" title="gtoolz.wrapit">wrapit</a></code></td>
-    <td>purpose: turns line(s) into a list of strings with full words less than or equal to length input is sentence which can be a string or list returns lines list wrapped using length and color if provided NOTE: all color codes will get stripped out before processing     requires import of wrapper...</td>
+    <td>purpose: turns line(s) into a list of strings with full words less than or equal to length input is sentence which can be a string or list returns lines from a list text wrapped using specified length and colorize text if stipulated NOTE: all color codes will get stripped out text before processing...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2692,7 +2707,7 @@
   <div class="docstring functionBody">
     
     <div><p class="pre">I wrote this because I am constantly building csv files with a header line
-consider add_or_replace() function
+(also consider add_or_replace() function)
 Required:
     file
     content=str|list
@@ -3113,30 +3128,6 @@ usage:
 </div><div class="basefunction">
   
   
-  <a name="gtoolz.chkbox_demo">
-    
-  </a>
-  <a name="chkbox_demo">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">chkbox_demo</span>(*args, **kwargs):
-    
-    <a class="headerLink" href="#chkbox_demo" title="gtoolz.chkbox_demo">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p class="pre">purpose: chkbox() demo
-returns: None</p></div>
-  </div>
-</div><div class="basefunction">
-  
-  
   <a name="gtoolz.chklst">
     
   </a>
@@ -3183,8 +3174,34 @@ use:
     while ans not in ("q", "Q", ""):
         cls()
         chklst(my_l, chkd_l, 'prnt', 'centered', 'boxed', title="What has been done", footer=dbug('here'))
-        ans = gselect(my_l, centered=centered_b)
-        chkd_L.append(ans)</p></div>
+        ans =  cinput("Select which it you would like to work on (q)uit: ")
+        if ans in ("q", "Q", ""):
+            break
+        chkd_l.append(ans)</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="gtoolz.chklst_demo">
+    
+  </a>
+  <a name="chklst_demo">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">chklst_demo</span>(*args, **kwargs):
+    
+    <a class="headerLink" href="#chklst_demo" title="gtoolz.chklst_demo">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">purpose: chkbox() demo
+returns: None</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -3801,6 +3818,7 @@ then print lines eg printit(lines)</p></div>
     
     <div><p class="pre">purpose: to provide a boxed closing message default msg is below
 options:
+    - box_clr: str           # color of main box
     - quote: str             # should a random quote from filename provided be included
     - quoote_box_color: str  # box color for quote default="White! on black"
     - centered: bool         # center the output on the screen
@@ -3917,10 +3935,10 @@ options:
     - content: str|list, 
     - prnt: bool, 
     - figlet: bool, 
-     - center: bool, 
-     - shadow: bool, 
-     - box_color: str, 
-     - color: str, 
+    - center: bool, 
+    - shadow: bool, 
+    - box_color: str, 
+    - color: str, 
     - fotune: bool &lt;-- requires the fortune app
     . quote: str   &lt;-- requires a filename with quote lines within it - one will be randomly selected
 if content = "" and /usr/local/etc/logo.nts does not exist then we use "Your Organization Name"
@@ -4058,11 +4076,15 @@ def myfunc():
     
     <div><p class="pre">purpose: print a simple directory tree
 options:
-    - files: bool  # default=False
-    - prnt: bool   # default=False  should we print out the lines
+    - files: bool           # default=False
+    - prnt: bool            # default=False  should we print out the lines
     - excludes: list | str  # default=[] this is a pattern or list of patterns to skip
-    - boxed: bool  # boxes all the lines
-    - length: int  # default=3  # size of the "fill"
+    - boxed: bool           # boxes all the lines
+    - title: str            # default=f"Directory: {dir_name} Show files: {files_b}"
+    - footer: str           # default=f"Excludes: {excludes} " + dbug('here')"
+    - centered: bool        # boxes all the lines
+    - length: int           # default=3  # size of the "fill"
+    - box_clr: str          # color of box if that option is True
 returns: list (lines for printing)</p></div>
   </div>
 </div><div class="basefunction">
@@ -4224,6 +4246,7 @@ returns: matching lines</p></div>
 options:
     - length: int        # defaults to the length of the first row ie len(my_lol[0])
     - blank: str|None    # defaults to None but can be any string eg blank="..."
+    - transpose|pivot: bool   # default=False - if set true the lol will be transposed or pivoted before returning
 returns: fixed lol with all rows the same length (number of elements)
 used by gtable with option "fix"</p></div>
   </div>
@@ -4478,7 +4501,7 @@ options:
     - footer = "": str  # only invoked if prnt == True
     - positions: list   # list of either triplets or lists with 3 values, (row, col, position)
             --- position can easily be declared as 1-9 -&gt; see gblock().__doc__
-return: lines: list # suitable for printit()
+returns: lines: list # suitable for printit()
 notes:
 - handles simple lists or a list of blocks/boxes (a list of lines)
 - If it is a list of lists (like several boxes made up of lines ) then
@@ -4965,7 +4988,8 @@ options:
 - footer
 - color
 - box_color
-- width
+- width: int|str   # if this is an integer it will provide the width in columns for the gselect. 
+                   # If it is a string it *must* have a "%" sign in it. The width will then become the percentage of the available screen columns 
 returns: str | list  -- either key(s) or value(s) as a *string* &lt;---IMPORTANT  or list (if multiple), your choice
 Notes:
     - to understand this function know first that everything is turned into a dictionary first. A list would become a dictionary with  the keys being 1,2,3...
@@ -5358,7 +5382,10 @@ returns: bool</p></div>
     <div><p class="pre">purpose: determine is my_lol is actually a list of lists
 required: list - my_lol
 options: none
-return: bool True | False</p></div>
+return: bool True | False
+note:
+    - if you want to know if your matrix is a list of list of a list of list (eg: rows, columns, of boxes)
+      use: islolol = all([islol(elem) for elem in mtrx])   # True or False... is this a list of lists within an lol</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -5672,6 +5699,30 @@ returns:
     or
     return_msgs and sorted names
 use: list_files("/tmp")</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="gtoolz.list_files_demo">
+    
+  </a>
+  <a name="list_files_demo">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">list_files_demo</span>(*args, **kwargs):
+    
+    <a class="headerLink" href="#list_files_demo" title="gtoolz.list_files_demo">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">purpose: a demo of using list_files
+returns: None</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -6154,7 +6205,7 @@ returns: None</p></div>
     <div><p class="pre">purpose: reduce a line to no more than max_len with and no broken words
     then return the reduced_line, and remaining_line
 returns: tuple - this_line(reduced) and the remaining part of the line
-Note - used in wrapit() ?</p></div>
+Note - this is used in wrapit() </p></div>
   </div>
 </div><div class="basefunction">
   
@@ -6177,10 +6228,10 @@ Note - used in wrapit() ?</p></div>
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="pre">regex for a patern in a word|column
-file_lines can be a filename or lines (list)
-col starts at 0 to be consistent with coding standards
-returns lines where pat matches col number word ie words[col]</p></div>
+    <div><p class="pre">purpose: regex for a pattern in a word|column
+    file_lines can be a filename or lines (list)
+returns: lines where pat matches col number word ie words[col]
+notes:    col starts at 0 to be consistent with coding standards</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -6234,8 +6285,9 @@ created: 20220423 gwm</p></div>
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="pre">purpose: replaces every dict key with dict value in a string
+    <div><p class="pre">purpose: replaces every string in a dict key with dict value in a string
     with_d eg: {'   ', '  ', 'foo', 'bar'}
+example use could be to replace foul words with less offensive terms
 returns: str 
 TODO need more doc info here</p></div>
   </div>
@@ -6632,6 +6684,8 @@ options:
     - prnt: bool
     - shadow
     - footer
+    - sortby: str      # if str in ("mtime", "mdate", "date") then sortby mtime
+    - with_mtime       # include mtime next to filename
     - width=0
 use: f = select_file("/home/user","*.txt")
 prints a file list and then asks for a choice
@@ -7181,9 +7235,8 @@ return: None</p></div>
     
     <div><p class="pre">purpose: turns line(s) into a list of strings with full words less than or equal to length
 input is sentence which can be a string or list
-returns lines list wrapped using length and color if provided
-NOTE: all color codes will get stripped out before processing
-    requires import of wrapper</p></div>
+returns lines from a list text wrapped using specified length and colorize text if stipulated
+NOTE: all color codes will get stripped out text before processing</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -7488,7 +7541,7 @@ returns: rgb(r,g,b) text string instead of supplied color</p></div>
   <div class="container">
     <a href="index.html">API Documentation</a> for gtoolz,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2023-02-28 10:33:42.
+    22.9.1 at 2023-03-09 14:02:24.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
