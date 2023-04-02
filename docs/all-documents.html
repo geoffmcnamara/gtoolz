@@ -139,7 +139,7 @@
             <div class="type">Module</div>
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">No module docstring; 0/5 variable, 0/3 constant, 150/152 functions, 4/4 classes documented</span></div>
+            <div class="summary"><span class="undocumented">No module docstring; 0/5 variable, 0/3 constant, 152/156 functions, 4/4 classes documented</span></div>
           </li><li id="gtoolz.__version__">
             
             <div class="fullName">gtoolz<wbr></wbr>.__version__</div>
@@ -675,7 +675,23 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Usage:     {0} [-hEP] [--dir] [&lt;filename&gt;]     {0} -s &lt;func&gt;     {0} -S &lt;func&gt;     {0} -t [&lt;func&gt;]     {0} -T &lt;func&gt; [&lt;fargs&gt;]     {0} --version</div>
+            <div class="summary">Usage:     {0} -h     {0} -T &lt;func&gt; [&lt;fargs&gt;]     {0} --version     {0} --demos     {0} --docs     {0} &lt;cmd&gt; [&lt;fargs&gt;]</div>
+          </li><li id="gtoolz.get_args">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.get<wbr></wbr>_args</div>
+            <div class="url">index.html#get_args</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="gtoolz.do_cli">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.do<wbr></wbr>_cli</div>
+            <div class="url">index.html#do_cli</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">WIP</div>
           </li><li id="gtoolz.centered">
             
             <div class="fullName">gtoolz<wbr></wbr>.centered</div>
@@ -795,7 +811,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: de-comments a file, aka removes all comments denoted by "#" ... input: file: str return lines: list (decommented lines)</div>
+            <div class="summary">purpose: de-comments a file, aka removes all comments denoted by "#" ... input:      content: list | filename | str   # content can be a line (string), a list of lines (strings), of a filename options:     - dat_b: bool   # converts first (commented line) into a non-commented line rather than eliminating it as a comment return lines: list (de-commented lines/purified)...</div>
           </li><li id="gtoolz.ireplace">
             
             <div class="fullName">gtoolz<wbr></wbr>.ireplace</div>
@@ -1195,7 +1211,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: accepts any type of "data" (ie str|list|pandas|list of dictionaries|csv_file_name etc) and converts to a list of lists (ie lol) options:     - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames     - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values     - index: bool         # TODO     - fix: bool           # will "fix" all the rows of an lol to the length of the first row (be careful with this)     - blanks: str|None    # default=None blanks sets the string for elements added in row when fix option is used returns: a list of lists (rows of columns) with the first row having colnames...</div>
+            <div class="summary">purpose: accepts any type of "data" (ie str|list|pandas|list of dictionaries|csv_file_name etc) and converts to a list of lists (ie lol) options:     - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames     - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values     - fix: bool           # will "fix" all the rows of an lol to the length of the first row (be careful with this)     - blanks: str|None    # default=None blanks sets the string for elements added in row when fix option is used     - index: bool         # default=False     - purify: bool        # default=True - strips off comments (purifies based on the '#' symbol) before processing returns: a list of lists (rows of columns) with the first row having colnames notes: problem if a "#" is in a line, it will truncate it as it thinks the ramaining is a comment # TODO need to fix this...</div>
           </li><li id="gtoolz.cnvrt2lol_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.cnvrt2lol<wbr></wbr>_demo</div>
@@ -1211,7 +1227,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: returns lines or displays a colorized table from a list_of_lists, df, or dictionary input: rows: str|list|dict|list_of_lists|list_of_dicts|dataframe options:     - color: str,     - box_style: 'single', 'double', 'solid',     - box_color: str,     - header|hdr: bool,  # header | hdr   # highlights the colnames     - end_hdr: bool      # adds highlighted hdr/colnames to the bottom of the table     - colnames: list | str,  'firstrow' | 'firstline' | 'keys'     - col_colors: list,   # gtable will use this list of colors to set each column, repeats if more cols than colors     - neg: bool | list,     - nan: str,     - alt: bool_val,     - alt_color: str,     - title: str,     - footer: str,     - indexes: bool,     - box_style: str,     - max_col_len|col_limit|col_len...</div>
+            <div class="summary">purpose: returns lines or displays a colorized table from a list_of_lists, df, or dictionary required:     - lol: list_of_lists | pandas_data_frame | str: csv_filename # this gives lots of flexibility input: rows: str|list|dict|list_of_lists|list_of_dicts|dataframe options:     - color: str,     - box_style: 'single', 'double', 'solid',     - box_color: str,     - header|hdr: bool,  # header | hdr   # highlights the colnames     - end_hdr: bool      # adds highlighted hdr/colnames to the bottom of the table     - colnames: list | str,  'firstrow' | 'firstline' | 'keys'     - col_colors: list,   # gtable will use this list of colors to set each column, repeats if more cols than colors     - neg: bool | list,     - nan: str,     - alt: bool_val,     - alt_color: str,     - title: str,     - footer: str,     - index: bool,         # default=False     - box_style: str,     - max_col_len|col_limit|col_len...</div>
           </li><li id="gtoolz.gtable_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.gtable<wbr></wbr>_demo</div>
@@ -1307,7 +1323,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: prints a list of enumerated basename filenames (sorted by name) input:     dirs=list|str options:     pattern: str|list = "*"  # glob pattern     return_msgs&lt;bolean&gt; = False     prnt&lt;bolean&gt; = False     dirs: bool               # include dirs     dir_only: bool           # only dirs     links: bool              # include links returns:     a sorted list of those names     or     return_msgs and sorted names use: list_files("/tmp")...</div>
+            <div class="summary">purpose: prints a list of enumerated basename filenames (sorted by name) input:     dirs=list|str options:     pattern: str|list = "*"  # glob pattern     return_msgs&lt;bolean&gt; = False     prnt&lt;bolean&gt; = False     dirs: bool               # include dirs     dir_only: bool           # only dirs     links: bool              # include links     mtime: bool              # with mtime returns:     a sorted list of those names     or     return_msgs and sorted names use: list_files("/tmp")...</div>
           </li><li id="gtoolz.list_files_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.list<wbr></wbr>_files<wbr></wbr>_demo</div>
@@ -1323,7 +1339,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: select a file (or dir) from using pattern(s) required: options:     - path: str|list  (defaults to "./")     - pattern: str|list     - prompt: str     - mtime: bool      # include mtime in listing     - centered     - dirs: bool       # include dirs     - dirs_only: bool  # only directories     - prnt: bool     - shadow     - footer     - sortby: str      # if str in ("mtime", "mdate", "date") then sortby mtime     - with_mtime       # include mtime next to filename     - width=0 use: f = select_file("/home/user","*...</div>
+            <div class="summary">purpose: select a file (or dir) from using pattern(s) required: options:     - path: str|list  (defaults to "./")     - pattern: str|list     - prompt: str     - mtime: bool      # include mtime in listing     - centered     - dirs: bool       # include dirs     - dirs_only: bool  # only directories     - prnt: bool     - shadow     - footer     - sortby: str      # if str in ("mtime", "mdate", "date") then sortby mtime     - width=0 use: f = select_file("/home/user","*...</div>
           </li><li id="gtoolz.reduce_line">
             
             <div class="fullName">gtoolz<wbr></wbr>.reduce<wbr></wbr>_line</div>
@@ -1467,7 +1483,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: designed to split a list of lines on delimiter - respects quoted elements that may contain "," even if that is the delimiter     - wip - this does the same thing as comma_split but adds a few options TODO Input:     lines (as a list) options:     - delimiter: str     # (default is a comma)     - col_limit: bool    # max column size default=0 - if 0 no truncation occurs otherwise all elems are limited to col_limit     - index: bool        # will insert an index (line numbers starting with 0)  # not used yet TODO     - lst: bool          # assumes a single line (ie: lines = str) so it returns a list of elemes from                             that line instead of a list_of_elems for multiple lines (ie an lol) Returns:     an array: list of list (lol - lines of elements aka rows and columns)     aka rows_lol...</div>
+            <div class="summary">purpose: designed to split a list of lines on delimiter - respects quoted elements that may contain "," even if that is the delimiter     - wip - this does the same thing as comma_split but adds a few options TODO Input:     lines (as a list) options:     - delimiter: str     # (default is a comma)     - col_limit: bool    # max column size default=0 - if 0 no truncation occurs otherwise all elems are limited to col_limit     - index: bool        # will insert an index (line numbers starting with 0)  # not used yet TODO     - lst: bool          # assumes a single line (ie: lines = str) so it returns a list of elemes from                             that line instead of a list_of_elems for multiple lines (ie an lol) Returns:     an array: list of list (lol - lines of elements aka rows and columns)     aka rows_lol Notes: be carefull - if a "#" is encountered it will be treated as the begining of a comment...</div>
           </li><li id="gtoolz.get_elems_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.get<wbr></wbr>_elems<wbr></wbr>_demo</div>
@@ -1516,6 +1532,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: to pull/scrape all tables off an url required:  url requires:     import pandas as pd     from selenium import webdriver options:     - show|prnt: bool  # default=False ... whether to print the tables     - spinner: bool    # default=False...</div>
+          </li><li id="gtoolz.get_html_tables_tst">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.get<wbr></wbr>_html<wbr></wbr>_tables<wbr></wbr>_tst</div>
+            <div class="url">index.html#get_html_tables_tst</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
           </li><li id="gtoolz.get_html_tst">
             
             <div class="fullName">gtoolz<wbr></wbr>.get<wbr></wbr>_html<wbr></wbr>_tst</div>
@@ -1691,7 +1715,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: quick display of data in  a file or in dataframe     displays a plot on a web browser if requested required: data: df | str | list (filename: csv or dat filename) options:     - show | prnt: bool     - centered: bool     - title: str     - footer: str     - tail: int          # for the last n rows of the df default=35     - choose: bool       # invokes gselect multi mode to allo"w selections of columns to display in the plot (graph)     - selections: list   # you can declare what columns to plot     - web: bool          # displays to your browser instead of a plot figure     - dat: bool | str    # I sometimes use a commented firstline for headers -                          # using 'dat' declares this to be true, if character is used ie dat=":"                          # then that will be used as the delimiter     - type: str          # default=line, bar, barh, hist, box, kde, density, area, pie, scatter, hexbin     - colnames: list | str     # default = [] if it is a str="firstrow" then the firstrow obviously will be treated as colnames     - mavgs: bool        # 50 day and 200 day moving averages added to plot     - box_text: str | list # string or lines to add to a box in fuger default=""     - subplot: str       # sub plot with area under filled using column name = subplot     - save_file: str     # name of file to save the plot figure to...</div>
+            <div class="summary">purpose: quick display of data in  a file or in dataframe     displays a plot on a web browser if requested required: data: df | str | list (filename: csv or dat filename) options:     - centered: bool     - title: str     - footer: str     - choose: bool       # invokes gselect multi mode to allo"w selections of columns to display in the plot (graph)     - selections: list   # you can declare what columns to plot     - web: bool          # displays to your browser instead of a plot figure     - dat: bool | str    # I sometimes use a commented firstline for headers -                          # using 'dat' declares this to be true, if character is used ie dat=":"                          # then that will be used as the delimiter     - type: str          # default=line, bar, barh, hist, box, kde, density, area, pie, scatter, hexbin     - colnames: list | str     # default = [] if it is a str="firstrow" then the firstrow obviously will be treated as colnames     - mavgs: bool        # 50 day and 200 day moving averages added to plot     - box_text: str | list # string or lines to add to a box in fuger default=""     - subplot: str       # sub plot with area under filled using colname = subplot     - save_file: str     # name of file to save the plot figure to...</div>
           </li><li id="gtoolz.quick_plot_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.quick<wbr></wbr>_plot<wbr></wbr>_demo</div>
@@ -1828,6 +1852,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: chkbox() demo returns: None</div>
+          </li><li id="gtoolz.cli_help">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.cli<wbr></wbr>_help</div>
+            <div class="url">index.html#cli_help</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">WIP</div>
           </li><li id="gtoolz.main">
             
             <div class="fullName">gtoolz<wbr></wbr>.main</div>

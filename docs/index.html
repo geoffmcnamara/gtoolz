@@ -386,6 +386,16 @@
         
 
         
+            <div class="itemName"><code><a href="#cli_help" class="internal-link" title="gtoolz.cli_help">cli<wbr></wbr>_help</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#clr_coded" class="internal-link" title="gtoolz.clr_coded">clr<wbr></wbr>_coded</a></code>
             </div>
         
@@ -567,6 +577,16 @@
 
         
             <div class="itemName"><code><a href="#display_in_cols" class="internal-link" title="gtoolz.display_in_cols">display<wbr></wbr>_in<wbr></wbr>_cols</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#do_cli" class="internal-link" title="gtoolz.do_cli">do<wbr></wbr>_cli</a></code>
             </div>
         
 
@@ -826,6 +846,16 @@
         
 
         
+            <div class="itemName"><code><a href="#get_args" class="internal-link" title="gtoolz.get_args">get<wbr></wbr>_args</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#get_boxchrs" class="internal-link" title="gtoolz.get_boxchrs">get<wbr></wbr>_boxchrs</a></code>
             </div>
         
@@ -877,6 +907,16 @@
 
         
             <div class="itemName"><code><a href="#get_html_tables" class="internal-link" title="gtoolz.get_html_tables">get<wbr></wbr>_html<wbr></wbr>_tables</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#get_html_tables_tst" class="internal-link" title="gtoolz.get_html_tables_tst">get<wbr></wbr>_html<wbr></wbr>_tables<wbr></wbr>_tst</a></code>
             </div>
         
 
@@ -1970,6 +2010,11 @@
   </tr><tr class="function">
     
     <td>Function</td>
+    <td><code><a href="#cli_help" class="internal-link" title="gtoolz.cli_help">cli<wbr></wbr>_help</a></code></td>
+    <td>WIP</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
     <td><code><a href="#clr_coded" class="internal-link" title="gtoolz.clr_coded">clr<wbr></wbr>_coded</a></code></td>
     <td>purpose: takes any msg string containing tags for colors and decodes them into a colorized string requires: msg_s: str returnd: colorized string decode a string - replace \[color\].*[\/] with code and reset requires a space before the first bracket...</td>
   </tr><tr class="function">
@@ -1996,7 +2041,7 @@
     
     <td>Function</td>
     <td><code><a href="#cnvrt2lol" class="internal-link" title="gtoolz.cnvrt2lol">cnvrt2lol</a></code></td>
-    <td>purpose: accepts any type of "data" (ie str|list|pandas|list of dictionaries|csv_file_name etc) and converts to a list of lists (ie lol) options:     - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames     - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values     - index: bool         # TODO     - fix: bool           # will "fix" all the rows of an lol to the length of the first row (be careful with this)     - blanks: str|None    # default=None blanks sets the string for elements added in row when fix option is used returns: a list of lists (rows of columns) with the first row having colnames...</td>
+    <td>purpose: accepts any type of "data" (ie str|list|pandas|list of dictionaries|csv_file_name etc) and converts to a list of lists (ie lol) options:     - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames     - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values     - fix: bool           # will "fix" all the rows of an lol to the length of the first row (be careful with this)     - blanks: str|None    # default=None blanks sets the string for elements added in row when fix option is used     - index: bool         # default=False     - purify: bool        # default=True - strips off comments (purifies based on the '#' symbol) before processing returns: a list of lists (rows of columns) with the first row having colnames notes: problem if a "#" is in a line, it will truncate it as it thinks the ramaining is a comment # TODO need to fix this...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2062,6 +2107,11 @@
     <td>Function</td>
     <td><code><a href="#display_in_cols" class="internal-link" title="gtoolz.display_in_cols">display<wbr></wbr>_in<wbr></wbr>_cols</a></code></td>
     <td>deprecated as gtable may take it's place input: takes a list or a dict and prints in order across cols options:     order default for list is is as-is     if it is a dict         you can sort "on" default "value" or on "key"         , or reverse=True or reverse=False returns: lines (sorted if dict) example: # &gt;&gt;&gt; lst = [*range(1,20)] # &gt;&gt;&gt; display_in_cols(lst) then print lines eg printit(lines)...</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#do_cli" class="internal-link" title="gtoolz.do_cli">do<wbr></wbr>_cli</a></code></td>
+    <td>WIP</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2190,6 +2240,11 @@
   </tr><tr class="function">
     
     <td>Function</td>
+    <td><code><a href="#get_args" class="internal-link" title="gtoolz.get_args">get<wbr></wbr>_args</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
     <td><code><a href="#get_boxchrs" class="internal-link" title="gtoolz.get_boxchrs">get<wbr></wbr>_boxchrs</a></code></td>
     <td>purpose: given a box_style (ansi, single, solid, double) will return a set of chars for creating a box input: box_style: str return:     [tl, hc, ts, tr, vc, ls, rs, ms, bl, bs, br]  as a list in the order shown Note: boxed() uses this     tl = top_left, hc=horizontal_char, ts=top_separator, tr=top_right, vc=vertical_char,     ls=left_separator, rs=right_separator, ms=middle_separator     bl=bottom_left, bs=bottom_sep, br=bottom_right...</td>
   </tr><tr class="function">
@@ -2206,7 +2261,7 @@
     
     <td>Function</td>
     <td><code><a href="#get_elems" class="internal-link" title="gtoolz.get_elems">get<wbr></wbr>_elems</a></code></td>
-    <td>purpose: designed to split a list of lines on delimiter - respects quoted elements that may contain "," even if that is the delimiter     - wip - this does the same thing as comma_split but adds a few options TODO Input:     lines (as a list) options:     - delimiter: str     # (default is a comma)     - col_limit: bool    # max column size default=0 - if 0 no truncation occurs otherwise all elems are limited to col_limit     - index: bool        # will insert an index (line numbers starting with 0)  # not used yet TODO     - lst: bool          # assumes a single line (ie: lines = str) so it returns a list of elemes from                             that line instead of a list_of_elems for multiple lines (ie an lol) Returns:     an array: list of list (lol - lines of elements aka rows and columns)     aka rows_lol...</td>
+    <td>purpose: designed to split a list of lines on delimiter - respects quoted elements that may contain "," even if that is the delimiter     - wip - this does the same thing as comma_split but adds a few options TODO Input:     lines (as a list) options:     - delimiter: str     # (default is a comma)     - col_limit: bool    # max column size default=0 - if 0 no truncation occurs otherwise all elems are limited to col_limit     - index: bool        # will insert an index (line numbers starting with 0)  # not used yet TODO     - lst: bool          # assumes a single line (ie: lines = str) so it returns a list of elemes from                             that line instead of a list_of_elems for multiple lines (ie an lol) Returns:     an array: list of list (lol - lines of elements aka rows and columns)     aka rows_lol Notes: be carefull - if a "#" is encountered it will be treated as the begining of a comment...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2217,6 +2272,11 @@
     <td>Function</td>
     <td><code><a href="#get_html_tables" class="internal-link" title="gtoolz.get_html_tables">get<wbr></wbr>_html<wbr></wbr>_tables</a></code></td>
     <td>purpose: to pull/scrape all tables off an url required:  url requires:     import pandas as pd     from selenium import webdriver options:     - show|prnt: bool  # default=False ... whether to print the tables     - spinner: bool    # default=False...</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#get_html_tables_tst" class="internal-link" title="gtoolz.get_html_tables_tst">get<wbr></wbr>_html<wbr></wbr>_tables<wbr></wbr>_tst</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2261,7 +2321,7 @@
     
     <td>Function</td>
     <td><code><a href="#gtable" class="internal-link" title="gtoolz.gtable">gtable</a></code></td>
-    <td>purpose: returns lines or displays a colorized table from a list_of_lists, df, or dictionary input: rows: str|list|dict|list_of_lists|list_of_dicts|dataframe options:     - color: str,     - box_style: 'single', 'double', 'solid',     - box_color: str,     - header|hdr: bool,  # header | hdr   # highlights the colnames     - end_hdr: bool      # adds highlighted hdr/colnames to the bottom of the table     - colnames: list | str,  'firstrow' | 'firstline' | 'keys'     - col_colors: list,   # gtable will use this list of colors to set each column, repeats if more cols than colors     - neg: bool | list,     - nan: str,     - alt: bool_val,     - alt_color: str,     - title: str,     - footer: str,     - indexes: bool,     - box_style: str,     - max_col_len|col_limit|col_len...</td>
+    <td>purpose: returns lines or displays a colorized table from a list_of_lists, df, or dictionary required:     - lol: list_of_lists | pandas_data_frame | str: csv_filename # this gives lots of flexibility input: rows: str|list|dict|list_of_lists|list_of_dicts|dataframe options:     - color: str,     - box_style: 'single', 'double', 'solid',     - box_color: str,     - header|hdr: bool,  # header | hdr   # highlights the colnames     - end_hdr: bool      # adds highlighted hdr/colnames to the bottom of the table     - colnames: list | str,  'firstrow' | 'firstline' | 'keys'     - col_colors: list,   # gtable will use this list of colors to set each column, repeats if more cols than colors     - neg: bool | list,     - nan: str,     - alt: bool_val,     - alt_color: str,     - title: str,     - footer: str,     - index: bool,         # default=False     - box_style: str,     - max_col_len|col_limit|col_len...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2281,7 +2341,7 @@
     
     <td>Function</td>
     <td><code><a href="#handleOPTS" class="internal-link" title="gtoolz.handleOPTS">handle<wbr></wbr>OPTS</a></code></td>
-    <td>Usage:     {0} [-hEP] [--dir] [&lt;filename&gt;]     {0} -s &lt;func&gt;     {0} -S &lt;func&gt;     {0} -t [&lt;func&gt;]     {0} -T &lt;func&gt; [&lt;fargs&gt;]     {0} --version</td>
+    <td>Usage:     {0} -h     {0} -T &lt;func&gt; [&lt;fargs&gt;]     {0} --version     {0} --demos     {0} --docs     {0} &lt;cmd&gt; [&lt;fargs&gt;]</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2366,7 +2426,7 @@
     
     <td>Function</td>
     <td><code><a href="#list_files" class="internal-link" title="gtoolz.list_files">list<wbr></wbr>_files</a></code></td>
-    <td>purpose: prints a list of enumerated basename filenames (sorted by name) input:     dirs=list|str options:     pattern: str|list = "*"  # glob pattern     return_msgs&lt;bolean&gt; = False     prnt&lt;bolean&gt; = False     dirs: bool               # include dirs     dir_only: bool           # only dirs     links: bool              # include links returns:     a sorted list of those names     or     return_msgs and sorted names use: list_files("/tmp")...</td>
+    <td>purpose: prints a list of enumerated basename filenames (sorted by name) input:     dirs=list|str options:     pattern: str|list = "*"  # glob pattern     return_msgs&lt;bolean&gt; = False     prnt&lt;bolean&gt; = False     dirs: bool               # include dirs     dir_only: bool           # only dirs     links: bool              # include links     mtime: bool              # with mtime returns:     a sorted list of those names     or     return_msgs and sorted names use: list_files("/tmp")...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2431,7 +2491,7 @@
     
     <td>Function</td>
     <td><code><a href="#purify" class="internal-link" title="gtoolz.purify">purify</a></code></td>
-    <td>purpose: de-comments a file, aka removes all comments denoted by "#" ... input: file: str return lines: list (decommented lines)</td>
+    <td>purpose: de-comments a file, aka removes all comments denoted by "#" ... input:      content: list | filename | str   # content can be a line (string), a list of lines (strings), of a filename options:     - dat_b: bool   # converts first (commented line) into a non-commented line rather than eliminating it as a comment return lines: list (de-commented lines/purified)...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2441,7 +2501,7 @@
     
     <td>Function</td>
     <td><code><a href="#quick_plot" class="internal-link" title="gtoolz.quick_plot">quick<wbr></wbr>_plot</a></code></td>
-    <td>purpose: quick display of data in  a file or in dataframe     displays a plot on a web browser if requested required: data: df | str | list (filename: csv or dat filename) options:     - show | prnt: bool     - centered: bool     - title: str     - footer: str     - tail: int          # for the last n rows of the df default=35     - choose: bool       # invokes gselect multi mode to allo"w selections of columns to display in the plot (graph)     - selections: list   # you can declare what columns to plot     - web: bool          # displays to your browser instead of a plot figure     - dat: bool | str    # I sometimes use a commented firstline for headers -                          # using 'dat' declares this to be true, if character is used ie dat=":"                          # then that will be used as the delimiter     - type: str          # default=line, bar, barh, hist, box, kde, density, area, pie, scatter, hexbin     - colnames: list | str     # default = [] if it is a str="firstrow" then the firstrow obviously will be treated as colnames     - mavgs: bool        # 50 day and 200 day moving averages added to plot     - box_text: str | list # string or lines to add to a box in fuger default=""     - subplot: str       # sub plot with area under filled using column name = subplot     - save_file: str     # name of file to save the plot figure to...</td>
+    <td>purpose: quick display of data in  a file or in dataframe     displays a plot on a web browser if requested required: data: df | str | list (filename: csv or dat filename) options:     - centered: bool     - title: str     - footer: str     - choose: bool       # invokes gselect multi mode to allo"w selections of columns to display in the plot (graph)     - selections: list   # you can declare what columns to plot     - web: bool          # displays to your browser instead of a plot figure     - dat: bool | str    # I sometimes use a commented firstline for headers -                          # using 'dat' declares this to be true, if character is used ie dat=":"                          # then that will be used as the delimiter     - type: str          # default=line, bar, barh, hist, box, kde, density, area, pie, scatter, hexbin     - colnames: list | str     # default = [] if it is a str="firstrow" then the firstrow obviously will be treated as colnames     - mavgs: bool        # 50 day and 200 day moving averages added to plot     - box_text: str | list # string or lines to add to a box in fuger default=""     - subplot: str       # sub plot with area under filled using colname = subplot     - save_file: str     # name of file to save the plot figure to...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2526,7 +2586,7 @@
     
     <td>Function</td>
     <td><code><a href="#select_file" class="internal-link" title="gtoolz.select_file">select<wbr></wbr>_file</a></code></td>
-    <td>purpose: select a file (or dir) from using pattern(s) required: options:     - path: str|list  (defaults to "./")     - pattern: str|list     - prompt: str     - mtime: bool      # include mtime in listing     - centered     - dirs: bool       # include dirs     - dirs_only: bool  # only directories     - prnt: bool     - shadow     - footer     - sortby: str      # if str in ("mtime", "mdate", "date") then sortby mtime     - with_mtime       # include mtime next to filename     - width=0 use: f = select_file("/home/user","*...</td>
+    <td>purpose: select a file (or dir) from using pattern(s) required: options:     - path: str|list  (defaults to "./")     - pattern: str|list     - prompt: str     - mtime: bool      # include mtime in listing     - centered     - dirs: bool       # include dirs     - dirs_only: bool  # only directories     - prnt: bool     - shadow     - footer     - sortby: str      # if str in ("mtime", "mdate", "date") then sortby mtime     - width=0 use: f = select_file("/home/user","*...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -3000,6 +3060,7 @@ returns: none</p></div>
     -    rtrn: str, (can be "str", "string", "lst", "list", "df"
     -    nums: bool   # forces all numbers to be returned as floats instead of str - useful for plotting
     -    index: bool  # adds id numbers to csv data
+    -    purify: bool # default=True - strips off all comments (except first line on a ".dat" file)
     returns the text of a file as a str or rows_lol (if it is a cvs: bool file) or returns a df if requested
     Note: if the result df has the header/colnames repeated in row[0] then make sure you included 'hdr' or hdr=True
     #&gt;&gt;&gt; t = cat_file("/etc/timezone")
@@ -3264,6 +3325,29 @@ returns: user response</p></div>
 </div><div class="basefunction">
   
   
+  <a name="gtoolz.cli_help">
+    
+  </a>
+  <a name="cli_help">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">cli_help</span>(*args, **kwargs):
+    
+    <a class="headerLink" href="#cli_help" title="gtoolz.cli_help">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">WIP</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
   <a name="gtoolz.clr_coded">
     
   </a>
@@ -3410,10 +3494,12 @@ returns: None</p></div>
 options:
     - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames
     - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values
-    - index: bool         # TODO
     - fix: bool           # will "fix" all the rows of an lol to the length of the first row (be careful with this)
     - blanks: str|None    # default=None blanks sets the string for elements added in row when fix option is used
-returns: a list of lists (rows of columns) with the first row having colnames</p></div>
+    - index: bool         # default=False
+    - purify: bool        # default=True - strips off comments (purifies based on the '#' symbol) before processing
+returns: a list of lists (rows of columns) with the first row having colnames
+notes: problem if a "#" is in a line, it will truncate it as it thinks the ramaining is a comment # TODO need to fix this</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -3798,6 +3884,29 @@ then print lines eg printit(lines)</p></div>
 </div><div class="basefunction">
   
   
+  <a name="gtoolz.do_cli">
+    
+  </a>
+  <a name="do_cli">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">do_cli</span>(cmd, args_s, *args, **kwargs):
+    
+    <a class="headerLink" href="#do_cli" title="gtoolz.do_cli">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">WIP</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
   <a name="gtoolz.do_close">
     
   </a>
@@ -3806,7 +3915,7 @@ then print lines eg printit(lines)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">do_close</span>(msg=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, hchr=<span class="rst-variable-quote">'</span><span class="rst-variable-string">=</span><span class="rst-variable-quote">'</span>, color=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, box_color=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, rc=0, **kwargs):
+    <span class="py-keyword">def</span> <span class="py-defname">do_close</span>(msg=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, hchr=<span class="rst-variable-quote">'</span><span class="rst-variable-string">=</span><span class="rst-variable-quote">'</span>, color=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, rc=0, **kwargs):
     
     <a class="headerLink" href="#do_close" title="gtoolz.do_close">
       
@@ -4601,6 +4710,29 @@ returns: bool</p></div>
 </div><div class="basefunction">
   
   
+  <a name="gtoolz.get_args">
+    
+  </a>
+  <a name="get_args">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_args</span>(arg_s):
+    
+    <a class="headerLink" href="#get_args" title="gtoolz.get_args">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
   <a name="gtoolz.get_boxchrs">
     
   </a>
@@ -4711,7 +4843,8 @@ options:
                             that line instead of a list_of_elems for multiple lines (ie an lol)
 Returns:
     an array: list of list (lol - lines of elements aka rows and columns)
-    aka rows_lol</p></div>
+    aka rows_lol
+Notes: be carefull - if a "#" is encountered it will be treated as the begining of a comment</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -4766,7 +4899,31 @@ requires:
 options:
     - show|prnt: bool  # default=False ... whether to print the tables
     - spinner: bool    # default=False ... whether to show a spinner while fetching data
+    - selenium: bool   # default-False ... whether to use selenium 
 returns: list of panda dataframes</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="gtoolz.get_html_tables_tst">
+    
+  </a>
+  <a name="get_html_tables_tst">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_html_tables_tst</span>(*args, **kwargs):
+    
+    <a class="headerLink" href="#get_html_tables_tst" title="gtoolz.get_html_tables_tst">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -5052,6 +5209,8 @@ To run a function using gselect - write code similar to this:
   <div class="docstring functionBody">
     
     <div><p class="pre">purpose: returns lines or displays a colorized table from a list_of_lists, df, or dictionary
+required:
+    - lol: list_of_lists | pandas_data_frame | str: csv_filename # this gives lots of flexibility
 input: rows: str|list|dict|list_of_lists|list_of_dicts|dataframe
 options:
     - color: str,
@@ -5067,7 +5226,7 @@ options:
     - alt_color: str,
     - title: str,
     - footer: str,
-    - indexes: bool,
+    - index: bool,         # default=False
     - box_style: str,
     - max_col_len|col_limit|col_len...: int,  default=100
     - human: bool| list,   # if bool all numbers will get "humanized", if list syntax = [colname, colname...] and ony those colnames will get "humanized"
@@ -5093,12 +5252,13 @@ options:
     - cols: int            # split a table into several tables or columns (aka chunks)
     - lol: bool            # default=False - will return the conditioned lol (rows of columns) instead of the default printable lines
     - no_hdr: bool         # removes header/colnames row from the table
+    - purify: bool         # default=False - assumes provided data (lol) has all ready been purified
 returns lines: list
 Notes:
-    if colnames="firstrow" then the firstrow will be extracted and used for the header
-    if colnames="keys" and we are passed a dictionary then the colnames will be the dictionary keys
-I frequenly use this function for financial data analysis or csv files
-TODO: add head: int and tail: in</p></div>
+    - if colnames="firstrow" then the firstrow will be extracted and used for the header
+    - if colnames="keys" and we are passed a dictionary then the colnames will be the dictionary keys
+    - TODO: add head: int and tail: in
+    - I frequenly use this function for financial data analysis or csv files</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -5203,21 +5363,19 @@ use:
   <div class="docstring functionBody">
     
     <div><p class="pre">Usage:
-    {0} [-hEP] [--dir] [&lt;filename&gt;]
-    {0} -s &lt;func&gt;
-    {0} -S &lt;func&gt;
-    {0} -t [&lt;func&gt;]
+    {0} -h
     {0} -T &lt;func&gt; [&lt;fargs&gt;]
     {0} --version
+    {0} --demos
+    {0} --docs
+    {0} &lt;cmd&gt; [&lt;fargs&gt;]
 
 Options
-    -h                     Help
-    --dir                  prints all the functions here and exits
-    -t                     runs all doctest calls
-    -T &lt;func&gt; [&lt;fargs&gt;]    runs specified func with optional args=fargs
+    -h, --help             Help
     -v, --version          Prints version
-    -s &lt;func&gt;              Show code block
-    -S &lt;func&gt;              Show __doc__</p></div>
+    -T &lt;func&gt; [&lt;fargs&gt;]    runs specified func with optional args=fargs, primarily for development
+    --demos                allows user to select a demo
+    --docs                 allows to user to display the doc for selected function</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -5694,6 +5852,7 @@ options:
     dirs: bool               # include dirs
     dir_only: bool           # only dirs
     links: bool              # include links
+    mtime: bool              # with mtime
 returns:
     a sorted list of those names
     or
@@ -5758,7 +5917,7 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">main</span>(main_args):
+    <span class="py-keyword">def</span> <span class="py-defname">main</span>(main_args=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>):
     
     <a class="headerLink" href="#main" title="gtoolz.main">
       
@@ -6074,8 +6233,11 @@ Percent: [############################################################] 99%</p><
   <div class="docstring functionBody">
     
     <div><p class="pre">purpose: de-comments a file, aka removes all comments denoted by "#" ...
-input: file: str
-return lines: list (decommented lines)</p></div>
+input: 
+    content: list | filename | str   # content can be a line (string), a list of lines (strings), of a filename
+options:
+    - dat_b: bool   # converts first (commented line) into a non-commented line rather than eliminating it as a comment
+return lines: list (de-commented lines/purified)</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -6131,11 +6293,9 @@ Required:
     displays a plot on a web browser if requested
 required: data: df | str | list (filename: csv or dat filename)
 options:
-    - show | prnt: bool
     - centered: bool
     - title: str
     - footer: str
-    - tail: int          # for the last n rows of the df default=35
     - choose: bool       # invokes gselect multi mode to allo"w selections of columns to display in the plot (graph)
     - selections: list   # you can declare what columns to plot
     - web: bool          # displays to your browser instead of a plot figure
@@ -6146,12 +6306,14 @@ options:
     - colnames: list | str     # default = [] if it is a str="firstrow" then the firstrow obviously will be treated as colnames
     - mavgs: bool        # 50 day and 200 day moving averages added to plot
     - box_text: str | list # string or lines to add to a box in fuger default=""
-    - subplot: str       # sub plot with area under filled using column name = subplot
+    - subplot: str       # sub plot with area under filled using colname = subplot
     - save_file: str     # name of file to save the plot figure to.  default=""
     - delimiter: str     # assumes a filename for data (above) and use delimiter to seperate elements in each line of the file
     - hlines: dict       # dictionary eg: {"target": 44, "strike": 33, ...} can be one or several
-    - plines: bool       # pullback_lines - only useful for stock history charts
+    - pblines: bool      # pullback_lines - only useful for stock history charts
     - rnd: int           # round numbers to int - only useful if show or prnt is invoked for gtable display (see option show | prnt)
+    - show | prnt: bool  # shows/prints a limited (see tail option) amount of data in a table centered (for debugging or checking)
+    - tail: int          # for the last n rows of the df default=35
 # returns: df
 returns: lol  # list of rows each of which is a list of columns
 NOTE: if a filename is used as data it will get "purified" by removing all comments first (except the first line of a dat file.)
@@ -6685,7 +6847,6 @@ options:
     - shadow
     - footer
     - sortby: str      # if str in ("mtime", "mdate", "date") then sortby mtime
-    - with_mtime       # include mtime next to filename
     - width=0
 use: f = select_file("/home/user","*.txt")
 prints a file list and then asks for a choice
@@ -7541,7 +7702,7 @@ returns: rgb(r,g,b) text string instead of supplied color</p></div>
   <div class="container">
     <a href="index.html">API Documentation</a> for gtoolz,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2023-03-10 07:55:55.
+    22.9.1 at 2023-04-02 10:14:56.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
