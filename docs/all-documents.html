@@ -139,7 +139,7 @@
             <div class="type">Module</div>
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">No module docstring; 0/5 variable, 0/3 constant, 152/156 functions, 4/4 classes documented</span></div>
+            <div class="summary"><span class="undocumented">No module docstring; 0/5 variable, 0/3 constant, 162/165 functions, 4/4 classes documented</span></div>
           </li><li id="gtoolz.__version__">
             
             <div class="fullName">gtoolz<wbr></wbr>.__version__</div>
@@ -507,7 +507,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
+            <div class="summary">purpose: Quick demo of using transcript (which writes out to the screen and to a file simultaneously - like bash 'script') returns: none notes: allows capturing screen output to a file for reference later...</div>
           </li><li id="gtoolz.ThreadWithReturn">
             
             <div class="fullName">gtoolz<wbr></wbr>.<wbr></wbr>Thread<wbr></wbr>With<wbr></wbr>Return</div>
@@ -603,7 +603,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">demo of using gselect</div>
+            <div class="summary">purpose: demo of using gselect returns: none</div>
           </li><li id="gtoolz.kvarg_val">
             
             <div class="fullName">gtoolz<wbr></wbr>.kvarg<wbr></wbr>_val</div>
@@ -636,6 +636,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="gtoolz.cfg_val 0">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.cfg<wbr></wbr>_val 0</div>
+            <div class="url">index.html#cfg_val%200</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: to retrieve cfg val from a config_dictionary (section, key-value pair) while allowing different key name requests to get a specific key options:      - if section == "" or section not found then section 'default' will be used     - dflt: str|int|bool|whatever  # allows a fall-back value if none found in cfg_d (see notes below)  returns: value notes: if section == 'DEFAULT' | 'Default' | 'default' | 'dflt' | "" then it will be processed as 'default' section;         This might seem like it defeats the purpose of the dflt option but it allows a cfg_d['default'] value to take precedent and allow a return even if no             matching key(s) can be found use:     cfg_d = handleCFG("/path/to/api...</div>
           </li><li id="gtoolz.cfg_val">
             
             <div class="fullName">gtoolz<wbr></wbr>.cfg<wbr></wbr>_val</div>
@@ -643,7 +651,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: to retrieve cfg val while allowing different key name request to get a specific key options: returns: value use:     cfg_d = handleCFG("/path/to/api.cfg")     api_key = cfg_val(["api", "key", "api_key"], 'testpypi', cfg_d, dflt="1234")     # above will find the api_key if it is defined in the file with any of the names in the list for section='testpypi'...</div>
+            <div class="summary">--== Config ==--</div>
           </li><li id="gtoolz.docvars">
             
             <div class="fullName">gtoolz<wbr></wbr>.docvars</div>
@@ -652,6 +660,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: wrapper for function to allow variable substitution within its doc I use this in front on a function I call handleOPTS(args) which works with the module docopts Thank you to stackoverflow.com: answered Apr 25 '12 at 1:54 senderle this is a very useful way to allow variables in your __doc__ strings wrap a function with this and use if this way eg: @docvars(os...</div>
+          </li><li id="gtoolz.fix_msgs">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.fix<wbr></wbr>_msgs</div>
+            <div class="url">index.html#fix_msgs</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"> purpose: 'fix' an internal multiline msg = """  line1  line2 etc"""  to remove preceding spaces - only works if spaces are used and not tabs (TODO)  options:      - lst: bool  # option to force return msg to be a list (default is str)  returns: msgs as a string if 'lst' not invoked without the preceding 4x" "   ...</div>
           </li><li id="gtoolz.handleCFG">
             
             <div class="fullName">gtoolz<wbr></wbr>.handle<wbr></wbr>CFG</div>
@@ -659,7 +675,15 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose:  if no cfg_file given it will find the default and return cfg_d (dictionary of dictioanries: cfg.sections; cfg.elem:vals) input: cfg_file: str defaults: cfg_file if it exists is: {myappname.basename}...</div>
+            <div class="summary">purpose:  if no cfg_file given it will find the default and return cfg_d (dictionary of dictioanries: cfg.sections; cfg.elem:vals) input: cfg_file: str options:     - section: str     - key: str defaults: cfg_file if it exists is: {myappname...</div>
+          </li><li id="gtoolz.handleCFG_tst">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.handle<wbr></wbr>CFG_tst</div>
+            <div class="url">index.html#handleCFG_tst</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: to demo use of handleCFG function returns: none</div>
           </li><li id="gtoolz.browseit">
             
             <div class="fullName">gtoolz<wbr></wbr>.browseit</div>
@@ -675,7 +699,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Usage:     {0} -h     {0} -T &lt;func&gt; [&lt;fargs&gt;]     {0} --version     {0} --demos     {0} --docs     {0} &lt;cmd&gt; [&lt;fargs&gt;]</div>
+            <div class="summary">Usage:     {0} -h     {0} -T &lt;func&gt; [&lt;fargs&gt;]     {0} -E     {0} --version     {0} --demos     {0} --docs     {0} &lt;cmd&gt; [&lt;fargs&gt;...]</div>
           </li><li id="gtoolz.get_args">
             
             <div class="fullName">gtoolz<wbr></wbr>.get<wbr></wbr>_args</div>
@@ -683,15 +707,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="gtoolz.do_cli">
-            
-            <div class="fullName">gtoolz<wbr></wbr>.do<wbr></wbr>_cli</div>
-            <div class="url">index.html#do_cli</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">WIP</div>
+            <div class="summary">purpose: parses string into *args and **kwargs notes: called by do_cli()</div>
           </li><li id="gtoolz.centered">
             
             <div class="fullName">gtoolz<wbr></wbr>.centered</div>
@@ -739,7 +755,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">expects a string with either an ending.lower() of "f" or "c" to declare what to return returns rounded(converted_temp) always returns a string with 2 places (inlcuding 0s)</div>
+            <div class="summary">purpose: convert from Celsius to Fahrenheit or vice versa expects: a string with either an ending.lower() of "f" or "c" to declare what to return returns: rounded(converted_temp)     always returns a string with 2 places (including 0s)...</div>
           </li><li id="gtoolz.do_logo">
             
             <div class="fullName">gtoolz<wbr></wbr>.do<wbr></wbr>_logo</div>
@@ -828,14 +844,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: return: just the first matched line(s) from a filename using pattern required:     - filename: str     - pattern: str options:     - upto: int default=1  # How many matching lines to return returns: matching lines...</div>
-          </li><li id="gtoolz.pp_d">
+          </li><li id="gtoolz.x_items">
             
-            <div class="fullName">gtoolz<wbr></wbr>.pp<wbr></wbr>_d</div>
-            <div class="url">index.html#pp_d</div>
+            <div class="fullName">gtoolz<wbr></wbr>.x<wbr></wbr>_items</div>
+            <div class="url">index.html#x_items</div>
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: pretty print a dictionary deprecated as gtable does this with between (str) placed between elems and kv_s (str) between k and v &gt;&gt;&gt; d = {"one": 1, "two": 2, "three": 3} &gt;&gt;&gt; print(pp_d(d)) one: 1  two: 2  three: 3...</div>
+            <div class="summary">purpose: returns a limited number of dictionary items - primarily used for development (debugging) options:     -x: int     # default=2 number of items (pairs of key/value) to return  returns: dict</div>
           </li><li id="gtoolz.kv_cols">
             
             <div class="fullName">gtoolz<wbr></wbr>.kv<wbr></wbr>_cols</div>
@@ -843,7 +859,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">input: my_d: dict cols:default=3 &lt;-- both args ie: dict and cols are required! options:     - title, header, pad, box_style, box_color: str, color: str, neg: bool,     - prnt: bool,  footer,title: str, rjust_cols: list, sep,pad: str, max_col_width: int,     - centered: bool, box_style: str, human: bool, rnd: bool, box_title: bool (requires title), sep: str     - hdr: bool default=True     - no_hdr: bool  # removes hdr/colnames from tables returns: lines tabalized key-value pairs...</div>
+            <div class="summary">input: my_d: dict cols:default=3 &lt;-- both args ie: dict and cols are required! options:     - title, header, pad, box_style, box_color: str, color: str, neg: bool,     - prnt: bool,  footer,title: str, rjust_cols: list, sep,pad: str, max_col_width: int,     - centered: bool, box_style: str, human: bool, rnd: bool, box_title: bool (requires title), sep: str     - hdr: bool default=True     - no_hdr: bool        # removes hdr/colnames from tables     - box_color: str      # affects all "internal" (columnized) boxes     - boxed: bool         # if true a master box is created surrounding the internal/columnized boxes     - mstr_box_clr: str   # master box color returns: lines tabalized key-value pairs...</div>
           </li><li id="gtoolz.kv_cols_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.kv<wbr></wbr>_cols<wbr></wbr>_demo</div>
@@ -948,6 +964,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Purpose: to return color code + text (if any) NOTE: sub_color() uses this! input:     text: str = ""         # if "" then the color code alone is returned     color: str = 'normal'  # examples: 'red on black', 'bold green on normal', 'bold yellow on red', 'blink red on black' etc     reset: bool            # adds a color reset after the text Notes:     color is the first argument because you may just want to return the color code only     run gcolors...</div>
+          </li><li id="gtoolz.gclr_demo">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.gclr<wbr></wbr>_demo</div>
+            <div class="url">index.html#gclr_demo</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: brief demo of using gclr() options: none returns: None</div>
           </li><li id="gtoolz.clr_tst">
             
             <div class="fullName">gtoolz<wbr></wbr>.clr<wbr></wbr>_tst</div>
@@ -1044,6 +1068,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: draw a unicode box around msgs args: msgs options:     centered | center: bool  # centers box on the screen     prnt: bool     txt_center: int  # num of lines from top to center in the box     color: str  # text color     box_color: str  # color of border     title, footer: str # goes in topline or bottom line centered of box     width forces the width size defaults to # screen columns     shadowed | shadow: bool # adds a shadow right and bottom...</div>
+          </li><li id="gtoolz.boxed_tst">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.boxed<wbr></wbr>_tst</div>
+            <div class="url">index.html#boxed_tst</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: boxed function test options: none return None</div>
           </li><li id="gtoolz.gline">
             
             <div class="fullName">gtoolz<wbr></wbr>.gline</div>
@@ -1059,7 +1091,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: quick-n-dirty Title/Separation Line - I use this just to separate sections returns: prints a line with "=" fill character and msg in the middle (centered) with width=width see: gline_demo</div>
+            <div class="summary">purpose: quick-n-dirty Title/Separation Line - I use this just to separate sections required: options:     - centered: bool     - boxed: bool returns: prints a line with "=" fill character and msg in the middle (centered) with width=width see: gline_demo...</div>
           </li><li id="gtoolz.gline_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.gline<wbr></wbr>_demo</div>
@@ -1211,7 +1243,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: accepts any type of "data" (ie str|list|pandas|list of dictionaries|csv_file_name etc) and converts to a list of lists (ie lol) options:     - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames     - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values     - fix: bool           # will "fix" all the rows of an lol to the length of the first row (be careful with this)     - blanks: str|None    # default=None blanks sets the string for elements added in row when fix option is used     - index: bool         # default=False     - purify: bool        # default=True - strips off comments (purifies based on the '#' symbol) before processing returns: a list of lists (rows of columns) with the first row having colnames notes: problem if a "#" is in a line, it will truncate it as it thinks the ramaining is a comment # TODO need to fix this...</div>
+            <div class="summary">purpose: accepts any type of "data" (ie str|list|pandas|list of dictionaries|csv_file_name etc) and converts to a list of lists (ie lol) options:     - colnames: list|str  # list of colnames or string eg: "firstline"|"firstrow" declares that the firstrow is already the colnames     - delimeter: char     #  if a filename is supplied (assumes a csv type file) this delimiter will be used to separate column values     - fix: bool           # will "fix" all the rows of an lol to the length of the first row (be careful with this)     - blanks: str|None    # default=None blanks sets the string for elements added in row when fix option is used     - index: bool         # default=False     - purify: bool        # default=True - strips off comments (purifies based on the '#' symbol) before processing     - selected: list      # list of colnames to include     - sortby: str         # colname to sort on     - filterby: dict      # dictionary with {'colname': 'pattern'}     - cols_limit: int      # sets max column size returns: a list of lists (rows of columns) with the first row having colnames notes: problem if a "#" is in a line, it will truncate it as it thinks the ramaining is a comment # TODO need to fix this...</div>
           </li><li id="gtoolz.cnvrt2lol_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.cnvrt2lol<wbr></wbr>_demo</div>
@@ -1236,6 +1268,38 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: test/demo using gtable() returns: None</div>
+          </li><li id="gtoolz.nestlvl">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.nestlvl</div>
+            <div class="url">index.html#nestlvl</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: gets the level of nested lists requires: lst options:     - verbose: bool    # returns a string providing the possible nature of the provided list (lst) returns: int notes: used by htmltable and gcolumnize (TODO)     This helps determine rows and columns of boxes (cell dimension=1) or tables (cell dimension=2)...</div>
+          </li><li id="gtoolz.nestlvl_tst">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.nestlvl<wbr></wbr>_tst</div>
+            <div class="url">index.html#nestlvl_tst</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="gtoolz.htmltable">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.htmltable</div>
+            <div class="url">index.html#htmltable</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: create code returning data as an html table required: data: list of lists | df    # expects the first line/row to be the header elements  options:      - title: str     - footer: str     - width: int|str   # provides width of holding box - can be a percent eg: width=80%     - col_colors: list # default (see code)     - page_cntr: bool  # if true the box with the table will be centered on the web page     - show: bool       # primarily for debugging; open the returning html code in a browser returns: str  # html code with a box (which is a single table cell or rows of tables) holding a table or tables of all the data provided notes: this is still limited in features but seems to be useful     You can also submit rows and or cols of tables(ie list-of-lists) or further do something like this     Syntax:         - htmltable(lol1)                      # a single table         - htmltable([lol1, lol2])              # a single row with two tables         - htmltable([[lol1, lol2], [lol3]])    # one row with two tables, and a second row with one table         - htmltable([[lol1], [lol2], [lol3]])  # three rows with one tables in each row     html_code = htmltable([{'table': my_lol, 'options': {'title': 'Title for my_lol'}}, {'table': my_lol2, 'options': {'title': "Title my_lol2"}}],                         [{'table': my_lol3}, 'options': {'title': "Title for my_lol3", 'footer': dbug('here')}]                     ])     browseit(html_code)...</div>
+          </li><li id="gtoolz.htmltable_tst">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.htmltable<wbr></wbr>_tst</div>
+            <div class="url">index.html#htmltable_tst</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: runs a test on htmltable returns: None</div>
           </li><li id="gtoolz.chunkit">
             
             <div class="fullName">gtoolz<wbr></wbr>.chunkit</div>
@@ -1356,14 +1420,6 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: Removes ansii codes from a string (line) returns: "cleaned no_code" line TODO: allow option to return clr_codes[1], nocode(elem), clr_codes[2] see: split_codes() aka: name should be escape_ansii...</div>
-          </li><li id="gtoolz.gclr_demo">
-            
-            <div class="fullName">gtoolz<wbr></wbr>.gclr<wbr></wbr>_demo</div>
-            <div class="url">index.html#gclr_demo</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: demo of using gclr() returns: None</div>
           </li><li id="gtoolz.nclen">
             
             <div class="fullName">gtoolz<wbr></wbr>.nclen</div>
@@ -1587,7 +1643,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: returns the root name of a full filename (not path, no extension) input: filename: str returns: ROOT_NAME: str</div>
+            <div class="summary">purpose: returns the root name of a full filename (not path, no extension) input: filename: str options:     - base: bool         # returns simple basename only     - full_base:_bool    # returns absolute path w/basename only     - dir: bool          # return just the absolute path w/o the basename...</div>
           </li><li id="gtoolz.islol">
             
             <div class="fullName">gtoolz<wbr></wbr>.islol</div>
@@ -1675,7 +1731,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: allow user input with editing options::     - prompt: str = "Your input: "     - edit: bool     - dft: str     - centered: bool     - shift: int     - update: dict     - length: int = 0       # all lines will display with the same length returns: edit or input data as str or dict if update option Notes:      - this function is typically called by usr_update()     - see usr_update()...</div>
+            <div class="summary">purpose: allow user input with editing - see usr_update() as that is likely what you want options::     - prompt: str = "Your input: "     - edit: bool     - dft: str     - centered: bool     - shift: int     - update: dict     - length: int = 0       # all lines will display with the same length returns: edit or input data as str or dict if update option Notes:      - this function is typically called by usr_update()     - see usr_update()...</div>
           </li><li id="gtoolz.usr_input_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.usr<wbr></wbr>_input<wbr></wbr>_demo</div>
@@ -1707,7 +1763,15 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: remaps keys names AND can select only the k.v pairs you want (in the order specified) (ie option: 'mapped_only') options:     - mapped_only: bool,     - rnd: int # rounds out numbers to rnd scale returns: my_d (remapped and optionally selected pairs) notes: remap_d should be dict {orig_key: new_key,...</div>
+            <div class="summary">purpose: remaps keys names AND can select only the k.v pairs you want (in the order specified) (ie option: 'mapped_only') options:     - mapped_only: bool  # default=True - returns a dictionary of only the remap_d key-value pairs if True (default)     - rnd: int           # rounds out numbers to rnd scale returns: my_d (remapped and optionally selected pairs) notes: remap_d should be dict {orig_key: new_key,...</div>
+          </li><li id="gtoolz.remap_keys_tst">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.remap<wbr></wbr>_keys<wbr></wbr>_tst</div>
+            <div class="url">index.html#remap_keys_tst</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">WIP for testing only</div>
           </li><li id="gtoolz.quick_plot">
             
             <div class="fullName">gtoolz<wbr></wbr>.quick<wbr></wbr>_plot</div>
@@ -1795,7 +1859,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: lists all functions and the docs from a module Note: except some functions eg _demo returns cnt</div>
+            <div class="summary">purpose: lists all functions and the docs from a module Note: except some functions eg _demo _tst (declared within this function, for now) returns cnt</div>
           </li><li id="gtoolz.isempty">
             
             <div class="fullName">gtoolz<wbr></wbr>.isempty</div>
@@ -1804,6 +1868,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: tests if a variable is empty ie len(my_var) == 0 or my_var is None etc options: None returns: bool</div>
+          </li><li id="gtoolz.isempty_tst">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.isempty<wbr></wbr>_tst</div>
+            <div class="url">index.html#isempty_tst</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: to test isempty()</div>
           </li><li id="gtoolz.columned">
             
             <div class="fullName">gtoolz<wbr></wbr>.columned</div>
@@ -1852,6 +1924,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: chkbox() demo returns: None</div>
+          </li><li id="gtoolz.do_cli">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.do<wbr></wbr>_cli</div>
+            <div class="url">index.html#do_cli</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: </div>
           </li><li id="gtoolz.cli_help">
             
             <div class="fullName">gtoolz<wbr></wbr>.cli<wbr></wbr>_help</div>
@@ -1859,7 +1939,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">WIP</div>
+            <div class="summary">purpose: provide basic help with do_cli() notes: This is work-in-progress (TODO)</div>
           </li><li id="gtoolz.main">
             
             <div class="fullName">gtoolz<wbr></wbr>.main</div>
