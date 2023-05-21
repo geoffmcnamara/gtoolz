@@ -1,6 +1,11 @@
 [build-system]
-requires = [ "hatchling",]
+requires = [ "hatchling",
+">=3.7",
+'wheel',
+'toml'
+]
 build-backend = "hatchling.build"
+# build-backend = "setuptools.build_meta"
 
 [project]
 name = "gtoolz"
@@ -10,7 +15,7 @@ readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [ "Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux",]
 dependencies = [ "docopt", "pandas >= 1.5.3",]
-base_dir = "/home/geoffm/dev/python/gtoolz"
+# base_dir = "/home/geoffm/dev/python/gtoolz"
 [[project.authors]]
 name = "Geoff McNamara"
 email = "geoff.mcnamara@gmail.com"
@@ -21,6 +26,7 @@ base_dir = "/home/geoffm/dev/python/gtoolz"
 
 [custom]
 orig_dir = "/home/geoffm/dev/python/gmodules"
+base_dir = "/home/geoffm/dev/python/gtoolz"
 
 [project.scripts]
 gtoolz-cli = "gtoolz:main"
@@ -31,3 +37,4 @@ Homepage = "https://github.com/geoffmcnamara/gtoolz"
 
 [options.packages.find]
 where = "src"
+
