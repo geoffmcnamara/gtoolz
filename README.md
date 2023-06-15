@@ -99,6 +99,6 @@ lines = gcolumnize(boxes, cols=2)
 printit(lines, 'boxed', 'centered', title=f"Symbol: {sym} url: {url}", footer=dbug('here'))
 ```
 
-Enjoy
+Enjoy,
 
 geoff.mcnamara@gmail.com
