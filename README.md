@@ -10,6 +10,9 @@ pip install gtoolz
 
 see: [https://github.com/geoffmcnamara/gtoolz]
 
+Note: In version 0.1.5 I lowered the required Pandas version. As a result you may have to install the latest version specifically:
+   eg: pip install gtoolz==0.1.5  # or latest version
+
 ## Use
 
 Simply run gtoolz.py (or see ./test/test_gtoolz.py) to see some of the possible uses.

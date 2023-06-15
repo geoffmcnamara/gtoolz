@@ -7,7 +7,7 @@
   <head>
     
     <title>gtoolz</title>
-    <meta name="generator" content="pydoctor 22.9.1"> 
+    <meta name="generator" content="pydoctor 23.4.0"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -286,7 +286,7 @@
         
 
         
-            <div class="itemName"><code><a href="#boxed_tst" class="internal-link" title="gtoolz.boxed_tst">boxed<wbr></wbr>_tst</a></code>
+            <div class="itemName"><code><a href="#browseit" class="internal-link" title="gtoolz.browseit">browseit</a></code>
             </div>
         
 
@@ -296,7 +296,7 @@
         
 
         
-            <div class="itemName"><code><a href="#browseit" class="internal-link" title="gtoolz.browseit">browseit</a></code>
+            <div class="itemName"><code><a href="#browseit_tst" class="internal-link" title="gtoolz.browseit_tst">browseit<wbr></wbr>_tst</a></code>
             </div>
         
 
@@ -546,6 +546,16 @@
         
 
         
+            <div class="itemName"><code><a href="#cond_num_tst" class="internal-link" title="gtoolz.cond_num_tst">cond<wbr></wbr>_num<wbr></wbr>_tst</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#convert_temp" class="internal-link" title="gtoolz.convert_temp">convert<wbr></wbr>_temp</a></code>
             </div>
         
@@ -657,16 +667,6 @@
 
         
             <div class="itemName"><code><a href="#do_logo_demo" class="internal-link" title="gtoolz.do_logo_demo">do<wbr></wbr>_logo<wbr></wbr>_demo</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#do_prcnt_bar" class="internal-link" title="gtoolz.do_prcnt_bar">do<wbr></wbr>_prcnt<wbr></wbr>_bar</a></code>
             </div>
         
 
@@ -1386,6 +1386,26 @@
         
 
         
+            <div class="itemName"><code><a href="#pbar" class="internal-link" title="gtoolz.pbar">pbar</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#pbar_demo" class="internal-link" title="gtoolz.pbar_demo">pbar<wbr></wbr>_demo</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#printit" class="internal-link" title="gtoolz.printit">printit</a></code>
             </div>
         
@@ -2011,7 +2031,7 @@
     
     <td>Function</td>
     <td><code><a href="#add_content" class="internal-link" title="gtoolz.add_content">add<wbr></wbr>_content</a></code></td>
-    <td>I wrote this because I am constantly building csv files with a header line (also consider add_or_replace() function) Required:     file     content=str|list Options:     after=pattern     before=pattern     replace=pattern     position=##     if none of those content is appended to the file     if header is also included it will be added to the begining of the file if it does not already exitst used_to_be: add_line()...</td>
+    <td>purpose: will add content to a file at a specified point in the file (after=pattern or before=pattern) or position=n) Required:     file: str     content: str | list | dict Options:     after: str     =pattern     before: str    =pattern     replace: str   =pattern     position: int  =##     if none of those,  content is appended to the end of the file     if content is a dictionary the will be considered the keys() and  if the header is also included          it will be added to the begining of the file (if it does not already exist) notes: I wrote this because I am constantly building csv files with a header line     (also consider add_or_replace() function)     used_to_be: add_line()...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2041,7 +2061,7 @@
     
     <td>Function</td>
     <td><code><a href="#boxed" class="internal-link" title="gtoolz.boxed">boxed</a></code></td>
-    <td>purpose: draw a unicode box around msgs args: msgs options:     centered | center: bool  # centers box on the screen     prnt: bool     txt_center: int  # num of lines from top to center in the box     color: str  # text color     box_color: str  # color of border     title, footer: str # goes in topline or bottom line centered of box     width forces the width size defaults to # screen columns     shadowed | shadow: bool # adds a shadow right and bottom...</td>
+    <td>purpose: draw a unicode box around msgs args: msgs options:     centered | center: bool  # centers box on the screen     prnt: bool     txt_center: int | list | tuple  # num of lines from top to center in the box - if list or tuple lines between first int and second int (inclusive) will be centered     txt_right: int | list | tuple   # num of lines from top to justify to the right within the box- if list or tuple lines between first int and second int (inclusive) will be right justified     color: str  # text color     box_color: str  # color of border     title, footer: str # goes in topline or bottom line centered of box     width forces the width size defaults to # screen columns     shadowed | shadow: bool # adds a shadow right and bottom...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2050,13 +2070,13 @@
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#boxed_tst" class="internal-link" title="gtoolz.boxed_tst">boxed<wbr></wbr>_tst</a></code></td>
-    <td>purpose: boxed function test options: none return None</td>
+    <td><code><a href="#browseit" class="internal-link" title="gtoolz.browseit">browseit</a></code></td>
+    <td>purpose: opens the url in your browser requires: url: str returns: none</td>
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#browseit" class="internal-link" title="gtoolz.browseit">browseit</a></code></td>
-    <td>purpose: opens the url in your browser requires: url: str returns: none</td>
+    <td><code><a href="#browseit_tst" class="internal-link" title="gtoolz.browseit_tst">browseit<wbr></wbr>_tst</a></code></td>
+    <td>purpose: simple demo of browseit returns: none</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2081,7 +2101,7 @@
     
     <td>Function</td>
     <td><code><a href="#chk_substr" class="internal-link" title="gtoolz.chk_substr">chk<wbr></wbr>_substr</a></code></td>
-    <td>purpose: given a list of strings to check (chk_l) and a list of substrings to compare (strgs_l)         if any "compare" substring is in any string in check list of strings then             do action either 'exclude' or 'include' required:     - chk_l: list | str     - strgs_l: list options:     - action: str  # default is 'exclude' return: new_list usage:     # given a list of functions, exclude the ones that have contain any of the substrings in the exclude_l list     funcs_l = chk_substr(funcs_l, exclude_l, action='exclude')...</td>
+    <td>purpose: given a list of strings to check (chk_l) and a list of substrings to compare (strgs_l)         if any "compare" substring is in any string in check list of strings then             do action either 'exclude' or 'include' required:     - chk_l: list | str     - strgs_l: list options:     - action: str  # default is 'exclude' return: new_list usage:     # given a list of functions, exclude the ones that may have any of the provided  substrings (list) in the exclude_l list     funcs_l = chk_substr(funcs_l, exclude_l, action='exclude')     eg:         exclude_l = ["main", 'tst', 'do_func_demos']         funcs_l = chk_substr(funcs_l, exclude_l, action='exclude')         funcs_l = sorted(funcs_l)...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2180,6 +2200,11 @@
   </tr><tr class="function">
     
     <td>Function</td>
+    <td><code><a href="#cond_num_tst" class="internal-link" title="gtoolz.cond_num_tst">cond<wbr></wbr>_num<wbr></wbr>_tst</a></code></td>
+    <td>WIP</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
     <td><code><a href="#convert_temp" class="internal-link" title="gtoolz.convert_temp">convert<wbr></wbr>_temp</a></code></td>
     <td>purpose: convert from Celsius to Fahrenheit or vice versa expects: a string with either an ending.lower() of "f" or "c" to declare what to return returns: rounded(converted_temp)     always returns a string with 2 places (including 0s)...</td>
   </tr><tr class="function">
@@ -2206,7 +2231,7 @@
     
     <td>Function</td>
     <td><code><a href="#do_cli" class="internal-link" title="gtoolz.do_cli">do<wbr></wbr>_cli</a></code></td>
-    <td>purpose: </td>
+    <td>purpose: runs command-line requests with cmd args... returns: none</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2226,7 +2251,7 @@
     
     <td>Function</td>
     <td><code><a href="#do_func_docs" class="internal-link" title="gtoolz.do_func_docs">do<wbr></wbr>_func<wbr></wbr>_docs</a></code></td>
-    <td>purpose: to get function docs</td>
+    <td>purpose: to get function docs returns: prints selected function __doc__ boxed and centered</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2237,11 +2262,6 @@
     <td>Function</td>
     <td><code><a href="#do_logo_demo" class="internal-link" title="gtoolz.do_logo_demo">do<wbr></wbr>_logo<wbr></wbr>_demo</a></code></td>
     <td>purpose: demo of using do_logo() returns: None</td>
-  </tr><tr class="function">
-    
-    <td>Function</td>
-    <td><code><a href="#do_prcnt_bar" class="internal-link" title="gtoolz.do_prcnt_bar">do<wbr></wbr>_prcnt<wbr></wbr>_bar</a></code></td>
-    <td>purpose: displays a percentge bar args: amnt (prcnt) options: full_range=100 if you submit this prcnt will be based on it     - bar_width=40: int   # declares width of bar     - color: str          # text color     - done_color:         # color of done portion     - undone_color:       # color of undone portion     - done_chr: str       # done character     - undone_chr: str     # undone character     - prompt: str         # prompt (before the bar)     - suffix: str         # suffix (afterr the bar)     - brackets=["[", "]"]: list     - show_prcnt=True: bool  # include the percentage at the end     - prnt=False: bool  # False to allow use in dashboards  # you can tell this to not print so you can include in in a box etc returns: percent bar line as a str #&gt;&gt;&gt; rh = 56 #&gt;&gt;&gt; rl = 50 #&gt;&gt;&gt; cp = 51 #&gt;&gt;&gt; amnt = cp - rl #&gt;&gt;&gt; full_range = rh - rl #&gt;&gt;&gt; print(f"rl {do_prcnt_bar(amnt,full_range)} rh") # rl [██████----------------------------------]16% rh...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2321,7 +2341,7 @@
     
     <td>Function</td>
     <td><code><a href="#gclr_demo" class="internal-link" title="gtoolz.gclr_demo">gclr<wbr></wbr>_demo</a></code></td>
-    <td>purpose: brief demo of using gclr() options: none returns: None</td>
+    <td>purpose: brief demo of using gclr() options: none returns: None notes:   none</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2336,7 +2356,7 @@
     
     <td>Function</td>
     <td><code><a href="#gcontains" class="internal-link" title="gtoolz.gcontains">gcontains</a></code></td>
-    <td>purpose: to determine if any pattern (str|list) is a substring of string (string_s) options: none returns: bool</td>
+    <td>purpose: determines if any pattern (str|list) is a substring of string (string_s) required:     - string_s: str     - pattern_m: str | list  # list = [pattern1, pattern2, ...] options: none returns: bool...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2396,7 +2416,7 @@
     
     <td>Function</td>
     <td><code><a href="#gline" class="internal-link" title="gtoolz.gline">gline</a></code></td>
-    <td>purpose: prints a line with msg and  options:     - width: int,      - msg|title: str  # default=""  msg has to be a key=val pair! eg: gline(60, msg="My Message", just='center')     - fc: str         # default=" " fill string/character (char(s) used to fill all surrounding space default: lc=rc=fc)     - lc: str         # default=fc  left/edge/corner (char(s) for left corner ie first charater(s))     - rc: str         # default=lc  right/edge/corner (char(s) for right corner ie last charcter(s))     - pad: str        # default=""  string/character(s) on each side of msg     - lpad: str       # default=pad     - rpad: str       # default=lpad     - box_color: str     - color: str     - lfill_color: str     - rfill_color: str     - just: str       # default = "left"|"l" but can be declared "center"|"c" or 'right'|"r"     - prnt: bool      # prints the output returns: line: str...</td>
+    <td>purpose: prints a line with msg with lots of options  options:     - width: int,     # first argument     - msg|title: str  # default=""  msg has to be a key=val pair! eg: gline(60, msg="My Message", just='center')     - fc: str         # default=" " fill string/character (char(s) used to fill all surrounding space default: lc=rc=fc)     - lc: str         # default=fc  left/edge/corner (char(s) for left corner ie first charater(s))     - rc: str         # default=lc  right/edge/corner (char(s) for right corner ie last charcter(s))     - pad: str        # default=""  string/character(s) on each side of msg     - lpad: str       # default=pad     - rpad: str       # default=lpad     - box_color: str     - color: str     - lfill_color: str     - rfill_color: str     - just: str       # default = "left"|"l" but can be declared "center"|"c" or 'right'|"r"     - prnt: bool      # prints the output returns: line: str notes: this is used in boxed and other functions...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2456,7 +2476,7 @@
     
     <td>Function</td>
     <td><code><a href="#has_substr" class="internal-link" title="gtoolz.has_substr">has<wbr></wbr>_substr</a></code></td>
-    <td>purpose: determin if any sub-string in chk_l is in text_s     column_name = "dtime"     eg is "time" or "date" in column_name... then use has_substr(column_name, ["time", "date"]) required:     - text_s: str     - chk_l: list options:     - ci: bool  # case_insensitive returns True | False used in quick_plot()...</td>
+    <td>purpose: determin if any sub-string in chk_l is in text_s     column_name = "dtime"     eg is "time" or "date" in column_name... then use has_substr(column_name, ["time", "date"]) required:     - text_s: str     - chk_l: list options:     - ci: bool  # case_insensitive returns True | False notes:     used in quick_plot()...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2476,7 +2496,7 @@
     
     <td>Function</td>
     <td><code><a href="#isempty" class="internal-link" title="gtoolz.isempty">isempty</a></code></td>
-    <td>purpose: tests if a variable is empty ie len(my_var) == 0 or my_var is None etc options: None returns: bool</td>
+    <td>purpose: tests if a variable is empty ie len(my_var) == 0 or my_var is None etc requires:     - my_var: str options: None returns: bool</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2600,6 +2620,16 @@
   </tr><tr class="function">
     
     <td>Function</td>
+    <td><code><a href="#pbar" class="internal-link" title="gtoolz.pbar">pbar</a></code></td>
+    <td>purpose: displays a percentge bar args: amnt (prcnt) options: full_range=100 if you submit this prcnt will be based on it     - bar_width=40: int   # declares width of bar     - color: str          # text color     - done_color:         # color of done portion     - undone_color:       # color of undone portion     - done_chr: str       # done character     - undone_chr: str     # undone character     - prompt: str         # prompt (before the bar)     - suffix: str         # suffix (afterr the bar)     - brackets=["[", "]"]: list     - show_prcnt=True: bool  # include the percentage at the end     - prnt=False: bool  # False to allow use in dashboards  # you can tell this to not print so you can include in in a box etc returns: percent bar line as a str #&gt;&gt;&gt; rh = 56 #&gt;&gt;&gt; rl = 50 #&gt;&gt;&gt; cp = 51 #&gt;&gt;&gt; amnt = cp - rl #&gt;&gt;&gt; full_range = rh - rl #&gt;&gt;&gt; print(f"rl {do_prcnt_bar(amnt,full_range)} rh") # rl [██████----------------------------------]16% rh...</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#pbar_demo" class="internal-link" title="gtoolz.pbar_demo">pbar<wbr></wbr>_demo</a></code></td>
+    <td>purpose: demo of do_prcnt_bar()</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
     <td><code><a href="#printit" class="internal-link" title="gtoolz.printit">printit</a></code></td>
     <td>purpose: prepares and prints (option) msg: str|list and can put in unicode color box, centered in terminal and with color required: msg: str|list (can contain color codes (see below) options:      "boxed" | boxed=False  # prepares a box around msg      "centered" | centered=False  # centers horizontally msg on a termial screen      "shadowed" | shadowed=True  # adds a shadow typically around a box      "prnt" | prnt=True  # print line(s) or just return them as a str         (useful for input(printit("What do you want...</td>
   </tr><tr class="function">
@@ -2646,7 +2676,7 @@
     
     <td>Function</td>
     <td><code><a href="#remap_keys" class="internal-link" title="gtoolz.remap_keys">remap<wbr></wbr>_keys</a></code></td>
-    <td>purpose: remaps keys names AND can select only the k.v pairs you want (in the order specified) (ie option: 'mapped_only') options:     - mapped_only: bool  # default=True - returns a dictionary of only the remap_d key-value pairs if True (default)     - rnd: int           # rounds out numbers to rnd scale returns: my_d (remapped and optionally selected pairs) notes: remap_d should be dict {orig_key: new_key,...</td>
+    <td>purpose: remaps keys names AND can select only the k.v pairs you want (in the order specified) (ie option: 'mapped_only') requires:     - my_d: dict       # a dictionary of key-value pairs     - remap_d: dict    # a dictionary holding orig_key-new_key pairs  options:     - mapped_only: bool  # default=True - returns a dictionary of only the remap_d key-value pairs if True (default)     - rnd: int           # rounds out numbers to rnd scale returns: my_d (remapped and optionally selected pairs) notes: remap_d should be dict {orig_key: new_key,...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2691,7 +2721,7 @@
     
     <td>Function</td>
     <td><code><a href="#run_cmd" class="internal-link" title="gtoolz.run_cmd">run<wbr></wbr>_cmd</a></code></td>
-    <td>purpose: runs cmd and returns output   eg: out = run_cmd("uname -o",False)   # now you can print the output from the cmd:   print(f"out:{out}") options:     - lst: bool   # ouput will return as a list of line rather than a str     - rc: bool    # returns the cmd return code instead of output     - both: bool  # returns (output, rc)     - runas: str  # you can declare who to run the cmd as     - prnt: bool  # print output - returns None returns: output from command Note: if runas == sudo then the command will be sun with sudo...</td>
+    <td>purpose: runs cmd and returns output   eg: out = run_cmd("uname -o",False)   # now you can print the output from the cmd:   print(f"out:{out}") options:     - lst: bool   # ouput will return as a list of line rather than a str     - rc: bool    # returns the cmd return code instead of output     - error: bool # also returns error     - both: bool  # returns (output, rc)     - runas: str  # you can declare who to run the cmd as     - prnt: bool  # print output - returns None returns: output from command Note: if runas == sudo then the command will be sun with sudo...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2716,7 +2746,7 @@
     
     <td>Function</td>
     <td><code><a href="#select_file" class="internal-link" title="gtoolz.select_file">select<wbr></wbr>_file</a></code></td>
-    <td>purpose: select a file (or dir) from using pattern(s) required: options:     - path: str|list  (defaults to "./")     - pattern: str|list     - prompt: str     - mtime: bool      # include mtime in listing     - centered     - dirs: bool       # include dirs     - dirs_only: bool  # only directories     - prnt: bool     - shadow     - footer     - sortby: str      # if str in ("mtime", "mdate", "date") then sortby mtime     - width=0 use: f = select_file("/home/user","*...</td>
+    <td>purpose: select a file (or dir) from using pattern(s) required: options:     - path: str|list  (defaults to "./")     - pattern: str|list     - prompt: str     - mtime: bool      # include mtime in listing     - centered     - dirs: bool       # include dirs     - dirs_only: bool  # only directories     - shadow: bool     - title: str     - footer: str     - sortby: str      # default='name - or choose "mtime" | "mdate" |"date" then this will sortby mtime     - width=0 use: f = select_file("/home/user","*...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2891,7 +2921,8 @@
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">add_content</span>(file, content=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, header=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, **kvargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">add_content</span><span class="function-signature">(file, content=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, header=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, **kvargs)</span>:
     
     <a class="headerLink" href="#add_content" title="gtoolz.add_content">
       
@@ -2901,19 +2932,21 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="pre">I wrote this because I am constantly building csv files with a header line
-(also consider add_or_replace() function)
+    <div><p class="pre">purpose: will add content to a file at a specified point in the file (after=pattern or before=pattern) or position=n)
 Required:
-    file
-    content=str|list
+    file: str
+    content: str | list | dict
 Options:
-    after=pattern
-    before=pattern
-    replace=pattern
-    position=##
-    if none of those content is appended to the file
-    if header is also included it will be added to the begining of the file if it does not already exitst
-used_to_be: add_line()</p></div>
+    after: str     =pattern
+    before: str    =pattern
+    replace: str   =pattern
+    position: int  =##
+    if none of those,  content is appended to the end of the file
+    if content is a dictionary the will be considered the keys() and  if the header is also included 
+        it will be added to the begining of the file (if it does not already exist)
+notes: I wrote this because I am constantly building csv files with a header line
+    (also consider add_or_replace() function)
+    used_to_be: add_line()</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -2926,7 +2959,8 @@ used_to_be: add_line()</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">add_or_replace</span>(filename, action, pattern, new_line, *args, backup=True, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">add_or_replace</span><span class="function-signature">(filename, action, pattern, new_line, *args, backup=True, **kwargs)</span>:
     
     <a class="headerLink" href="#add_or_replace" title="gtoolz.add_or_replace">
       
@@ -2959,7 +2993,8 @@ returns: "done" or None depending on use</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">askYN</span>(msg=<span class="rst-variable-quote">'</span><span class="rst-variable-string">Continue</span><span class="rst-variable-quote">'</span>, *args, dflt=<span class="rst-variable-quote">'</span><span class="rst-variable-string">y</span><span class="rst-variable-quote">'</span>, auto=False, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">askYN</span><span class="function-signature">(msg=<span class="rst-variable-quote">'</span><span class="rst-variable-string">Continue</span><span class="rst-variable-quote">'</span>, *args, dflt=<span class="rst-variable-quote">'</span><span class="rst-variable-string">y</span><span class="rst-variable-quote">'</span>, auto=False, **kwargs)</span>:
     
     <a class="headerLink" href="#askYN" title="gtoolz.askYN">
       
@@ -3000,7 +3035,8 @@ if askYN("Do you want to save this file?", "n"):
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">askYN_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">askYN_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#askYN_demo" title="gtoolz.askYN_demo">
       
@@ -3024,7 +3060,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">bool_val</span>(key_l, args_l, kvargs={}, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">bool_val</span><span class="function-signature">(key_l, args_l, kvargs={}, **kwargs)</span>:
     
     <a class="headerLink" href="#bool_val" title="gtoolz.bool_val">
       
@@ -3064,7 +3101,8 @@ use:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">bool_val_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">bool_val_demo</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#bool_val_demo" title="gtoolz.bool_val_demo">
       
@@ -3087,7 +3125,8 @@ use:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">boxed</span>(msgs, *args, cornerchr=<span class="rst-variable-quote">'</span><span class="rst-variable-string">+</span><span class="rst-variable-quote">'</span>, hchr=<span class="rst-variable-quote">'</span><span class="rst-variable-string">=</span><span class="rst-variable-quote">'</span>, vchr=<span class="rst-variable-quote">'</span><span class="rst-variable-string">|</span><span class="rst-variable-quote">'</span>, padmin=1, color=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, title=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, footer=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, style=<span class="rst-variable-quote">'</span><span class="rst-variable-string">single</span><span class="rst-variable-quote">'</span>, shadow=False, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">boxed</span><span class="function-signature">(msgs, *args, cornerchr=<span class="rst-variable-quote">'</span><span class="rst-variable-string">+</span><span class="rst-variable-quote">'</span>, hchr=<span class="rst-variable-quote">'</span><span class="rst-variable-string">=</span><span class="rst-variable-quote">'</span>, vchr=<span class="rst-variable-quote">'</span><span class="rst-variable-string">|</span><span class="rst-variable-quote">'</span>, padmin=1, color=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, title=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, footer=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, style=<span class="rst-variable-quote">'</span><span class="rst-variable-string">single</span><span class="rst-variable-quote">'</span>, shadow=False, **kwargs)</span>:
     
     <a class="headerLink" href="#boxed" title="gtoolz.boxed">
       
@@ -3102,7 +3141,8 @@ args: msgs
 options:
     centered | center: bool  # centers box on the screen
     prnt: bool
-    txt_center: int  # num of lines from top to center in the box
+    txt_center: int | list | tuple  # num of lines from top to center in the box - if list or tuple lines between first int and second int (inclusive) will be centered
+    txt_right: int | list | tuple   # num of lines from top to justify to the right within the box- if list or tuple lines between first int and second int (inclusive) will be right justified
     color: str  # text color
     box_color: str  # color of border
     title, footer: str # goes in topline or bottom line centered of box
@@ -3123,7 +3163,8 @@ NOTES: this function does not print - it returns the box lines</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">boxed_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">boxed_demo</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#boxed_demo" title="gtoolz.boxed_demo">
       
@@ -3138,31 +3179,6 @@ NOTES: this function does not print - it returns the box lines</p></div>
 </div><div class="basefunction">
   
   
-  <a name="gtoolz.boxed_tst">
-    
-  </a>
-  <a name="boxed_tst">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">boxed_tst</span>(*args, **kwargs):
-    
-    <a class="headerLink" href="#boxed_tst" title="gtoolz.boxed_tst">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p class="pre">purpose: boxed function test
-options: none
-return None</p></div>
-  </div>
-</div><div class="basefunction">
-  
-  
   <a name="gtoolz.browseit">
     
   </a>
@@ -3171,7 +3187,8 @@ return None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">browseit</span>(url, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">browseit</span><span class="function-signature">(url=<span class="rst-variable-quote">'</span><span class="rst-variable-string">http://localhost/</span><span class="rst-variable-quote">'</span>, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#browseit" title="gtoolz.browseit">
       
@@ -3188,6 +3205,31 @@ returns: none</p></div>
 </div><div class="basefunction">
   
   
+  <a name="gtoolz.browseit_tst">
+    
+  </a>
+  <a name="browseit_tst">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">browseit_tst</span><span class="function-signature">(*args, **kwargs)</span>:
+    
+    <a class="headerLink" href="#browseit_tst" title="gtoolz.browseit_tst">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">purpose: simple demo of browseit
+returns: none</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
   <a name="gtoolz.cat_file">
     
   </a>
@@ -3196,7 +3238,8 @@ returns: none</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">cat_file</span>(fname, *args, prnt=False, lst=False, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">cat_file</span><span class="function-signature">(fname, *args, prnt=False, lst=False, **kwargs)</span>:
     
     <a class="headerLink" href="#cat_file" title="gtoolz.cat_file">
       
@@ -3240,7 +3283,8 @@ returns: none</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">centered</span>(msgs, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">centered</span><span class="function-signature">(msgs, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#centered" title="gtoolz.centered">
       
@@ -3270,7 +3314,8 @@ note: replaces deprecated centerit()</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">centered_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">centered_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#centered_demo" title="gtoolz.centered_demo">
       
@@ -3294,7 +3339,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">cfg_val</span>(keys, section, cfg_d, dflt=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">cfg_val</span><span class="function-signature">(keys, section, cfg_d, dflt=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#cfg_val" title="gtoolz.cfg_val">
       
@@ -3317,7 +3363,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">chk_substr</span>(chk_l, strgs_l, action=<span class="rst-variable-quote">'</span><span class="rst-variable-string">exclude</span><span class="rst-variable-quote">'</span>):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">chk_substr</span><span class="function-signature">(chk_l, strgs_l, action=<span class="rst-variable-quote">'</span><span class="rst-variable-string">exclude</span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#chk_substr" title="gtoolz.chk_substr">
       
@@ -3337,8 +3384,12 @@ options:
     - action: str  # default is 'exclude'
 return: new_list
 usage:
-    # given a list of functions, exclude the ones that have contain any of the substrings in the exclude_l list
-    funcs_l = chk_substr(funcs_l, exclude_l, action='exclude')</p></div>
+    # given a list of functions, exclude the ones that may have any of the provided  substrings (list) in the exclude_l list
+    funcs_l = chk_substr(funcs_l, exclude_l, action='exclude')
+    eg:
+        exclude_l = ["main", 'tst', 'do_func_demos']
+        funcs_l = chk_substr(funcs_l, exclude_l, action='exclude')
+        funcs_l = sorted(funcs_l)</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -3351,7 +3402,8 @@ usage:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">chklst</span>(my_l, chkd_l=[], *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">chklst</span><span class="function-signature">(my_l, chkd_l=[], *args, **kwargs)</span>:
     
     <a class="headerLink" href="#chklst" title="gtoolz.chklst">
       
@@ -3405,7 +3457,8 @@ use:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">chklst_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">chklst_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#chklst_demo" title="gtoolz.chklst_demo">
       
@@ -3429,7 +3482,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">chunkit</span>(my_l, size, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">chunkit</span><span class="function-signature">(my_l, size, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#chunkit" title="gtoolz.chunkit">
       
@@ -3459,7 +3513,8 @@ note: this is used: in a dashboard columns of boxes - see gcolumnize and in gtab
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">cinput</span>(prompt, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">cinput</span><span class="function-signature">(prompt, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#cinput" title="gtoolz.cinput">
       
@@ -3487,7 +3542,8 @@ returns: user response</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">cli_help</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">cli_help</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#cli_help" title="gtoolz.cli_help">
       
@@ -3511,7 +3567,8 @@ notes: This is work-in-progress (TODO)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">clr_coded</span>(msg_s):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">clr_coded</span><span class="function-signature">(msg_s)</span>:
     
     <a class="headerLink" href="#clr_coded" title="gtoolz.clr_coded">
       
@@ -3538,7 +3595,8 @@ requires a space before the first bracket</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">clr_coded_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">clr_coded_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#clr_coded_demo" title="gtoolz.clr_coded_demo">
       
@@ -3562,7 +3620,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">clr_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">clr_demo</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#clr_demo" title="gtoolz.clr_demo">
       
@@ -3585,7 +3644,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">clr_tst</span>(CODE, color=<span class="rst-variable-quote">'</span><span class="rst-variable-string">unknown</span><span class="rst-variable-quote">'</span>):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">clr_tst</span><span class="function-signature">(CODE, color=<span class="rst-variable-quote">'</span><span class="rst-variable-string">unknown</span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#clr_tst" title="gtoolz.clr_tst">
       
@@ -3611,7 +3671,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">cls</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">cls</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#cls" title="gtoolz.cls">
       
@@ -3635,7 +3696,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">cnvrt2lol</span>(data, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">cnvrt2lol</span><span class="function-signature">(data, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#cnvrt2lol" title="gtoolz.cnvrt2lol">
       
@@ -3671,7 +3733,8 @@ notes: problem if a "#" is in a line, it will truncate it as it thinks the ramai
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">cnvrt2lol_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">cnvrt2lol_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#cnvrt2lol_demo" title="gtoolz.cnvrt2lol_demo">
       
@@ -3695,7 +3758,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">columned</span>(my_l, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">columned</span><span class="function-signature">(my_l, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#columned" title="gtoolz.columned">
       
@@ -3721,7 +3785,7 @@ options:
 returns: lines for printing
 notes: this takes the place of standard module columnize so we are not dependant on that code
     - you probably do not want to use this function directly - use gcolumnize instead.
-used by: gcolumnize()</p></div>
+    - used by: gcolumnize()</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -3734,7 +3798,8 @@ used by: gcolumnize()</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">columned_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">columned_demo</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#columned_demo" title="gtoolz.columned_demo">
       
@@ -3759,7 +3824,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">comma_join</span>(data, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">comma_join</span><span class="function-signature">(data, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#comma_join" title="gtoolz.comma_join">
       
@@ -3788,7 +3854,8 @@ notes: this has not been fully tested yet</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">comma_join_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">comma_join_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#comma_join_demo" title="gtoolz.comma_join_demo">
       
@@ -3812,7 +3879,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">comma_split</span>(my_s, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">comma_split</span><span class="function-signature">(my_s, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#comma_split" title="gtoolz.comma_split">
       
@@ -3837,7 +3905,8 @@ notes: this is a kludge but it works for me</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">comma_split_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">comma_split_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#comma_split_demo" title="gtoolz.comma_split_demo">
       
@@ -3861,7 +3930,8 @@ return: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">cond_num</span>(elem, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">cond_num</span><span class="function-signature">(elem, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#cond_num" title="gtoolz.cond_num">
       
@@ -3896,6 +3966,30 @@ aka: color_neg(elem)</p></div>
 </div><div class="basefunction">
   
   
+  <a name="gtoolz.cond_num_tst">
+    
+  </a>
+  <a name="cond_num_tst">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">cond_num_tst</span><span class="function-signature">(*args, **kwargs)</span>:
+    
+    <a class="headerLink" href="#cond_num_tst" title="gtoolz.cond_num_tst">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">WIP</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
   <a name="gtoolz.convert_temp">
     
   </a>
@@ -3904,7 +3998,8 @@ aka: color_neg(elem)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">convert_temp</span>(temp, convert2=<span class="rst-variable-quote">'</span><span class="rst-variable-string">f</span><span class="rst-variable-quote">'</span>):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">convert_temp</span><span class="function-signature">(temp, convert2=<span class="rst-variable-quote">'</span><span class="rst-variable-string">f</span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#convert_temp" title="gtoolz.convert_temp">
       
@@ -3930,7 +4025,8 @@ returns: rounded(converted_temp)
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">dbug</span>(xvar=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, exit=False, ask=False, prnt=True, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">dbug</span><span class="function-signature">(xvar=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, exit=False, ask=False, prnt=True, **kwargs)</span>:
     
     <a class="headerLink" href="#dbug" title="gtoolz.dbug">
       
@@ -3973,7 +4069,8 @@ DEBUG: [dbug.py; &lt;module&gt;:1] a:xyz
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">dbug_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">dbug_demo</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#dbug_demo" title="gtoolz.dbug_demo">
       
@@ -3996,7 +4093,8 @@ DEBUG: [dbug.py; &lt;module&gt;:1] a:xyz
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">ddbug</span>(msg=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, ask=False, exit=False):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">ddbug</span><span class="function-signature">(msg=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, ask=False, exit=False)</span>:
     
     <a class="headerLink" href="#ddbug" title="gtoolz.ddbug">
       
@@ -4019,7 +4117,8 @@ DEBUG: [dbug.py; &lt;module&gt;:1] a:xyz
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">display_in_cols</span>(lst, cols=0, reverse=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, on=<span class="rst-variable-quote">'</span><span class="rst-variable-string">value</span><span class="rst-variable-quote">'</span>):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">display_in_cols</span><span class="function-signature">(lst, cols=0, reverse=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, on=<span class="rst-variable-quote">'</span><span class="rst-variable-string">value</span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#display_in_cols" title="gtoolz.display_in_cols">
       
@@ -4053,7 +4152,8 @@ then print lines eg printit(lines)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">do_cli</span>(cmd, args_s, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">do_cli</span><span class="function-signature">(cmd, args_s, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#do_cli" title="gtoolz.do_cli">
       
@@ -4063,7 +4163,8 @@ then print lines eg printit(lines)</p></div>
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="pre">purpose: </p></div>
+    <div><p class="pre">purpose: runs command-line requests with cmd args...
+returns: none</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -4076,7 +4177,8 @@ then print lines eg printit(lines)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">do_close</span>(msg=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, hchr=<span class="rst-variable-quote">'</span><span class="rst-variable-string">=</span><span class="rst-variable-quote">'</span>, color=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, rc=0, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">do_close</span><span class="function-signature">(msg=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, hchr=<span class="rst-variable-quote">'</span><span class="rst-variable-string">=</span><span class="rst-variable-quote">'</span>, color=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, rc=0, **kwargs)</span>:
     
     <a class="headerLink" href="#do_close" title="gtoolz.do_close">
       
@@ -4114,7 +4216,8 @@ options: 'center' | 'centered' color='red' rc=return code to exit with
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">do_edit</span>(file, lnum=0):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">do_edit</span><span class="function-signature">(file, lnum=0)</span>:
     
     <a class="headerLink" href="#do_edit" title="gtoolz.do_edit">
       
@@ -4141,7 +4244,8 @@ Initiate edit on a file - with lineno if provided</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">do_func_demos</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">do_func_demos</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#do_func_demos" title="gtoolz.do_func_demos">
       
@@ -4166,7 +4270,8 @@ return: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">do_func_docs</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">do_func_docs</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#do_func_docs" title="gtoolz.do_func_docs">
       
@@ -4176,7 +4281,8 @@ return: None</p></div>
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="pre">purpose: to get function docs</p></div>
+    <div><p class="pre">purpose: to get function docs
+returns: prints selected function __doc__ boxed and centered</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -4189,7 +4295,8 @@ return: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">do_logo</span>(content=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, hchr=<span class="rst-variable-quote">'</span><span class="rst-variable-string">-</span><span class="rst-variable-quote">'</span>, prnt=True, figlet=False, center=True, shadow=False, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">do_logo</span><span class="function-signature">(content=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, hchr=<span class="rst-variable-quote">'</span><span class="rst-variable-string">-</span><span class="rst-variable-quote">'</span>, prnt=True, figlet=False, center=True, shadow=False, **kwargs)</span>:
     
     <a class="headerLink" href="#do_logo" title="gtoolz.do_logo">
       
@@ -4227,7 +4334,8 @@ if content is a str and not a file then use pyfiglet to turn it into ascii lette
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">do_logo_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">do_logo_demo</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#do_logo_demo" title="gtoolz.do_logo_demo">
       
@@ -4243,50 +4351,6 @@ returns: None</p></div>
 </div><div class="basefunction">
   
   
-  <a name="gtoolz.do_prcnt_bar">
-    
-  </a>
-  <a name="do_prcnt_bar">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">do_prcnt_bar</span>(amnt, full_range=100, *args, bar_width=40, show_prcnt=True, **kwargs):
-    
-    <a class="headerLink" href="#do_prcnt_bar" title="gtoolz.do_prcnt_bar">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p class="pre">purpose: displays a percentge bar
-args: amnt (prcnt)
-options: full_range=100 if you submit this prcnt will be based on it
-    - bar_width=40: int   # declares width of bar
-    - color: str          # text color
-    - done_color:         # color of done portion
-    - undone_color:       # color of undone portion
-    - done_chr: str       # done character
-    - undone_chr: str     # undone character
-    - prompt: str         # prompt (before the bar)
-    - suffix: str         # suffix (afterr the bar)
-    - brackets=["[", "]"]: list
-    - show_prcnt=True: bool  # include the percentage at the end
-    - prnt=False: bool  # False to allow use in dashboards  # you can tell this to not print so you can include in in a box etc
-returns: percent bar line as a str
-#&gt;&gt;&gt; rh = 56
-#&gt;&gt;&gt; rl = 50
-#&gt;&gt;&gt; cp = 51
-#&gt;&gt;&gt; amnt = cp - rl
-#&gt;&gt;&gt; full_range = rh - rl
-#&gt;&gt;&gt; print(f"rl {do_prcnt_bar(amnt,full_range)} rh")
-# rl [██████----------------------------------]16% rh</p></div>
-  </div>
-</div><div class="basefunction">
-  
-  
   <a name="gtoolz.docvars">
     
   </a>
@@ -4295,7 +4359,8 @@ returns: percent bar line as a str
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">docvars</span>(*args, **kvargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">docvars</span><span class="function-signature">(*args, **kvargs)</span>:
     
     <a class="headerLink" href="#docvars" title="gtoolz.docvars">
       
@@ -4334,7 +4399,8 @@ def myfunc():
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">dtree</span>(dir_name=<span class="rst-variable-quote">'</span><span class="rst-variable-string">./</span><span class="rst-variable-quote">'</span>, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">dtree</span><span class="function-signature">(dir_name=<span class="rst-variable-quote">'</span><span class="rst-variable-string">./</span><span class="rst-variable-quote">'</span>, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#dtree" title="gtoolz.dtree">
       
@@ -4368,7 +4434,8 @@ returns: list (lines for printing)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">dtree_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">dtree_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#dtree_demo" title="gtoolz.dtree_demo">
       
@@ -4392,7 +4459,8 @@ return: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">escape_ansi</span>(line, *args, **kvargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">escape_ansi</span><span class="function-signature">(line, *args, **kvargs)</span>:
     
     <a class="headerLink" href="#escape_ansi" title="gtoolz.escape_ansi">
       
@@ -4419,7 +4487,8 @@ aka: name should be escape_ansii</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">file_exists</span>(file, type=<span class="rst-variable-quote">'</span><span class="rst-variable-string">file</span><span class="rst-variable-quote">'</span>, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">file_exists</span><span class="function-signature">(file, type=<span class="rst-variable-quote">'</span><span class="rst-variable-string">file</span><span class="rst-variable-quote">'</span>, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#file_exists" title="gtoolz.file_exists">
       
@@ -4449,7 +4518,8 @@ usage:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">find_file_in_dirs</span>(filename, dirs_l=[], prnt=False):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">find_file_in_dirs</span><span class="function-signature">(filename, dirs_l=[], prnt=False)</span>:
     
     <a class="headerLink" href="#find_file_in_dirs" title="gtoolz.find_file_in_dirs">
       
@@ -4473,7 +4543,8 @@ notes: if dirs_l is empty it defaults to ["./"]</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">first_matched_line</span>(filename, pattern, upto=1):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">first_matched_line</span><span class="function-signature">(filename, pattern, upto=1)</span>:
     
     <a class="headerLink" href="#first_matched_line" title="gtoolz.first_matched_line">
       
@@ -4502,7 +4573,8 @@ returns: matching lines</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">fix_msgs</span>(msgs, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">fix_msgs</span><span class="function-signature">(msgs, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#fix_msgs" title="gtoolz.fix_msgs">
       
@@ -4531,7 +4603,8 @@ etc"""  to remove preceding spaces - only works if spaces are used and not tabs 
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">fixlol</span>(my_lol=[], *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">fixlol</span><span class="function-signature">(my_lol=[], *args, **kwargs)</span>:
     
     <a class="headerLink" href="#fixlol" title="gtoolz.fixlol">
       
@@ -4560,7 +4633,8 @@ used by gtable with option "fix"</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">flattenit</span>(my_l):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">flattenit</span><span class="function-signature">(my_l)</span>:
     
     <a class="headerLink" href="#flattenit" title="gtoolz.flattenit">
       
@@ -4585,7 +4659,8 @@ returns: list</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">from_to</span>(filename, begin, end, *args, include=<span class="rst-variable-quote">'</span><span class="rst-variable-string">none</span><span class="rst-variable-quote">'</span>, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">from_to</span><span class="function-signature">(filename, begin, end, *args, include=<span class="rst-variable-quote">'</span><span class="rst-variable-string">none</span><span class="rst-variable-quote">'</span>, **kwargs)</span>:
     
     <a class="headerLink" href="#from_to" title="gtoolz.from_to">
       
@@ -4614,7 +4689,8 @@ returns: lines between (or including) begin pattern and end pattern from filenam
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">funcname</span>(n=0):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">funcname</span><span class="function-signature">(n=0)</span>:
     
     <a class="headerLink" href="#funcname" title="gtoolz.funcname">
       
@@ -4637,7 +4713,8 @@ returns: lines between (or including) begin pattern and end pattern from filenam
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gblock</span>(msgs_l, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gblock</span><span class="function-signature">(msgs_l, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#gblock" title="gtoolz.gblock">
       
@@ -4696,7 +4773,8 @@ notes:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gblock_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gblock_demo</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#gblock_demo" title="gtoolz.gblock_demo">
       
@@ -4720,7 +4798,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gclr</span>(color=<span class="rst-variable-quote">'</span><span class="rst-variable-string">normal</span><span class="rst-variable-quote">'</span>, text=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gclr</span><span class="function-signature">(color=<span class="rst-variable-quote">'</span><span class="rst-variable-string">normal</span><span class="rst-variable-quote">'</span>, text=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, **kwargs)</span>:
     
     <a class="headerLink" href="#gclr" title="gtoolz.gclr">
       
@@ -4751,7 +4830,8 @@ returns: color coded [and text]</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gclr_demo</span>(*args, **kwarg):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gclr_demo</span><span class="function-signature">(*args, **kwarg)</span>:
     
     <a class="headerLink" href="#gclr_demo" title="gtoolz.gclr_demo">
       
@@ -4763,7 +4843,8 @@ returns: color coded [and text]</p></div>
     
     <div><p class="pre">purpose: brief demo of using gclr()
 options: none
-returns: None</p></div>
+returns: None
+notes:   none</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -4776,7 +4857,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gcolumnize</span>(msg_l, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gcolumnize</span><span class="function-signature">(msg_l, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#gcolumnize" title="gtoolz.gcolumnize">
       
@@ -4860,7 +4942,8 @@ Three potato</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gcolumnize_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gcolumnize_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#gcolumnize_demo" title="gtoolz.gcolumnize_demo">
       
@@ -4884,7 +4967,8 @@ Three potato</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gcontains</span>(string_s, pattern_m):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gcontains</span><span class="function-signature">(string_s, pattern_m)</span>:
     
     <a class="headerLink" href="#gcontains" title="gtoolz.gcontains">
       
@@ -4894,7 +4978,10 @@ Three potato</p></div>
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="pre">purpose: to determine if any pattern (str|list) is a substring of string (string_s)
+    <div><p class="pre">purpose: determines if any pattern (str|list) is a substring of string (string_s)
+required:
+    - string_s: str
+    - pattern_m: str | list  # list = [pattern1, pattern2, ...]
 options: none
 returns: bool</p></div>
   </div>
@@ -4909,7 +4996,8 @@ returns: bool</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">get_args</span>(arg_s):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_args</span><span class="function-signature">(arg_s)</span>:
     
     <a class="headerLink" href="#get_args" title="gtoolz.get_args">
       
@@ -4933,7 +5021,8 @@ notes: called by do_cli()</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">get_boxchrs</span>(box_style=<span class="rst-variable-quote">'</span><span class="rst-variable-string">single</span><span class="rst-variable-quote">'</span>, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_boxchrs</span><span class="function-signature">(box_style=<span class="rst-variable-quote">'</span><span class="rst-variable-string">single</span><span class="rst-variable-quote">'</span>, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#get_boxchrs" title="gtoolz.get_boxchrs">
       
@@ -4963,7 +5052,8 @@ Note: boxed() uses this
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">get_columns</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_columns</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#get_columns" title="gtoolz.get_columns">
       
@@ -4987,7 +5077,8 @@ returns int(columns)| int(rows: bool) | int(cols), int(rows) both: bool</p></div
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">get_dtime_format</span>(s_date):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_dtime_format</span><span class="function-signature">(s_date)</span>:
     
     <a class="headerLink" href="#get_dtime_format" title="gtoolz.get_dtime_format">
       
@@ -5013,7 +5104,8 @@ returns date patters in strftime format</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">get_elems</span>(lines, *args, index=False, col_limit=20, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_elems</span><span class="function-signature">(lines, *args, index=False, col_limit=20, **kwargs)</span>:
     
     <a class="headerLink" href="#get_elems" title="gtoolz.get_elems">
       
@@ -5049,7 +5141,8 @@ Notes: be carefull - if a "#" is encountered it will be treated as the begining 
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">get_elems_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_elems_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#get_elems_demo" title="gtoolz.get_elems_demo">
       
@@ -5073,7 +5166,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">get_html_tables</span>(url=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_html_tables</span><span class="function-signature">(url=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#get_html_tables" title="gtoolz.get_html_tables">
       
@@ -5105,7 +5199,8 @@ returns: list of panda dataframes</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">get_html_tables_tst</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_html_tables_tst</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#get_html_tables_tst" title="gtoolz.get_html_tables_tst">
       
@@ -5128,7 +5223,8 @@ returns: list of panda dataframes</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">get_html_tst</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_html_tst</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#get_html_tst" title="gtoolz.get_html_tst">
       
@@ -5160,7 +5256,8 @@ options:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">get_mod_docs</span>(mod=__file__, *args, fn=<span class="rst-variable-quote">'</span><span class="rst-variable-string">*</span><span class="rst-variable-quote">'</span>, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_mod_docs</span><span class="function-signature">(mod=__file__, *args, fn=<span class="rst-variable-quote">'</span><span class="rst-variable-string">*</span><span class="rst-variable-quote">'</span>, **kwargs)</span>:
     
     <a class="headerLink" href="#get_mod_docs" title="gtoolz.get_mod_docs">
       
@@ -5185,7 +5282,8 @@ returns cnt</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">get_random_line</span>(file, prnt=False, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_random_line</span><span class="function-signature">(file, prnt=False, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#get_random_line" title="gtoolz.get_random_line">
       
@@ -5214,7 +5312,8 @@ Note: file has all comments removed first (purified)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gline</span>(width=0, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gline</span><span class="function-signature">(width=0, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#gline" title="gtoolz.gline">
       
@@ -5224,9 +5323,9 @@ Note: file has all comments removed first (purified)</p></div>
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="pre">purpose: prints a line with msg and 
+    <div><p class="pre">purpose: prints a line with msg with lots of options 
 options:
-    - width: int, 
+    - width: int,     # first argument
     - msg|title: str  # default=""  msg has to be a key=val pair! eg: gline(60, msg="My Message", just='center')
     - fc: str         # default=" " fill string/character (char(s) used to fill all surrounding space default: lc=rc=fc)
     - lc: str         # default=fc  left/edge/corner (char(s) for left corner ie first charater(s))
@@ -5240,7 +5339,8 @@ options:
     - rfill_color: str
     - just: str       # default = "left"|"l" but can be declared "center"|"c" or 'right'|"r"
     - prnt: bool      # prints the output
-returns: line: str</p></div>
+returns: line: str
+notes: this is used in boxed and other functions</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -5253,7 +5353,8 @@ returns: line: str</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gline_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gline_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#gline_demo" title="gtoolz.gline_demo">
       
@@ -5277,7 +5378,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">grep_lines</span>(lines, pattern, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">grep_lines</span><span class="function-signature">(lines, pattern, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#grep_lines" title="gtoolz.grep_lines">
       
@@ -5307,7 +5409,8 @@ Note: if only one line is matched then it will return that one line otherwise it
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gselect</span>(selections, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gselect</span><span class="function-signature">(selections, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#gselect" title="gtoolz.gselect">
       
@@ -5367,7 +5470,8 @@ To run a function using gselect - write code similar to this:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gselect_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gselect_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#gselect_demo" title="gtoolz.gselect_demo">
       
@@ -5391,7 +5495,8 @@ returns: none</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gtable</span>(lol, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gtable</span><span class="function-signature">(lol, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#gtable" title="gtoolz.gtable">
       
@@ -5441,6 +5546,7 @@ options:
     - fix: bool            # default=False - if true then everry row of the data will be made the length of the first row
     - ignore: bool         # default=False builds the table even if the number of columns is different on the rows - makes it easier to troublshoot
     - cols: int            # split a table into several tables or columns (aka chunks) - very useful with long tables
+    - sep: str             # default=" "  this is the string between columns (only effective with the cols option &gt; 1)
     - lol: bool            # default=False - will return the conditioned lol (rows of columns) instead of the default printable lines
     - no_hdr: bool         # removes header/colnames row from the table
     - purify: bool         # default=False - assumes provided data (lol) has all ready been purified
@@ -5462,7 +5568,8 @@ Notes:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gtable_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gtable_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#gtable_demo" title="gtoolz.gtable_demo">
       
@@ -5486,7 +5593,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">gtitle</span>(width=40, msg=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, fc=<span class="rst-variable-quote">'</span><span class="rst-variable-string">=</span><span class="rst-variable-quote">'</span>, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">gtitle</span><span class="function-signature">(width=40, msg=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, fc=<span class="rst-variable-quote">'</span><span class="rst-variable-string">=</span><span class="rst-variable-quote">'</span>, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#gtitle" title="gtoolz.gtitle">
       
@@ -5515,7 +5623,8 @@ see: gline_demo</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">handleCFG</span>(cfg_file=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">handleCFG</span><span class="function-signature">(cfg_file=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#handleCFG" title="gtoolz.handleCFG">
       
@@ -5550,7 +5659,8 @@ use:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">handleCFG_tst</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">handleCFG_tst</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#handleCFG_tst" title="gtoolz.handleCFG_tst">
       
@@ -5573,8 +5683,9 @@ returns: none</p></div>
     
   </a>
   <div class="functionHeader">
+    
     @<a href="#docvars" class="internal-link" title="gtoolz.docvars">docvars</a>(<wbr></wbr>os.path.basename(<wbr></wbr>__file__))<br />
-    <span class="py-keyword">def</span> <span class="py-defname">handleOPTS</span>(args):
+    <span class="py-keyword">def</span> <span class="py-defname">handleOPTS</span><span class="function-signature">(args)</span>:
     
     <a class="headerLink" href="#handleOPTS" title="gtoolz.handleOPTS">
       
@@ -5599,7 +5710,12 @@ Options
     -T &lt;func&gt; [&lt;fargs&gt;]    runs specified func with optional args=fargs, primarily for development
     -E                     edit this file
     --demos                allows user to select a demo
-    --docs                 allows to user to display the doc for selected function</p></div>
+    --docs                 allows to user to display the doc for selected function
+    &lt;cmd&gt; [farg farg] ...] function arg, arg, arg ... (when used at command line, ie: {0}-cli, prnt is always assumed to be true)
+
+Examples for {0}-cli:
+    {0}-cli "This is in a red box" boxed centered box_color=red
+    {0}-cli printit "Message in a white on black box" boxed box_color='white on black'</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -5612,7 +5728,8 @@ Options
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">has_alnum</span>(string):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">has_alnum</span><span class="function-signature">(string)</span>:
     
     <a class="headerLink" href="#has_alnum" title="gtoolz.has_alnum">
       
@@ -5637,7 +5754,8 @@ isspace() does the samething</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">has_substr</span>(text_s, chk_l, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">has_substr</span><span class="function-signature">(text_s, chk_l, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#has_substr" title="gtoolz.has_substr">
       
@@ -5656,7 +5774,8 @@ required:
 options:
     - ci: bool  # case_insensitive
 returns True | False
-used in quick_plot()</p></div>
+notes:
+    used in quick_plot()</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -5669,7 +5788,8 @@ used in quick_plot()</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">htmltable</span>(data, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">htmltable</span><span class="function-signature">(data, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#htmltable" title="gtoolz.htmltable">
       
@@ -5712,7 +5832,8 @@ notes: this is still limited in features but seems to be useful
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">htmltable_tst</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">htmltable_tst</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#htmltable_tst" title="gtoolz.htmltable_tst">
       
@@ -5736,7 +5857,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">ireplace</span>(s, indices=[], char=<span class="rst-variable-quote">'</span><span class="rst-variable-string">|</span><span class="rst-variable-quote">'</span>):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">ireplace</span><span class="function-signature">(s, indices=[], char=<span class="rst-variable-quote">'</span><span class="rst-variable-string">|</span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#ireplace" title="gtoolz.ireplace">
       
@@ -5768,7 +5890,8 @@ then use this func with:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">isempty</span>(my_var):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">isempty</span><span class="function-signature">(my_var)</span>:
     
     <a class="headerLink" href="#isempty" title="gtoolz.isempty">
       
@@ -5779,6 +5902,8 @@ then use this func with:
   <div class="docstring functionBody">
     
     <div><p class="pre">purpose: tests if a variable is empty ie len(my_var) == 0 or my_var is None etc
+requires:
+    - my_var: str
 options: None
 returns: bool</p></div>
   </div>
@@ -5793,7 +5918,8 @@ returns: bool</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">isempty_tst</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">isempty_tst</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#isempty_tst" title="gtoolz.isempty_tst">
       
@@ -5816,7 +5942,8 @@ returns: bool</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">islod</span>(my_lod, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">islod</span><span class="function-signature">(my_lod, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#islod" title="gtoolz.islod">
       
@@ -5841,7 +5968,8 @@ returns: bool</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">islol</span>(my_lol, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">islol</span><span class="function-signature">(my_lol, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#islol" title="gtoolz.islol">
       
@@ -5870,7 +5998,8 @@ note:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">islols_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">islols_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#islols_demo" title="gtoolz.islols_demo">
       
@@ -5896,7 +6025,8 @@ return: none</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">islos</span>(my_los=[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">a</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">list</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">of</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">strings</span><span class="rst-variable-quote">'</span>], *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">islos</span><span class="function-signature">(my_los=[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">a</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">list</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">of</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">strings</span><span class="rst-variable-quote">'</span>], *args, **kwargs)</span>:
     
     <a class="headerLink" href="#islos" title="gtoolz.islos">
       
@@ -5920,7 +6050,8 @@ returns: bool</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">isnumber</span>(x, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">isnumber</span><span class="function-signature">(x, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#isnumber" title="gtoolz.isnumber">
       
@@ -5951,7 +6082,8 @@ notes: tests... pos, neg, floats, int, scientific, B(illion), T(trillions), G(ig
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">isnumber_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">isnumber_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#isnumber_demo" title="gtoolz.isnumber_demo">
       
@@ -5975,7 +6107,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">key_swap</span>(orig_key, new_key, d):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">key_swap</span><span class="function-signature">(orig_key, new_key, d)</span>:
     
     <a class="headerLink" href="#key_swap" title="gtoolz.key_swap">
       
@@ -6003,7 +6136,8 @@ returns: the altered dictionary</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">kv_cols</span>(my_d, cols=3, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">kv_cols</span><span class="function-signature">(my_d, cols=3, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#kv_cols" title="gtoolz.kv_cols">
       
@@ -6036,7 +6170,8 @@ returns: lines tabalized key-value pairs</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">kv_cols_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">kv_cols_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#kv_cols_demo" title="gtoolz.kv_cols_demo">
       
@@ -6060,7 +6195,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">kvarg_val</span>(key, kwargs_d={}, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">kvarg_val</span><span class="function-signature">(key, kwargs_d={}, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#kvarg_val" title="gtoolz.kvarg_val">
       
@@ -6103,7 +6239,8 @@ returns str(key_val) or default_val(which is "" if none is provided)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">kvarg_val_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">kvarg_val_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#kvarg_val_demo" title="gtoolz.kvarg_val_demo">
       
@@ -6126,7 +6263,8 @@ returns str(key_val) or default_val(which is "" if none is provided)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">lineno</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">lineno</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#lineno" title="gtoolz.lineno">
       
@@ -6149,7 +6287,8 @@ returns str(key_val) or default_val(which is "" if none is provided)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">list_files</span>(dirs, file_pat=<span class="rst-variable-quote">'</span><span class="rst-variable-string">*</span><span class="rst-variable-quote">'</span>, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">list_files</span><span class="function-signature">(dirs, file_pat=<span class="rst-variable-quote">'</span><span class="rst-variable-string">*</span><span class="rst-variable-quote">'</span>, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#list_files" title="gtoolz.list_files">
       
@@ -6187,7 +6326,8 @@ use: list_files("/tmp")</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">list_files_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">list_files_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#list_files_demo" title="gtoolz.list_files_demo">
       
@@ -6211,7 +6351,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">long_proc</span>(msg=<span class="rst-variable-quote">'</span><span class="rst-variable-string">testing long process</span><span class="rst-variable-quote">'</span>, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">long_proc</span><span class="function-signature">(msg=<span class="rst-variable-quote">'</span><span class="rst-variable-string">testing long process</span><span class="rst-variable-quote">'</span>, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#long_proc" title="gtoolz.long_proc">
       
@@ -6234,7 +6375,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">main</span>(main_args=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">main</span><span class="function-signature">(main_args=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#main" title="gtoolz.main">
       
@@ -6257,7 +6399,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">matrix</span>(rows, cols, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">matrix</span><span class="function-signature">(rows, cols, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#matrix" title="gtoolz.matrix">
       
@@ -6285,7 +6428,8 @@ aka: init_arr | initarray | init_arr</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">max_width_lol</span>(input_table):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">max_width_lol</span><span class="function-signature">(input_table)</span>:
     
     <a class="headerLink" href="#max_width_lol" title="gtoolz.max_width_lol">
       
@@ -6310,7 +6454,8 @@ returns: column sizes</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">maxof</span>(my_l, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">maxof</span><span class="function-signature">(my_l, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#maxof" title="gtoolz.maxof">
       
@@ -6345,7 +6490,8 @@ note: saves me from having to look up how to do this all the time and works with
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">maxof_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">maxof_demo</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#maxof_demo" title="gtoolz.maxof_demo">
       
@@ -6369,7 +6515,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">nclen</span>(line, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">nclen</span><span class="function-signature">(line, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#nclen" title="gtoolz.nclen">
       
@@ -6394,7 +6541,8 @@ aka: no_color len of line (length w/o ansii codes)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">nestlvl</span>(lst, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">nestlvl</span><span class="function-signature">(lst, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#nestlvl" title="gtoolz.nestlvl">
       
@@ -6423,7 +6571,8 @@ notes: used by htmltable and gcolumnize (TODO)
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">nestlvl_tst</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">nestlvl_tst</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#nestlvl_tst" title="gtoolz.nestlvl_tst">
       
@@ -6438,6 +6587,75 @@ notes: used by htmltable and gcolumnize (TODO)
 </div><div class="basefunction">
   
   
+  <a name="gtoolz.pbar">
+    
+  </a>
+  <a name="pbar">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">pbar</span><span class="function-signature">(amnt, full_range=100, *args, bar_width=40, show_prcnt=True, **kwargs)</span>:
+    
+    <a class="headerLink" href="#pbar" title="gtoolz.pbar">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">purpose: displays a percentge bar
+args: amnt (prcnt)
+options: full_range=100 if you submit this prcnt will be based on it
+    - bar_width=40: int   # declares width of bar
+    - color: str          # text color
+    - done_color:         # color of done portion
+    - undone_color:       # color of undone portion
+    - done_chr: str       # done character
+    - undone_chr: str     # undone character
+    - prompt: str         # prompt (before the bar)
+    - suffix: str         # suffix (afterr the bar)
+    - brackets=["[", "]"]: list
+    - show_prcnt=True: bool  # include the percentage at the end
+    - prnt=False: bool  # False to allow use in dashboards  # you can tell this to not print so you can include in in a box etc
+returns: percent bar line as a str
+#&gt;&gt;&gt; rh = 56
+#&gt;&gt;&gt; rl = 50
+#&gt;&gt;&gt; cp = 51
+#&gt;&gt;&gt; amnt = cp - rl
+#&gt;&gt;&gt; full_range = rh - rl
+#&gt;&gt;&gt; print(f"rl {do_prcnt_bar(amnt,full_range)} rh")
+# rl [██████----------------------------------]16% rh</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="gtoolz.pbar_demo">
+    
+  </a>
+  <a name="pbar_demo">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">pbar_demo</span><span class="function-signature">(*args, **kwargs)</span>:
+    
+    <a class="headerLink" href="#pbar_demo" title="gtoolz.pbar_demo">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">purpose: demo of do_prcnt_bar()</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
   <a name="gtoolz.printit">
     
   </a>
@@ -6446,7 +6664,8 @@ notes: used by htmltable and gcolumnize (TODO)
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">printit</span>(msg, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">printit</span><span class="function-signature">(msg, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#printit" title="gtoolz.printit">
       
@@ -6464,7 +6683,8 @@ options:
      "shadowed" | shadowed=True  # adds a shadow typically around a box
      "prnt" | prnt=True  # print line(s) or just return them as a str
         (useful for input(printit("What do you want? ", 'centered', prnt=False, rtrn_type="str")))
-     txt_center: int  # tells how many lines from the top to center within a list
+     txt_center: int  # tells how many lines from the top to center within a list of lines
+     txt_right: int  # tells how many lines from the top to justify to the right within a list of lines
      box_color: str  # eg "blink red on black"
      color: str  # eg "bold yellow on rgb(40,40,40)"
      title: str  # puts a title at top of a box
@@ -6490,7 +6710,8 @@ options:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">printit_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">printit_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#printit_demo" title="gtoolz.printit_demo">
       
@@ -6514,7 +6735,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">progress</span>(progress, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">progress</span><span class="function-signature">(progress, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#progress" title="gtoolz.progress">
       
@@ -6562,7 +6784,8 @@ Percent: [############################################################] 99%</p><
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">purify</span>(content, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">purify</span><span class="function-signature">(content, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#purify" title="gtoolz.purify">
       
@@ -6590,7 +6813,8 @@ return lines: list (de-commented lines/purified)</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">pyscraper</span>(url, pat):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">pyscraper</span><span class="function-signature">(url, pat)</span>:
     
     <a class="headerLink" href="#pyscraper" title="gtoolz.pyscraper">
       
@@ -6619,7 +6843,8 @@ Required:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">quick_plot</span>(data, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">quick_plot</span><span class="function-signature">(data, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#quick_plot" title="gtoolz.quick_plot">
       
@@ -6670,7 +6895,8 @@ NOTE: if a filename is used as data it will get "purified" by removing all comme
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">quick_plot_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">quick_plot_demo</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#quick_plot_demo" title="gtoolz.quick_plot_demo">
       
@@ -6694,7 +6920,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">reduce_line</span>(line, max_len, pad):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">reduce_line</span><span class="function-signature">(line, max_len, pad)</span>:
     
     <a class="headerLink" href="#reduce_line" title="gtoolz.reduce_line">
       
@@ -6720,7 +6947,8 @@ Note - this is used in wrapit() </p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">regex_col</span>(file_lines, pat=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, col=7, sep=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">regex_col</span><span class="function-signature">(file_lines, pat=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, col=7, sep=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#regex_col" title="gtoolz.regex_col">
       
@@ -6746,7 +6974,8 @@ notes:    col starts at 0 to be consistent with coding standards</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">remap_keys</span>(my_d, remap_d, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">remap_keys</span><span class="function-signature">(my_d, remap_d, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#remap_keys" title="gtoolz.remap_keys">
       
@@ -6757,6 +6986,9 @@ notes:    col starts at 0 to be consistent with coding standards</p></div>
   <div class="docstring functionBody">
     
     <div><p class="pre">purpose: remaps keys names AND can select only the k.v pairs you want (in the order specified) (ie option: 'mapped_only')
+requires:
+    - my_d: dict       # a dictionary of key-value pairs
+    - remap_d: dict    # a dictionary holding orig_key-new_key pairs 
 options:
     - mapped_only: bool  # default=True - returns a dictionary of only the remap_d key-value pairs if True (default)
     - rnd: int           # rounds out numbers to rnd scale
@@ -6777,7 +7009,8 @@ created: 20220423 gwm</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">remap_keys_tst</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">remap_keys_tst</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#remap_keys_tst" title="gtoolz.remap_keys_tst">
       
@@ -6800,7 +7033,8 @@ created: 20220423 gwm</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">replace_all</span>(msg, with_d):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">replace_all</span><span class="function-signature">(msg, with_d)</span>:
     
     <a class="headerLink" href="#replace_all" title="gtoolz.replace_all">
       
@@ -6827,7 +7061,8 @@ TODO need more doc info here</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">retry</span>(howmany, *exception_types, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">retry</span><span class="function-signature">(howmany, *exception_types, **kwargs)</span>:
     
     <a class="headerLink" href="#retry" title="gtoolz.retry">
       
@@ -6864,7 +7099,8 @@ for attempts in range(3):
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">rgb</span>(r=80, g=80, b=140, text=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, fg=False, bg=False, prfx=False, reset=False):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">rgb</span><span class="function-signature">(r=80, g=80, b=140, text=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, fg=False, bg=False, prfx=False, reset=False)</span>:
     
     <a class="headerLink" href="#rgb" title="gtoolz.rgb">
       
@@ -6891,7 +7127,8 @@ returns: rgb color coded text</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">rootname</span>(filename, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">rootname</span><span class="function-signature">(filename, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#rootname" title="gtoolz.rootname">
       
@@ -6920,7 +7157,8 @@ returns: ROOT_NAME: str</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">rowscols_cols</span>(lol, cols, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">rowscols_cols</span><span class="function-signature">(lol, cols, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#rowscols_cols" title="gtoolz.rowscols_cols">
       
@@ -6976,7 +7214,8 @@ split_tables = rowscols_cols(row_of_cols, 2)
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">ruleit</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">ruleit</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#ruleit" title="gtoolz.ruleit">
       
@@ -7006,7 +7245,8 @@ returns: printed ruler line with tick marks and marker numbers below</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">ruleit_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">ruleit_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#ruleit_demo" title="gtoolz.ruleit_demo">
       
@@ -7030,7 +7270,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">run_cmd</span>(cmd, *args, prnt=False, runas=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">run_cmd</span><span class="function-signature">(cmd, *args, prnt=False, runas=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, **kwargs)</span>:
     
     <a class="headerLink" href="#run_cmd" title="gtoolz.run_cmd">
       
@@ -7047,6 +7288,7 @@ returns: None</p></div>
 options:
     - lst: bool   # ouput will return as a list of line rather than a str
     - rc: bool    # returns the cmd return code instead of output
+    - error: bool # also returns error
     - both: bool  # returns (output, rc)
     - runas: str  # you can declare who to run the cmd as
     - prnt: bool  # print output - returns None
@@ -7072,7 +7314,8 @@ GNU/Linux
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">run_cmd_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">run_cmd_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#run_cmd_demo" title="gtoolz.run_cmd_demo">
       
@@ -7096,7 +7339,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">run_cmd_threaded</span>(cmd, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">run_cmd_threaded</span><span class="function-signature">(cmd, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#run_cmd_threaded" title="gtoolz.run_cmd_threaded">
       
@@ -7125,7 +7369,8 @@ so put it "later" rather than "sooner" in your app
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">sayit</span>(msg, *args, prnt=True, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">sayit</span><span class="function-signature">(msg, *args, prnt=True, **kwargs)</span>:
     
     <a class="headerLink" href="#sayit" title="gtoolz.sayit">
       
@@ -7166,7 +7411,8 @@ notes:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">sayit_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">sayit_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#sayit_demo" title="gtoolz.sayit_demo">
       
@@ -7190,7 +7436,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">select_file</span>(path=<span class="rst-variable-quote">'</span><span class="rst-variable-string">./</span><span class="rst-variable-quote">'</span>, *args, pattern=<span class="rst-variable-quote">'</span><span class="rst-variable-string">*</span><span class="rst-variable-quote">'</span>, prnt=True, color=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, boxed=False, box_color=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, title=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, footer=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, shadow=False, center=False, displaywidth=0, rtrn=<span class="rst-variable-quote">'</span><span class="rst-variable-string">value</span><span class="rst-variable-quote">'</span>, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">select_file</span><span class="function-signature">(path=<span class="rst-variable-quote">'</span><span class="rst-variable-string">./</span><span class="rst-variable-quote">'</span>, *args, pattern=<span class="rst-variable-quote">'</span><span class="rst-variable-string">*</span><span class="rst-variable-quote">'</span>, **kwargs)</span>:
     
     <a class="headerLink" href="#select_file" title="gtoolz.select_file">
       
@@ -7210,10 +7457,10 @@ options:
     - centered
     - dirs: bool       # include dirs
     - dirs_only: bool  # only directories
-    - prnt: bool
-    - shadow
-    - footer
-    - sortby: str      # if str in ("mtime", "mdate", "date") then sortby mtime
+    - shadow: bool
+    - title: str
+    - footer: str
+    - sortby: str      # default='name - or choose "mtime" | "mdate" |"date" then this will sortby mtime
     - width=0
 use: f = select_file("/home/user","*.txt")
 prints a file list and then asks for a choice
@@ -7231,7 +7478,8 @@ Note: this uses list_files</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">shades</span>(color, num=16):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">shades</span><span class="function-signature">(color, num=16)</span>:
     
     <a class="headerLink" href="#shades" title="gtoolz.shades">
       
@@ -7259,7 +7507,8 @@ returns list # of ncreasing colors</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">shadowed</span>(lines=[], style=4, color=<span class="rst-variable-quote">'</span><span class="rst-variable-string">grey</span><span class="rst-variable-quote">'</span>):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">shadowed</span><span class="function-signature">(lines=[], style=4, color=<span class="rst-variable-quote">'</span><span class="rst-variable-string">grey</span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#shadowed" title="gtoolz.shadowed">
       
@@ -7292,7 +7541,8 @@ style: {n}"),style=n)))
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">sorted_add</span>(filename, line, after=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, before=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">sorted_add</span><span class="function-signature">(filename, line, after=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, before=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#sorted_add" title="gtoolz.sorted_add">
       
@@ -7326,7 +7576,8 @@ eg:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">Spinner_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">Spinner_demo</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#Spinner_demo" title="gtoolz.Spinner_demo">
       
@@ -7349,7 +7600,8 @@ eg:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">split_codes</span>(val, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">split_codes</span><span class="function-signature">(val, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#split_codes" title="gtoolz.split_codes">
       
@@ -7378,7 +7630,8 @@ notes: - used in cond_num() aka: color_neg()
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">split_codes_demo</span>(my_s=(<a href="#gclr" class="internal-link" title="gtoolz.gclr">gclr</a>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">red</span><span class="rst-variable-quote">'</span>)+<span class="rst-variable-quote">'</span><span class="rst-variable-string">test string</span><span class="rst-variable-quote">'</span>)+<a href="#gclr" class="internal-link" title="gtoolz.gclr">gclr</a>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">reset</span><span class="rst-variable-quote">'</span>), *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">split_codes_demo</span><span class="function-signature">(my_s=(<a href="#gclr" class="internal-link" title="gtoolz.gclr">gclr</a>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">red</span><span class="rst-variable-quote">'</span>)+<span class="rst-variable-quote">'</span><span class="rst-variable-string">test string</span><span class="rst-variable-quote">'</span>)+<a href="#gclr" class="internal-link" title="gtoolz.gclr">gclr</a>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">reset</span><span class="rst-variable-quote">'</span>), *args, **kwargs)</span>:
     
     <a class="headerLink" href="#split_codes_demo" title="gtoolz.split_codes_demo">
       
@@ -7402,7 +7655,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">splitit</span>(s, delimiter=<span class="rst-variable-quote">'</span><span class="rst-variable-string"> </span><span class="rst-variable-quote">'</span>):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">splitit</span><span class="function-signature">(s, delimiter=<span class="rst-variable-quote">'</span><span class="rst-variable-string"> </span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#splitit" title="gtoolz.splitit">
       
@@ -7435,7 +7689,8 @@ notes:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">sub_color</span>(clr, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">sub_color</span><span class="function-signature">(clr, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#sub_color" title="gtoolz.sub_color">
       
@@ -7459,7 +7714,8 @@ returns ansi-CODE</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">transcript_demo</span>():
+    
+    <span class="py-keyword">def</span> <span class="py-defname">transcript_demo</span><span class="function-signature">()</span>:
     
     <a class="headerLink" href="#transcript_demo" title="gtoolz.transcript_demo">
       
@@ -7484,7 +7740,8 @@ notes: allows capturing screen output to a file for reference later... I use it 
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">transcript_start</span>(filename, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">transcript_start</span><span class="function-signature">(filename, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#transcript_start" title="gtoolz.transcript_start">
       
@@ -7508,7 +7765,8 @@ appending print output to given filename</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">transcript_stop</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">transcript_stop</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#transcript_stop" title="gtoolz.transcript_stop">
       
@@ -7531,7 +7789,8 @@ appending print output to given filename</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">try_it</span>(func, *args, attempts=1, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">try_it</span><span class="function-signature">(func, *args, attempts=1, **kwargs)</span>:
     
     <a class="headerLink" href="#try_it" title="gtoolz.try_it">
       
@@ -7561,7 +7820,8 @@ use:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">try_to_get</span>(driver, pat=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, by_type=<span class="rst-variable-quote">'</span><span class="rst-variable-string">link</span><span class="rst-variable-quote">'</span>, action=<span class="rst-variable-quote">'</span><span class="rst-variable-string">none</span><span class="rst-variable-quote">'</span>):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">try_to_get</span><span class="function-signature">(driver, pat=<span class="rst-variable-quote">'</span><span class="rst-variable-string"></span><span class="rst-variable-quote">'</span>, by_type=<span class="rst-variable-quote">'</span><span class="rst-variable-string">link</span><span class="rst-variable-quote">'</span>, action=<span class="rst-variable-quote">'</span><span class="rst-variable-string">none</span><span class="rst-variable-quote">'</span>)</span>:
     
     <a class="headerLink" href="#try_to_get" title="gtoolz.try_to_get">
       
@@ -7591,7 +7851,8 @@ requires:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">tst</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">tst</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#tst" title="gtoolz.tst">
       
@@ -7633,7 +7894,8 @@ Notes:  The args here are do not need to be separated by a space and there is no
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">usr_input</span>(prompt=<span class="rst-variable-quote">'</span><span class="rst-variable-string">Your input: </span><span class="rst-variable-quote">'</span>, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">usr_input</span><span class="function-signature">(prompt=<span class="rst-variable-quote">'</span><span class="rst-variable-string">Your input: </span><span class="rst-variable-quote">'</span>, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#usr_input" title="gtoolz.usr_input">
       
@@ -7668,7 +7930,8 @@ Notes:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">usr_input_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">usr_input_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#usr_input_demo" title="gtoolz.usr_input_demo">
       
@@ -7692,7 +7955,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">usr_update</span>(my_d, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">usr_update</span><span class="function-signature">(my_d, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#usr_update" title="gtoolz.usr_update">
       
@@ -7729,7 +7993,8 @@ Notes:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">usr_update_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">usr_update_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#usr_update_demo" title="gtoolz.usr_update_demo">
       
@@ -7753,7 +8018,8 @@ return: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">wrapit</span>(sentence, length=20, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">wrapit</span><span class="function-signature">(sentence, length=20, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#wrapit" title="gtoolz.wrapit">
       
@@ -7779,7 +8045,8 @@ NOTE: all color codes will get stripped out text before processing</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">wrapit_demo</span>(*args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">wrapit_demo</span><span class="function-signature">(*args, **kwargs)</span>:
     
     <a class="headerLink" href="#wrapit_demo" title="gtoolz.wrapit_demo">
       
@@ -7803,7 +8070,8 @@ returns: None</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">write_file</span>(data, fname, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">write_file</span><span class="function-signature">(data, fname, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#write_file" title="gtoolz.write_file">
       
@@ -7842,7 +8110,8 @@ Notes:
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">x_items</span>(my_d, x=2, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">x_items</span><span class="function-signature">(my_d, x=2, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#x_items" title="gtoolz.x_items">
       
@@ -7868,7 +8137,8 @@ returns: dict</p></div>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">xlate_clr</span>(color, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">xlate_clr</span><span class="function-signature">(color, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#xlate_clr" title="gtoolz.xlate_clr">
       
@@ -8097,7 +8367,7 @@ returns: rgb(r,g,b) text string instead of supplied color</p></div>
   <div class="container">
     <a href="index.html">API Documentation</a> for gtoolz,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2023-05-21 17:40:04.
+    23.4.0 at 2023-06-12 17:54:05.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

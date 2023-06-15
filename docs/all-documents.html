@@ -6,7 +6,7 @@
   <head>
     
     <title>All Documents</title>
-    <meta name="generator" content="pydoctor 22.9.1"> 
+    <meta name="generator" content="pydoctor 23.4.0"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -139,7 +139,7 @@
             <div class="type">Module</div>
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">No module docstring; 0/5 variable, 0/3 constant, 162/165 functions, 4/4 classes documented</span></div>
+            <div class="summary"><span class="undocumented">No module docstring; 0/5 variable, 0/3 constant, 164/167 functions, 4/4 classes documented</span></div>
           </li><li id="gtoolz.__version__">
             
             <div class="fullName">gtoolz<wbr></wbr>.__version__</div>
@@ -692,6 +692,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: opens the url in your browser requires: url: str returns: none</div>
+          </li><li id="gtoolz.browseit_tst">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.browseit<wbr></wbr>_tst</div>
+            <div class="url">index.html#browseit_tst</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: simple demo of browseit returns: none</div>
           </li><li id="gtoolz.handleOPTS">
             
             <div class="fullName">gtoolz<wbr></wbr>.handle<wbr></wbr>OPTS</div>
@@ -971,7 +979,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: brief demo of using gclr() options: none returns: None</div>
+            <div class="summary">purpose: brief demo of using gclr() options: none returns: None notes:   none</div>
           </li><li id="gtoolz.clr_tst">
             
             <div class="fullName">gtoolz<wbr></wbr>.clr<wbr></wbr>_tst</div>
@@ -1067,15 +1075,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: draw a unicode box around msgs args: msgs options:     centered | center: bool  # centers box on the screen     prnt: bool     txt_center: int  # num of lines from top to center in the box     color: str  # text color     box_color: str  # color of border     title, footer: str # goes in topline or bottom line centered of box     width forces the width size defaults to # screen columns     shadowed | shadow: bool # adds a shadow right and bottom...</div>
-          </li><li id="gtoolz.boxed_tst">
-            
-            <div class="fullName">gtoolz<wbr></wbr>.boxed<wbr></wbr>_tst</div>
-            <div class="url">index.html#boxed_tst</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: boxed function test options: none return None</div>
+            <div class="summary">purpose: draw a unicode box around msgs args: msgs options:     centered | center: bool  # centers box on the screen     prnt: bool     txt_center: int | list | tuple  # num of lines from top to center in the box - if list or tuple lines between first int and second int (inclusive) will be centered     txt_right: int | list | tuple   # num of lines from top to justify to the right within the box- if list or tuple lines between first int and second int (inclusive) will be right justified     color: str  # text color     box_color: str  # color of border     title, footer: str # goes in topline or bottom line centered of box     width forces the width size defaults to # screen columns     shadowed | shadow: bool # adds a shadow right and bottom...</div>
           </li><li id="gtoolz.gline">
             
             <div class="fullName">gtoolz<wbr></wbr>.gline</div>
@@ -1083,7 +1083,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: prints a line with msg and  options:     - width: int,      - msg|title: str  # default=""  msg has to be a key=val pair! eg: gline(60, msg="My Message", just='center')     - fc: str         # default=" " fill string/character (char(s) used to fill all surrounding space default: lc=rc=fc)     - lc: str         # default=fc  left/edge/corner (char(s) for left corner ie first charater(s))     - rc: str         # default=lc  right/edge/corner (char(s) for right corner ie last charcter(s))     - pad: str        # default=""  string/character(s) on each side of msg     - lpad: str       # default=pad     - rpad: str       # default=lpad     - box_color: str     - color: str     - lfill_color: str     - rfill_color: str     - just: str       # default = "left"|"l" but can be declared "center"|"c" or 'right'|"r"     - prnt: bool      # prints the output returns: line: str...</div>
+            <div class="summary">purpose: prints a line with msg with lots of options  options:     - width: int,     # first argument     - msg|title: str  # default=""  msg has to be a key=val pair! eg: gline(60, msg="My Message", just='center')     - fc: str         # default=" " fill string/character (char(s) used to fill all surrounding space default: lc=rc=fc)     - lc: str         # default=fc  left/edge/corner (char(s) for left corner ie first charater(s))     - rc: str         # default=lc  right/edge/corner (char(s) for right corner ie last charcter(s))     - pad: str        # default=""  string/character(s) on each side of msg     - lpad: str       # default=pad     - rpad: str       # default=lpad     - box_color: str     - color: str     - lfill_color: str     - rfill_color: str     - just: str       # default = "left"|"l" but can be declared "center"|"c" or 'right'|"r"     - prnt: bool      # prints the output returns: line: str notes: this is used in boxed and other functions...</div>
           </li><li id="gtoolz.gtitle">
             
             <div class="fullName">gtoolz<wbr></wbr>.gtitle</div>
@@ -1340,6 +1340,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: this conditions (colorizes, rounds, and adds commas and unit indicators) elems if they are numbers input: elem options: "neg_color=red on black!": str, pos_color="green! on black!": str, rnd=0: int -   color: bool         # will color the number...</div>
+          </li><li id="gtoolz.cond_num_tst">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.cond<wbr></wbr>_num<wbr></wbr>_tst</div>
+            <div class="url">index.html#cond_num_tst</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">WIP</div>
           </li><li id="gtoolz.get_random_line">
             
             <div class="fullName">gtoolz<wbr></wbr>.get<wbr></wbr>_random<wbr></wbr>_line</div>
@@ -1363,7 +1371,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: runs cmd and returns output   eg: out = run_cmd("uname -o",False)   # now you can print the output from the cmd:   print(f"out:{out}") options:     - lst: bool   # ouput will return as a list of line rather than a str     - rc: bool    # returns the cmd return code instead of output     - both: bool  # returns (output, rc)     - runas: str  # you can declare who to run the cmd as     - prnt: bool  # print output - returns None returns: output from command Note: if runas == sudo then the command will be sun with sudo...</div>
+            <div class="summary">purpose: runs cmd and returns output   eg: out = run_cmd("uname -o",False)   # now you can print the output from the cmd:   print(f"out:{out}") options:     - lst: bool   # ouput will return as a list of line rather than a str     - rc: bool    # returns the cmd return code instead of output     - error: bool # also returns error     - both: bool  # returns (output, rc)     - runas: str  # you can declare who to run the cmd as     - prnt: bool  # print output - returns None returns: output from command Note: if runas == sudo then the command will be sun with sudo...</div>
           </li><li id="gtoolz.run_cmd_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.run<wbr></wbr>_cmd<wbr></wbr>_demo</div>
@@ -1403,7 +1411,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: select a file (or dir) from using pattern(s) required: options:     - path: str|list  (defaults to "./")     - pattern: str|list     - prompt: str     - mtime: bool      # include mtime in listing     - centered     - dirs: bool       # include dirs     - dirs_only: bool  # only directories     - prnt: bool     - shadow     - footer     - sortby: str      # if str in ("mtime", "mdate", "date") then sortby mtime     - width=0 use: f = select_file("/home/user","*...</div>
+            <div class="summary">purpose: select a file (or dir) from using pattern(s) required: options:     - path: str|list  (defaults to "./")     - pattern: str|list     - prompt: str     - mtime: bool      # include mtime in listing     - centered     - dirs: bool       # include dirs     - dirs_only: bool  # only directories     - shadow: bool     - title: str     - footer: str     - sortby: str      # default='name - or choose "mtime" | "mdate" |"date" then this will sortby mtime     - width=0 use: f = select_file("/home/user","*...</div>
           </li><li id="gtoolz.reduce_line">
             
             <div class="fullName">gtoolz<wbr></wbr>.reduce<wbr></wbr>_line</div>
@@ -1444,14 +1452,22 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">aka: centered input purpose: gets input from user using provided promt - centers the prompt on the screen options:     - shift: int   # allows you to shift the position of the prompt (from the center) eg shift=-5     - quit|exit|close: bool   # will quit with do_close() if availaable or just sys...</div>
-          </li><li id="gtoolz.do_prcnt_bar">
+          </li><li id="gtoolz.pbar">
             
-            <div class="fullName">gtoolz<wbr></wbr>.do<wbr></wbr>_prcnt<wbr></wbr>_bar</div>
-            <div class="url">index.html#do_prcnt_bar</div>
+            <div class="fullName">gtoolz<wbr></wbr>.pbar</div>
+            <div class="url">index.html#pbar</div>
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: displays a percentge bar args: amnt (prcnt) options: full_range=100 if you submit this prcnt will be based on it     - bar_width=40: int   # declares width of bar     - color: str          # text color     - done_color:         # color of done portion     - undone_color:       # color of undone portion     - done_chr: str       # done character     - undone_chr: str     # undone character     - prompt: str         # prompt (before the bar)     - suffix: str         # suffix (afterr the bar)     - brackets=["[", "]"]: list     - show_prcnt=True: bool  # include the percentage at the end     - prnt=False: bool  # False to allow use in dashboards  # you can tell this to not print so you can include in in a box etc returns: percent bar line as a str #&gt;&gt;&gt; rh = 56 #&gt;&gt;&gt; rl = 50 #&gt;&gt;&gt; cp = 51 #&gt;&gt;&gt; amnt = cp - rl #&gt;&gt;&gt; full_range = rh - rl #&gt;&gt;&gt; print(f"rl {do_prcnt_bar(amnt,full_range)} rh") # rl [██████----------------------------------]16% rh...</div>
+          </li><li id="gtoolz.pbar_demo">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.pbar<wbr></wbr>_demo</div>
+            <div class="url">index.html#pbar_demo</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: demo of do_prcnt_bar()</div>
           </li><li id="gtoolz.progress">
             
             <div class="fullName">gtoolz<wbr></wbr>.progress</div>
@@ -1475,7 +1491,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">I wrote this because I am constantly building csv files with a header line (also consider add_or_replace() function) Required:     file     content=str|list Options:     after=pattern     before=pattern     replace=pattern     position=##     if none of those content is appended to the file     if header is also included it will be added to the begining of the file if it does not already exitst used_to_be: add_line()...</div>
+            <div class="summary">purpose: will add content to a file at a specified point in the file (after=pattern or before=pattern) or position=n) Required:     file: str     content: str | list | dict Options:     after: str     =pattern     before: str    =pattern     replace: str   =pattern     position: int  =##     if none of those,  content is appended to the end of the file     if content is a dictionary the will be considered the keys() and  if the header is also included          it will be added to the begining of the file (if it does not already exist) notes: I wrote this because I am constantly building csv files with a header line     (also consider add_or_replace() function)     used_to_be: add_line()...</div>
           </li><li id="gtoolz.sorted_add">
             
             <div class="fullName">gtoolz<wbr></wbr>.sorted<wbr></wbr>_add</div>
@@ -1763,7 +1779,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: remaps keys names AND can select only the k.v pairs you want (in the order specified) (ie option: 'mapped_only') options:     - mapped_only: bool  # default=True - returns a dictionary of only the remap_d key-value pairs if True (default)     - rnd: int           # rounds out numbers to rnd scale returns: my_d (remapped and optionally selected pairs) notes: remap_d should be dict {orig_key: new_key,...</div>
+            <div class="summary">purpose: remaps keys names AND can select only the k.v pairs you want (in the order specified) (ie option: 'mapped_only') requires:     - my_d: dict       # a dictionary of key-value pairs     - remap_d: dict    # a dictionary holding orig_key-new_key pairs  options:     - mapped_only: bool  # default=True - returns a dictionary of only the remap_d key-value pairs if True (default)     - rnd: int           # rounds out numbers to rnd scale returns: my_d (remapped and optionally selected pairs) notes: remap_d should be dict {orig_key: new_key,...</div>
           </li><li id="gtoolz.remap_keys_tst">
             
             <div class="fullName">gtoolz<wbr></wbr>.remap<wbr></wbr>_keys<wbr></wbr>_tst</div>
@@ -1788,6 +1804,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">purpose: to provide examples of displaying data in plots returns: None</div>
+          </li><li id="gtoolz.boxed_demo 0">
+            
+            <div class="fullName">gtoolz<wbr></wbr>.boxed<wbr></wbr>_demo 0</div>
+            <div class="url">index.html#boxed_demo%200</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">purpose: boxed function test options: none return None</div>
           </li><li id="gtoolz.boxed_demo">
             
             <div class="fullName">gtoolz<wbr></wbr>.boxed<wbr></wbr>_demo</div>
@@ -1819,7 +1843,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: to get function docs</div>
+            <div class="summary">purpose: to get function docs returns: prints selected function __doc__ boxed and centered</div>
           </li><li id="gtoolz.has_substr">
             
             <div class="fullName">gtoolz<wbr></wbr>.has<wbr></wbr>_substr</div>
@@ -1827,7 +1851,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: determin if any sub-string in chk_l is in text_s     column_name = "dtime"     eg is "time" or "date" in column_name... then use has_substr(column_name, ["time", "date"]) required:     - text_s: str     - chk_l: list options:     - ci: bool  # case_insensitive returns True | False used in quick_plot()...</div>
+            <div class="summary">purpose: determin if any sub-string in chk_l is in text_s     column_name = "dtime"     eg is "time" or "date" in column_name... then use has_substr(column_name, ["time", "date"]) required:     - text_s: str     - chk_l: list options:     - ci: bool  # case_insensitive returns True | False notes:     used in quick_plot()...</div>
           </li><li id="gtoolz.chk_substr">
             
             <div class="fullName">gtoolz<wbr></wbr>.chk<wbr></wbr>_substr</div>
@@ -1835,7 +1859,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: given a list of strings to check (chk_l) and a list of substrings to compare (strgs_l)         if any "compare" substring is in any string in check list of strings then             do action either 'exclude' or 'include' required:     - chk_l: list | str     - strgs_l: list options:     - action: str  # default is 'exclude' return: new_list usage:     # given a list of functions, exclude the ones that have contain any of the substrings in the exclude_l list     funcs_l = chk_substr(funcs_l, exclude_l, action='exclude')...</div>
+            <div class="summary">purpose: given a list of strings to check (chk_l) and a list of substrings to compare (strgs_l)         if any "compare" substring is in any string in check list of strings then             do action either 'exclude' or 'include' required:     - chk_l: list | str     - strgs_l: list options:     - action: str  # default is 'exclude' return: new_list usage:     # given a list of functions, exclude the ones that may have any of the provided  substrings (list) in the exclude_l list     funcs_l = chk_substr(funcs_l, exclude_l, action='exclude')     eg:         exclude_l = ["main", 'tst', 'do_func_demos']         funcs_l = chk_substr(funcs_l, exclude_l, action='exclude')         funcs_l = sorted(funcs_l)...</div>
           </li><li id="gtoolz.do_func_demos">
             
             <div class="fullName">gtoolz<wbr></wbr>.do<wbr></wbr>_func<wbr></wbr>_demos</div>
@@ -1851,7 +1875,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: to determine if any pattern (str|list) is a substring of string (string_s) options: none returns: bool</div>
+            <div class="summary">purpose: determines if any pattern (str|list) is a substring of string (string_s) required:     - string_s: str     - pattern_m: str | list  # list = [pattern1, pattern2, ...] options: none returns: bool...</div>
           </li><li id="gtoolz.get_mod_docs">
             
             <div class="fullName">gtoolz<wbr></wbr>.get<wbr></wbr>_mod<wbr></wbr>_docs</div>
@@ -1867,7 +1891,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: tests if a variable is empty ie len(my_var) == 0 or my_var is None etc options: None returns: bool</div>
+            <div class="summary">purpose: tests if a variable is empty ie len(my_var) == 0 or my_var is None etc requires:     - my_var: str options: None returns: bool</div>
           </li><li id="gtoolz.isempty_tst">
             
             <div class="fullName">gtoolz<wbr></wbr>.isempty<wbr></wbr>_tst</div>
@@ -1931,7 +1955,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">purpose: </div>
+            <div class="summary">purpose: runs command-line requests with cmd args... returns: none</div>
           </li><li id="gtoolz.cli_help">
             
             <div class="fullName">gtoolz<wbr></wbr>.cli<wbr></wbr>_help</div>
