@@ -38,10 +38,10 @@ Simply run gtoolz.py (or see ./test/test_gtoolz.py) to see some of the possible 
 This set of tools offers over 100 functions. 
 
 Some examples:
+  - gtable() accepts a list of lists or a dataframe and will display the data in a table (with lots of options to alter the table)
   - gselect() accepts a list or dictionary and displays either keys or numbered listing in a box and returns what you want - it is a type of menu selection
   - usr_update() takes a dictionary and presents each (or selected) values to the user for editing and replacing
   - printit() accepts a list or a string and prints, options include boxing (with or without a shadow), centering, wraping text, etc 
-  - gtable() accepts a list of lists or a dataframe and will display the data in a table (with lots of options to alter the table)
   - kv_cols() takes a dictionary of key_value pairs and displays in columnized tables
   - gcolumnize() puts lists or lists of lists into columns, also see gblocks which positions blocks within blocks (lines of strings all the same length)
   - gclr() will return ansii codes for colorizing text - several differnt ways to colorize including tags, rgb, or simple strings
