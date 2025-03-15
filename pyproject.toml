@@ -1,5 +1,5 @@
 [build-system]
-requires = [ "hatchling", ">=3.7", "wheel", "toml",]
+requires = [ "hatchling", "wheel", "toml",]
 build-backend = "hatchling.build"
 
 [project]
@@ -7,7 +7,7 @@ name = "gtoolz"
 version = "0.1.5"
 description = "This package provides a multitude of functions or classes to manipulate data into ascii color tables or build dashboards"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">= 3.8"
 classifiers = [ "Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux",]
 dependencies = [ "docopt", "pandas",]
 
@@ -16,7 +16,7 @@ name = "Geoff McNamara"
 email = "geoff.mcnamara@gmail.com"
 
 [options]
-package_dir = "src"
+package_dir = "src/gtoolz"
 base_dir = "/home/geoffm/dev/python/gtoolz"
 
 [custom]
@@ -31,4 +31,8 @@ Homepage = "https://github.com/geoffmcnamara/gtoolz"
 "Bug Trakers" = "https://github.com/geoffmcnamara/gtoolz/issues"
 
 [options.packages.find]
-where = "src"
+where = "src/gtoolz"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gtoolz"]
+
