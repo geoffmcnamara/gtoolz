@@ -1,4 +1,4 @@
-# #!/usr/bin/env python3
+#!/usr/bin/env python3
 # vim: set syntax=none nospell:
 # ruff: noqa: E501, E731
 # #####################
@@ -20,9 +20,10 @@
 #   in various layouts so the most called for function is gtable(). This function, gtable(), uses cnvrt so you can pass almost
 #   any type of data to it and it will display a decent readable table for the user. There are a myraid other functions but many of them
 #   are in support of gtable or helping me develope code (the function dbug() or called_from() is liberally peppered into everything).
+#   If you are looking for speed, efficiency, and stability then you are in the wrong place.
 # LICENSE = MIT
 # WARNING: Use at your own risk!
-#          Side effects include but not limited: severe nosebleeds and complete loss of data.
+#          Side effects include but not limited to: severe nosebleeds and complete loss of data.
 #          This file is subject to frequent change!
 # Please contact me anytime. I willingly accept compliments and I tolerate complaints (most of the time).
 # Requires: docopt, pandas, and others
@@ -60,8 +61,10 @@ import pandas as pd
 # import sqlite3
 
 
-# ### GLOBALS ### #
+# ### DUNDERS ### #
 __version__ = '0.1.6a0'  # VERSION
+
+# ### GLOBALS ### #
 dtime = datetime.now().strftime("%Y%m%d-%H%M")
 FULL_PATH_SCRIPT = __file__
 SCRIPT = os.path.basename(__file__)
@@ -123,29 +126,29 @@ class Spinner:
         # dbug(args)
         # dbug(kwargs)
         """--== config ==--"""
-        # color = kvarg_val(["color", "spinner_color", "spinner_clr"], kwargs, dflt="")
-        txt_color = kvarg_val(["text_color", "txt_color", "text_clr", "txt_clr"], kwargs, dflt="")
-        self.color = kvarg_val(["color", 'spinner_clr', 'spinner_color', 'clr'], kwargs, dflt="")
+        # color = arg_val(["color", "spinner_color", "spinner_clr"], args, kwargs, dflt="")
+        txt_color = arg_val(["text_color", "txt_color", "text_clr", "txt_clr"], args, kwargs, dflt="")
+        self.color = arg_val(["color", 'spinner_clr', 'spinner_color', 'clr'], args, kwargs, dflt="")
         # if isinstance(color, list):
-        self.colors = kvarg_val(["colors", "color", "spinner_colrs", "spinner_clrs"], kwargs, dflt=[])
+        self.colors = arg_val(["colors", "color", "spinner_colrs", "spinner_clrs"], args, kwargs, dflt=[])
         self.COLOR = sub_color(self.color)
-        txt_color = kvarg_val(["txt_color", 'txt_clr'], kwargs, dflt="")
+        txt_color = arg_val(["txt_color", 'txt_clr'], args, kwargs, dflt="")
         self.TXT_COLOR = sub_color(txt_color)
-        self.elapsed = bool_val(['elapsed', 'elapse', "time", "timed"], args, kwargs, dflt=False)
+        self.elapsed = arg_val(['elapsed', 'elapse', "time", "timed"], args, kwargs, dflt=False)
         # dbug(self.elapsed)
-        time_color = kvarg_val(["time_color", 'time_clr', 'elapsed_clr', 'elapsed_time_clr', 'elapsed_color', 'elapse_color', 'elapse_clr'], kwargs, dflt=txt_color)
+        time_color = arg_val(["time_color", 'time_clr', 'elapsed_clr', 'elapsed_time_clr', 'elapsed_color', 'elapse_color', 'elapse_clr'], args, kwargs, dflt=txt_color)
         # dbug(time_color)
         self.time_color = time_color
         self.TIME_COLOR = sub_color(time_color)
         # self.elapsed_time = 0
-        self.etime = bool_val(["etime", "show_elapsed", 'elpased_time', 'elapsed', 'time'], args, kwargs, dflt=False)
-        self.centered = bool_val(['center', 'centered'], args, kwargs, dflt=False)
+        self.etime = arg_val(["etime", "show_elapsed", 'elpased_time', 'elapsed', 'time'], args, kwargs, dflt=False)
+        self.centered = arg_val(['center', 'centered'], args, kwargs, dflt=False)
         self.RESET = sub_color('reset')
         self.start_time = time.time()
         # dbug(self.etime)
         self.style = style = kvarg_val(["style", 'type'], kwargs, dflt=style)
         # dbug(self.style)
-        self.prog = bool_val("prog", args, kwargs, dflt=True)
+        self.prog = arg_val("prog", args, kwargs, dflt=True)
         self.style_len = kvarg_val(["length", "width"], kwargs, dflt=4)
         """--== set default ==--"""
         if isinstance(self.colors, str):
@@ -225,12 +228,13 @@ class Spinner:
         # dbug(type(message))
         # dbug(message)
         if self.centered:
+            add_shift = 0
             spinner_len = 1
             if self.prog:
                 spinner_len = len(escape_ansi(spinner_chrs))
             if self.etime:
-                spinner_len += 2
-            shift = -(spinner_len)
+                add_shift = 2
+            shift = -(spinner_len + add_shift)
             # dbug(message)
             message = printit(message, 'centered', prnt=False, rtrn_type="str", color=txt_color, shift=shift)
         sys.stdout.write(message)
@@ -278,13 +282,8 @@ class Spinner:
                     # dbug(f"self.style: {self.style} self.chr_cnt: {self.chr_cnt} self.style_len: {self.style_len}")
                     sys.stdout.write('\b')
                 else:
-                    # if progressive then ...
-                    # clr_cnt = self.chr_cnt % len(self.colors)
-                    # self.COLOR = self.colors[clr_cnt]
-                    # dbug(self.COLOR)
-                    # dbug(f"prog: {self.prog} chr_cnt: {self.chr_cnt} style_len: {self.style_len}")
                     self.chr_cnt += 1
-                    if self.chr_cnt > self.style_len:
+                    if self.chr_cnt > self.style_len-2:
                         # if we hit the len of style_len... print elapsed time... then...
                         if self.etime:
                             elapsed_time = round(time.time() - self.start_time, 2)
@@ -310,11 +309,6 @@ class Spinner:
                         # self.chr_cnt = 0
                 if self.style in ('clock', 'moon'):
                     sys.stdout.write('\b')
-                # if self.chr_cnt > self.style_len:
-                #     #dbug("how did we get here")  # not sure if this section is needed
-                #     if self.etime:
-                #         elapsed_time = round(time.time() - self.start_time, 2)
-                #         sys.stdout.write(f" {self.TIME_COLOR}{elapsed_time}{self.RESET}")
                 sys.stdout.write('\x1b[?25l')  # Hide cursor
                 self.spinner_visible = False
                 if cleanup:
@@ -350,10 +344,6 @@ class Spinner:
     def __exit__(self, exc_type, exc_val, exc_traceback):
         self.busy = False
         if sys.stdout.isatty():
-            # self.busy = False
-            # end_time = time.time()
-            # self.elapsed_time = (end_time - self.start_time)
-            # sys.stdout.write(f"({self.elapsed_time})")
             self.spin_backover(cleanup=True)
             sys.stdout.write('\r')
             sys.stdout.flush()
@@ -442,7 +432,7 @@ class SQLiteDB:
         - db.create_table(tablename, columns)  # id will be created as first column - columns = "col1 TEXT, col2 INT, col3 REAL, col4 BLOB, NUMERIC,..."
                                                # or {'col1': 'TEXT', 'col2', 'text', 'col3': 'numeric', ...}
                                                # or ['col1', 'col2', 'col3', ....]  # everything will be made NUMERIC
-        - db.insert(tablename, data)           # data = {col: val, ...}
+        - db.insert(tablename, data)           # data = {col: val, ...} If a table exists you can get away with submitting just data: dict|lol
         - db.update(tablename, data, where)   
         - db.delete(tablename, where):
         - db.fetchall(table, query)
@@ -454,6 +444,7 @@ class SQLiteDB:
         - db.close()
     notes:
         - WIP
+        - this code is more recent (2025) and is in need of severed refactoring!
     """
     import sqlite3
     def __init__(self, dbname="", tablename="", columns="", *args, **kwargs):
@@ -465,13 +456,17 @@ class SQLiteDB:
         notes:
             - WIP
         """
+        """--== Config ==--"""
         dbname = arg_val(['dbname', 'db'], args, kwargs, dflt=dbname)
         dbfile = arg_val(["dbfile", "file", "filename", "fname"], args, kwargs, dflt="")
         # dbfile = os.path.expanduser(dbfile)
         tablename = arg_val(["table", "tablename", "tbl"], args, kwargs, dflt=tablename)
         columns = arg_val(["cols", "columns", "colnames"], args, kwargs, dflt=columns)
+        """--== SEP_LINE ==--"""
         # dbug(dbname)
         # dbug(dbfile)
+        if not os.path.splitext(dbname)[1] != '':
+            dbname = os.path.basenameos(os.path.expanduser(dbname))
         if not dbname.endswith(".db"):
             # dbug(f"adding '.db' to dbname: {dbname}")
             self.dbname = dbname
@@ -486,10 +481,10 @@ class SQLiteDB:
         self.conn = None
         self.tables = []
         if tablename != "" and columns != "":
-            # dbug(f"Using tablename: {tablename} columns: {columns}")
+            dbug(f"Using tablename: {tablename} columns: {columns}")
             self.create_table(tablename, columns)
             self.tables.append(tablename)
-        # dbug(f"dbfile exists?: {file_exists(dbfile)}")
+        # dbug(f"dbfile exists?: {file_exists(dbfile)} self.tables: {self.tables}")
     """--== SEP_LINE ==--"""
     def connect(self):
         import sqlite3
@@ -497,7 +492,7 @@ class SQLiteDB:
         self.conn = sqlite3.connect(self.dbfile)  # this is crucial!
     conn = connect
     """--== create table ==--"""
-    def create_table(self, tablename, colnames):
+    def create_table(self, tablename, colnames, *args, **kwargs):
         """
         purpose: create a table for existing self.dbname/file
         requires: 
@@ -508,9 +503,18 @@ class SQLiteDB:
         notes:
             - WIP
         """
+        """--== Config ==--"""
+        """--== Convert/Init/Validate ==--"""
+        if isempty(tablename):
+            dbug(f"tablename: {tablename} appears empty... returning")
+            return
+        if isempty(colnames):
+            dbug(f"colnames: {colnames} appears empty {called_from()}... returning")
+            return
+        """--== SEP_LINE ==--"""
         # dbug(called_from())
         if tablename in self.tables:
-            dbug("Table exists.... double check is below... returning")
+            dbug("Table exists ...returning")
             return
         else:
             # dbug(self.tables)
@@ -523,8 +527,7 @@ class SQLiteDB:
         # dbug(self.tables, 'ask')
         # dbug(called_feom())
         # untried: colnames colname can include type eg: ["name NOT NULL UNIQUE", "age", "gender"]
-        # q = f"DROP TABLE IF EXISTS {tablename};"
-        # self.execute(q)
+        # dbug(colnames)
         if isinstance(colnames, str):
             # assuming it already has the proper construction...
             pass
@@ -697,7 +700,7 @@ class SQLiteDB:
         return rows_lol
         # return cursor.fetchall()
     """--== insert ==--"""
-    def insert(self, tablename="", data={}):
+    def insert(self, tablename="", data={}, *args, **kwargs):
         """
         purpose: to add data
         requires:
@@ -709,33 +712,61 @@ class SQLiteDB:
         # dbug(called_from())
         # dbug(tablename)
         # dbug(data)
-        # dbug(called_from())
-        if isinstance(tablename, dict) and data == {}:
+        """--== Config ==--"""
+        tablename = arg_val(['table', 'tablename', 'tname', 'tbl'], args, kwargs, dflt=tablename)
+        colnames =  arg_val(['colnames', 'columns'], args, kwargs, dflt=None)
+        data =  arg_val(['data'], args, kwargs, dflt=data)
+        """--== Convert/Init ==--"""
+        dtype = data_type(data)
+        # dbug(dtype)
+        if dtype in ("empty"):
+            dbug(f"data appears empty data: {data} {called_from()}...")
+        # dbug(self.tables)
+        if dtype in ('lol'):
+            colnames = data[0]
+            if colnames[0].lower() in ("id", "index", "indx"):
+                colnames = colnames[1:]
+                data = [row[1:] for row in data] 
+        if not isempty(colnames):
+            colnames_s = ', '.join(colnames)
+        if isinstance(tablename, dict) and isempty(data):
             # dbug("User provided data instead of a tablename so I will switch that")
             data = tablename
             if len(self.tables) > 0:
+                dbug(self.tables)
                 tablename = self.tables[0]
             else:
-                dbug("we are missing tablename and data...returning...") 
+                dbug("tablename and data appear to be empty ...returning...") 
                 return
+        if isempty(self.tables):
+            tablename = rootname(self.dbname)
+            if isempty(colnames):
+                dbug(f"Creating table with create_table(tablename: {tablename}), colnames: {colnames}<==empty? dtype: {dtype}")
+            self.create_table(tablename, colnames=colnames)
         # dbug(tablename)
-        if "id" in data:
-            data.pop("id")
-        if isinstance(data, dict):
+        """--== Process ==--"""
+        # make sure that id is removed as the table autoincrements an initial column with the 'id' index
+        # dbug(data)
+        if dtype in ('lol'):
+            for row in data:
+                if colnames == row:
+                    continue
+                vals_s = ', '.join(f'"{item}"' for item in row)
+                query = f"INSERT INTO {tablename} ({colnames_s}) VALUES ({vals_s})"
+                self.execute(query)
+        if dtype in ('dov'):
+            if "id" in data:
+                data.pop("id")
             data = {f"'{k}'" if k[0].isdigit() else k: v for k, v in data.items()}  # double quote if first char is a digit as sqlite doesn't like colnames that start with a digit
             # placeholders = ', '.join(['?'] * len(data))
             vals = list(data.values())
-            vals = ', '.join(f'"{item}"' for item in vals)
-            columns = ', '.join(data.keys())
-        else:
-            # dbug(data, 'ask')
-            # dbug(data_type(data))
-            dbug("Consider submitting data [type(data): {type(data)}] as a dictionary ie use:  row_d = dict(zip(colnames, row_l))")
+            vals_s = ', '.join(f'"{item}"' for item in vals)
+            colnames_s = ', '.join(data.keys())
+            query = f"INSERT INTO {tablename} ({colnames_s}) VALUES ({vals_s})"
+            self.execute(query)
+        if isempty(colnames_s) or isempty(vals_s):
+            dbug("A problem occurred with the submitted data; please investigate...returning...")
             return
-        # query = f"INSERT INTO {tablename} ({columns}) VALUES ({placeholders})"
-        query = f"INSERT INTO {tablename} ({columns}) VALUES ({vals})"
-        # dbug(query, 'ask')
-        self.execute(query)
     """--== update ==--"""
     def update(self, tablename, data, where):
         """
@@ -824,22 +855,8 @@ class SQLiteDB:
         """
         dbug("WIP !!!! UNFINISHED - UNTESTED !!! WIP") #
         """--== SEP_LINE ==--"""
-        # q = f"ALTER TABLE {table} ADD COLUMN {new_colname} {new_type}"
-        # self.execute(q)
-        # q = f"UPDATE {table} SET {new_colname} = CAST({old_colname} as {new_type})"
-        # self.execute(q)
-        """--== SEP_LINE ==--"""
-        # -- first store the values of the target col in the temp. table
-        # q = f"create temp table temp_view as select id, target_col from target_table"
-        # self.execute(q)
         # -- Drop the column
         # q = f"alter table target_table drop target_col;"
-        # self.execute(q)
-        """--== now add new_col ==--"""
-        # q = f"alter table target_table add target_col new_type;"
-        # self.execute(q)
-        # -- Update the values from temp. table
-        # q = f"update target_table set target_col = (select target_col from temp_view where temp_view.id = target_table.id);"
         # self.execute(q)
     """--== drop_table ==--"""
     def drop_table(self, tablename):
@@ -917,36 +934,37 @@ def timeit(f):
     # ### EOB def timeit(f): ### #
 
 
-# ###################################################
-def run_func(func_name, my_args="", *args, **kwargs):
-    # ###############################################
-    """
-    purpose: This is to test a single function from command line or while editing
-    requires: function_name function_arguments(if any)`
-    options: none
-    returns: none
-    notes:
-        You may want to put this in Usage section of a script's doc:
-          {0} -T <funcname> [<fargs>...]
-        You can use this feature while you are editing... in vim: <ESC>:! ./% -T your_function <args>
-    """
-    funcname = func_name
-    do_this = funcname
-    # this_doc = f"print('Function doc: ',{do_this}.__doc__)"
-    this_doc = f"{do_this}.__doc__"
-    msg = eval(this_doc)
-    if msg is None:
-        msg = "No doc available..."
-    fargs = my_args
-    # you may have to escape (\) any quotes around fargs
-    if fargs is not None and len(fargs) > 0:
-        fargs = ",".join('"' + elem + '"' for elem in fargs)
-        evalthis = f"{do_this}({fargs})"
-    else:
-        evalthis = f"{do_this}()"
-    printit(f"Function: {funcname}({fargs}) doc: " + msg, 'centered', 'boxed', title=f"Calling function: {funcname}() for testing purposes")
-    eval(evalthis)
-    return None
+# # ###################################################
+# def run_func(func_name, my_args="", *args, **kwargs):
+#     # ###############################################
+#     """
+#     purpose: This is to test a single function from command line or while editing
+#     requires: function_name function_arguments(if any)`
+#     options: none
+#     returns: none
+#     notes:
+#         You may want to put this in Usage section of a script's doc:
+#           {0} -T <funcname> [<fargs>...]
+#         You can use this feature while you are editing... in vim: <ESC>:! ./% -T your_function <args>
+#     """
+#     funcname = func_name
+#     do_this = funcname
+#     # this_doc = f"print('Function doc: ',{do_this}.__doc__)"
+#     this_doc = f"{do_this}.__doc__"
+#     msg = eval(this_doc)
+#     if msg is None:
+#         msg = "No doc available..."
+#     fargs = my_args
+#     # you may have to escape (\) any quotes around fargs
+#     if fargs is not None and len(fargs) > 0:
+#         fargs = ",".join('"' + elem + '"' for elem in fargs)
+#         dbug(fargs)
+#         evalthis = f"{do_this}({fargs})"
+#     else:
+#         evalthis = f"{do_this}()"
+#     printit(f"Function: {funcname}({fargs}) doc: " + msg, 'centered', 'boxed', title=f"Calling function: {funcname}() for testing purposes")
+#     eval(evalthis)
+#     return None
 
 
 # ################
@@ -983,8 +1001,8 @@ def called_from(*args, **kwargs):
     notes:
     """
     """--== Config ==--"""
-    prnt = bool_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
-    brief_b = bool_val(['brief', 'short', 'silent', "b", "s"], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print', 'show'], args, kwargs, dflt=False)
+    brief_b = arg_val(['brief', 'short', 'silent', "b", "s"], args, kwargs, dflt=True, opposites=['verbose', 'v', 'long'])
     """--== SEP_LINE ==--"""
     from inspect import getframeinfo, stack
     """--== Init ==--"""
@@ -996,9 +1014,10 @@ def called_from(*args, **kwargs):
     called_from_lineno = caller.lineno
     # i_filename = str(inspect.getfile(currentframe().f_back))
     # filename = os.path.basename(i_filename)
-    msg = f"called from: {called_from_funcname}: {called_from_lineno}"
     if brief_b:
         msg = f"{called_from_funcname}: {called_from_lineno}"
+    if not brief_b:
+        msg = f" Called from: {called_from_funcname}: {called_from_lineno}"
     if prnt:
         print(msg)
     return msg
@@ -1032,11 +1051,6 @@ def ddbug(msg="", *args, ask=False, exit=False):
     fname = str(getframeinfo(currentframe().f_back).function)
     fname = os.path.basename(fname)
     lineno = str(inspect.currentframe().f_back.f_lineno)
-    # msg = "DEBUG: [" + {fname} + ":" + {lineno} + "] " + {msg}
-    # if file:
-    #     msg = "DEBUG: [" + filename + ";" + fname + "(..):" + lineno + "] " + msg
-    # else:
-    #     msg = "DEBUG: [ " + str(fname) + "():" + str(lineno) + " ] " + str(msg)
     msg = f"*** DDBUG ***: [{filename}; {fname} (..): {lineno} ] {msg}"
     try:
         print(msg)
@@ -1045,14 +1059,6 @@ def ddbug(msg="", *args, ask=False, exit=False):
         print(msg)
     if ask:
         askYN()  # this will ask "Continue:" ... should exit with 'n'
-        # ans = input("Continue with (y or Y): ")  # avoiding recursion with askYN()
-        # if ans not in ["y", "Y"]:
-            # sys.exit()
-        # ans = input("Do you want to exit? ")
-        # # ddbug(f"we got here ~679 with and: {ans}")
-        # if ans.lower().strip() in ("y", "yes"):
-        #     print("Exiting as requested...")
-        #     sys.exit(99)
     if exit_b:
         sys.exit()
     return msg
@@ -1067,6 +1073,7 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
     required: xvar: str ... can be a local variable, a python statement, a string, a list
     options:
         - ask: bool          # forces a breakpoint, stops execution ans asks the user before continuing
+            - timeout: int=0 # you can use a timeout option which works with the ask option
         - here|noprnt: bool  # will only return the DEBUG info (file, function. linenumber) as a string without printing - typically used like this boxed("my box", footer=dbug('here'))
         - boxed: bool        # boxes debug output
         - box_color: str     # declares box_color default is 'red! on grey40'
@@ -1091,35 +1098,37 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
     """
     """--== Imports ==--"""
     """--== Config ==--"""
-    center_b = bool_val(['center', 'centered'], args, kwargs)
+    center_b = arg_val(['center', 'centered'], args, kwargs)
     # ddbug(f"center_b: {center_b}")
-    box_b = bool_val(['box', 'boxed'], args, kwargs, dflt=False)
+    box_b = arg_val(['box', 'boxed'], args, kwargs, dflt=False)
     color = kvarg_val('color', kwargs, dflt='')
-    nocolor = bool_val(['nocolor', 'noclr'], args, kwargs, dflt=False)
+    nocolor = arg_val(['nocolor', 'noclr'], args, kwargs, dflt=False)
     # box_color = kvarg_val('box_color', kwargs, dflt="red! on black")
     box_color = kvarg_val(['box_color', 'box_clr', 'bxclr'], kwargs, dflt="red! on grey40")
-    DBUG = kvarg_val(['dbug', 'DBUG'], kwargs, dflt=True)  # True unless specified as False
+    DBUG = arg_val(['dbug', 'DBUG'], args, kwargs, dflt=True)  # True unless specified as False
     if not DBUG:
-        # the idea here is if dbug looks like this: {where DBUG is True or >0) dbug(..., dbug=DBUG) then this func will honor the value of DBUG (ie True or False)
+        # DBUG by default above is True
+        # the idea here is if dbug looks like this: {where DBUG is True or > 0) dbug(..., dbug=DBUG) then this func will honor the value of DBUG (ie True or False)
         # this should ease the pain for change ... now you can do this
-        # DBUG = bool_val('dbug', args)
+        # DBUG = arg_val('dbug', args)
         # and then dbug(f"whatever here", dbug=DBUG)
         # ddbug(f"DBUG: {DBUG} therefore I am returning [empty handed sort of speak]")
         # further... you could put DBUG = 0 (or False) in GLOBAL vars and use docopts to turn on or off DBUG
         return
-    EXIT = bool_val('exit', args, kwargs, dflt=False)
-    ask_b = bool_val('ask', args, kwargs, dflt=False)
-    warn_b = bool_val(["warn", "warning"], args, kwargs, dflt=False)
-    info_b = bool_val(["info"], args, kwargs, dflt=False)
-    error_b = bool_val(['err', 'error'], args, kwargs, dflt=False)
-    lineno_b = bool_val(['lineno_b', 'lineno', 'line_no', 'line_number'], args, kwargs, dflt=False)
-    here_b = bool_val(['here', 'noprnt','xprnt','noprint'], args, kwargs, dflt=False)
+    EXIT = arg_val('exit', args, kwargs, dflt=False)
+    ask_b = arg_val('ask', args, kwargs, dflt=False)
+    warn_b = arg_val(["warn", "warning"], args, kwargs, dflt=False)
+    info_b = arg_val(["info"], args, kwargs, dflt=False)
+    error_b = arg_val(['err', 'error'], args, kwargs, dflt=False)
+    lineno_b = arg_val(['lineno_b', 'lineno', 'line_no', 'line_number'], args, kwargs, dflt=False)
+    here_b = arg_val(['here', 'noprnt','xprnt','noprint'], args, kwargs, dflt=False)
     title = kvarg_val("title", kwargs, dflt="")
-    footered_b = bool_val(['footered', 'footerred'], args, kwargs, dflt=False)
+    footered_b = arg_val(['footered', 'footerred'], args, kwargs, dflt=False)
     footer = kvarg_val("footer", kwargs, dflt="")
-    list_b = bool_val(["lst", "list"], args, kwargs, dflt=False)  # print the list in lines if xvar contains a list (like printit for dbug)
+    list_b = arg_val(["lst", "list"], args, kwargs, dflt=False)  # print the list in lines if xvar contains a list (like printit for dbug)
     table_b = arg_val(["tbl", "table"], args, kwargs, dflt=False)  # print the input as a table
-    titled_b = bool_val("titled", args, kwargs, dflt=True)  # consider making this the default - this adds the debug_info to the box title
+    titled_b = arg_val("titled", args, kwargs, dflt=True)  # consider making this the default - this adds the debug_info to the box title
+    timeout = arg_val(['timeout'], args, kwargs, dflt=0)
     """--== Init ==--"""
     global PRFX  # PRFX = "\x1b["
     global RESET
@@ -1168,7 +1177,7 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
             my_title = ""
             my_footer = ""
             if not isempty(title):
-                my_title = "title: " + title
+                my_title = title
             if not isempty(footer):
                 my_footer = "footer: " + footer
             # ddbug(f"titled: {titled}")
@@ -1197,11 +1206,12 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
         """--== now decide how to end or exit ==--"""
         if ask_b:
             # ddbug(f"ask_b: {ask_b}")
-            if not askYN("Continue?: ", "y", centered=center_b):
+            if not askYN("Continue?: ", "y", centered=center_b, timeout=timeout):
                 sys.exit()
             # ddbug('ask')
         if EXIT:
             sys.exit()
+        return to_prnt
         # ### EOB def do_prnt(rtrn_msg, *args, ask=ask_b, **kwargs):  # , ask=ask_b, centered=center_b): ### #
     """--== serious work here below ==--"""
     # print(f"Here you go: {inspect.getframeinfo(frame)}")
@@ -1212,7 +1222,8 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
         ask_b = True
         rtrn_msg = ""
         to_prnt = f"DEBUG: [{filename}:{fname}:{lineno}] {rtrn_msg}\nContinue: "
-        if not askYN(f"{to_prnt}"):
+        # ddbug(f"timeout: {timeout}")
+        if not askYN(f"{to_prnt}", timeout=timeout):
             sys.exit()
         return
     all_args = msg_literal.split(",")
@@ -1221,8 +1232,8 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
     lvars = inspect.currentframe().f_back.f_locals
     (f"msg_literal: {msg_literal}")
     if msg_literal.startswith('f"') or msg_literal.startswith("f'"):
-        do_prnt(xvar, args, ask=ask_b, footered_b=footered_b, title_b=titled_b)
-        return
+        to_prnt = do_prnt(xvar, args, ask=ask_b, footered_b=footered_b, title_b=titled_b)
+        return to_prnt
     if msg_literal.startswith('"') or msg_literal.startswith("'"):
         # ddbug(f"msg_literal: {msg_literal}")
         msg_literal = msg_literal[1:-1]
@@ -1265,7 +1276,7 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
                 # if islol(xvar) or dtype == "lom" or  dtype == "los" or dtype == "lod" or dtype == "loD":
                 if data_type(xvar, ['lol']) or dtype == "lom" or  dtype == "los" or dtype == "lod" or dtype == "loD":
                     my_prnt = f"[red!]DEBUG[/]: [{filename}:{fname}:{lineno}] {msg_literal}"
-                    printit(boxed(xvar, box_color="red! on grey40", title=my_prnt), centered=center_b)
+                    printit(boxed(xvar, box_color=box_color, title=my_prnt), centered=center_b)
                     # printit(xvar, 'boxed', title="We are in dbug()", footer="~986")
                     return
             rtrn_msg = f"{msg_literal}: {xvar}"
@@ -1273,8 +1284,8 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
             # ddbug(f"args: {args}")
             # ddbug(f"msg_literal: {msg_literal} xvar: {xvar}")
             # do_prnt(rtrn_msg, args, ask=ask_b, footered=footered, titled=titled)
-            do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
-            return
+            to_prnt = do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
+            return to_prnt
         else:
             # not match to a local var
             # ddbug(f" ---- xvar: {xvar} is not in lvars")\
@@ -1298,12 +1309,6 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
                     xvar = lines1
                     # ddbug(f"xvar: {xvar}")
                 xvar = "\n" + "\n".join(xvar)
-                # ddbug(f"xvar: {xvar}")
-                # print(xvar)
-                # for ln in xvar:
-                #    for my_ln in ln:
-                #        printit(xvar
-                # askYN("HHHHHHHHHAAAAAAAA")
             # ddbug(f"msg_literal: {msg_literal} k: {k}")
         # rtrn_msg = f"{msg_literal}: {xvar}"
         rtrn_msg = f"{xvar}"
@@ -1317,8 +1322,8 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
         import pandas as pd
         if isinstance(xvar, pd.DataFrame) or isinstance(xvar, pd.core.series.Series):
             rtrn_msg = f"{msg_literal}: {xvar}"
-            do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
-            return  # yes, this return is needed otherwise bool prnts 2x
+            to_prnt = do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
+            return to_prnt # yes, this return is needed otherwise bool prnts 2x
     except Exception as e:
         ddbug(f"Error: {e}")
     # ddbug(f"msg_literal: {msg_literal}")
@@ -1326,14 +1331,14 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
         # ddbug(f"msg_literal: {msg_literal}")
         if isinstance(xvar, type):
             rtrn_msg = f"{msg_literal}: {xvar}"
-            do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
-            return  # yes, this return is needed otherwise bool prnts 2x
+            to_prnt = do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
+            return to_prnt # yes, this return is needed otherwise bool prnts 2x
         try:
             if re.search(r'^f["].*"$', msg_literal) or re.search("^'.*'$", msg_literal):
                 # catches an f-strg (assumes that it is an f-str
                 rtrn_msg = xvar  # default to this
-                do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
-                return
+                to_prnt = do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
+                return to_prnt
             else:
                 # ddbug(f"msg_literal: {msg_literal} xvar: {xvar}")
                 # if msg_literal == 'ask':
@@ -1342,17 +1347,17 @@ def dbug(xvar="", *args, exit=False, ask=False, prnt=True, **kwargs):
                     ddbug(f"rtrn_msg: {rtrn_msg}")
                 else:
                     rtrn_msg = f"{msg_literal}: {xvar}"
-                do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
-                return
+                to_prnt = do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
+                return to_prnt
         except Exception as Error:
             rtrn_msg = f"{msg_literal}: {xvar}"
             ddbug(f"rtrn_msg: {rtrn_msg} Error: {Error}")
-            do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
-            return
+            to_prnt = do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
+            return to_prnt
         return
     rtrn_msg = f"{msg_literal}"
-    do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
-    return
+    to_prnt = do_prnt(rtrn_msg, args, ask=ask_b, footered_b=footered_b, titled_b=titled_b)
+    return to_prnt
     # ### EOB def dbug(): ### #
 
 
@@ -1363,8 +1368,8 @@ def transcript_start(filename, *args, **kwargs):
     Start class Transcript(object=filename),
     appending print output to given filename
     """
-    prnt = bool_val(["prnt", 'printit', 'show'], args, kwargs, dflt=False)
-    centered_b = bool_val(['centered'], args, kwargs, dflt=False)
+    prnt = arg_val(["prnt", 'printit', 'show'], args, kwargs, dflt=False)
+    centered_b = arg_val(['centered'], args, kwargs, dflt=False)
     if prnt:
         printit(f"Starting transcript out to {filename}", centered=centered_b)
     sys.stdout = Transcript(filename)
@@ -1376,8 +1381,8 @@ def transcript_stop(*args, **kwargs):
     """
     Stop class Transcript() and return print functionality to normal
     """
-    prnt = bool_val(["prnt", 'printit', 'show'], args, kwargs, dflt=False)
-    centered_b = bool_val(['centered'], args, kwargs, dflt=False)
+    prnt = arg_val(["prnt", 'printit', 'show'], args, kwargs, dflt=False)
+    centered_b = arg_val(['centered'], args, kwargs, dflt=False)
     sys.stdout.logfile.close()
     sys.stdout = sys.stdout.terminal
     if prnt:
@@ -1398,13 +1403,14 @@ def kvarg_val(key, kwargs_d={}, *args, **kwargs):
     returns str(key_val) or default_val(which is "" if none is provided)
     notes
         - If any key in the list is set = to a value, that value is returned
-        - see: bool_val which process both args and kvargs and returns bool_val
+        - see: arg_val which process both args and kvargs and returns bool_val
     useage: used in function to get a value from a kwargs ky=value pair
         - eg:
             def my_function(*args, **kwargs):
                 txt_center = kvarg_val(["text_center", "txt_cntr", "txtcntr"], kwargs, dflt=1)
         - so if you call my_function(txt_center=99) then txt_center will be set to 99
         - input key(string), kvargs_d(dictionary of key,vals), default(string; optional)
+        - this is being deprecated. Use arg_val() instead to gain consistency  
     """
     """--== Debugging ==--"""
     # print(f"funcname: {funcname()}")
@@ -1434,24 +1440,12 @@ def kvarg_val(key, kwargs_d={}, *args, **kwargs):
                 ddbug(f"Found on key: {key} my_k: {my_k}")
         if not found_flag:
             dbug(f"Note: A value for a key: {key} was declared required: [{required}] for this operation. No value was provided")
-            # dbug(f"Required: [{required}] is experimental but was apparently not included")
-            # dbug(f"A value for a key: {key} is required for this operation.", 'ask', 'boxed')
-    # if 'rtrn' in key:
-        # ddbug(f"kwargs_d: {kwargs_d}")
     # my_val = ""
     my_val = mydflt
     # my_default = ""
     # dbug
     if not isinstance(kwargs_d, dict):
         dbug(f"Supplied kwargs_d: {kwargs_d} MUST be a dictionary! {called_from()} ... Returning...")
-        # we might consider turning this into bool_val here... TODO
-        # rtrn = bool_val(key, args, kwargs, dflt=mydflt)
-        # dbug(key)
-        # dbug(args)
-        # dbug(kwargs)
-        # dbug(mydflt)
-        # dbug(rtrn)
-        # return rtrn
         return
     """--== Convert ==--"""
     if isinstance(key, list):
@@ -1481,7 +1475,7 @@ def kvarg_val(key, kwargs_d={}, *args, **kwargs):
 
 
 # ###########################################
-def bool_val(key_l, args_l, kvargs={}, **kwargs):
+def arg_val(key_l, args_l, kvargs={}, **kwargs):
     # #######################################
     """
     purpose: look at args and kwargs with a list of possible option strings and return the default True or False
@@ -1490,7 +1484,7 @@ def bool_val(key_l, args_l, kvargs={}, **kwargs):
     options:
         - default | dflt: bool  # the default value to return
         - opposite | opposites: str | list  # a list of opposites
-            eg: prnt = bool_val(["print", "prnt"], args, kwargs, dflt=True, opposites=['noprnt', 'no_prnt', 'no_print'])
+            eg: prnt = arg_val(["print", "prnt"], args, kwargs, dflt=True, opposites=['noprnt', 'no_prnt', 'no_print'])
     return True or False
     Notes:
         key_l can be a str or list
@@ -1500,9 +1494,9 @@ def bool_val(key_l, args_l, kvargs={}, **kwargs):
             by being in args or seeing it has a bool value set in kvargs
         aka: arg_val() <-- this alias is probably going to replace kvarg_val()
     use:
-        DBUG = bool_val('dbug', args, kvargs)
+        DBUG = arg_val('dbug', args, kvargs)
         or
-        DBUG = bool_val(['dbug', 'DBUG'], args, kvargs)
+        DBUG = arg_val(['dbug', 'DBUG'], args, kvargs)
     """
     """--== Debugging ==--"""
     # ddbug(f"funcname: {funcname()}")
@@ -1574,10 +1568,11 @@ def bool_val(key_l, args_l, kvargs={}, **kwargs):
     """--== Returning ==--"""
     # dbug(f"Returning bool_v: {bool_v}")
     return bool_v
-    # ### EOB def bool_val(key_l, args_l, kvargs={}, **kwargs): ### #
+    # ### EOB def arg_val(key_l, args_l, kvargs={}, **kwargs): ### #
 
 # alias 
-arg_val = bool_val
+# - this is being deprecated. Use arg_val() instead to gain consistency  
+bool_val = arg_val
 
 
 
@@ -1609,24 +1604,23 @@ def write_file(contents=[], fname="",*args, **kwargs):
     # dbug(f"funcname: {funcname()} called_from: {called_from()}")
     # dbug(fname)
     # dbug(contents)
-    # dbug(len(contents))
     # dbug(contents[:3])
     # dbug(args)
     # dbug(kwargs)
     """--== Config ==--"""
-    prnt = bool_val(["print", "prnt", "show", "verbose"], args, kwargs, dflt=False)
+    prnt = arg_val(["print", "prnt", "show", "verbose"], args, kwargs, dflt=False)
     # if prnt:
         # dbug(f"funcname(): {funcname()} called_from(): {called_from()} prnt: {prnt} <-- change this after testing")
-    ask_b = bool_val(["ask"], args, kwargs, dflt=False)
-    # id_flag = bool_val(["orig_id_flag", "id_flag", "indx", "idx", "id"], args, kwargs, dflt=False)
-    bak_b = bool_val(["bak", "backup", "back", "bakup"], args, kwargs, dflt=True)
+    ask_b = arg_val(["ask"], args, kwargs, dflt=False)
+    # id_flag = arg_val(["orig_id_flag", "id_flag", "indx", "idx", "id"], args, kwargs, dflt=False)
+    bak_b = arg_val(["bak", "backup", "back", "bakup"], args, kwargs, dflt=True)
     # comment_lines = kvarg_val(["comment_lines"], kwargs, dflt=[])
     colnames = kvarg_val(["colnames", "col_names", "cols", "header", "hdr"], kwargs, dflt=[])
-    append_b = bool_val(["append", "a", 'add'], args, kwargs, dflt=False)
+    append_b = arg_val(["append", "a", 'add'], args, kwargs, dflt=False)
     # dbug(append_b)
-    dat_b = bool_val(["dat", 'dat_file'], args, kwargs, dflt=False)
-    csv_b = bool_val(["csv", 'csv_file'], args, kwargs, dflt=False)
-    raw_b = bool_val(["raw"], args, kwargs, dflt=False)
+    dat_b = arg_val(["dat", 'dat_file'], args, kwargs, dflt=False)
+    csv_b = arg_val(["csv", 'csv_file'], args, kwargs, dflt=False)
+    raw_b = arg_val(["raw"], args, kwargs, dflt=False)
     arch_d = kvarg_val(["arch"], kwargs, dflt={})
     dict_b = kvarg_val(["dict", "dictionary"], kwargs, dflt={})
     """--== Local Import(s) ==--"""
@@ -1634,11 +1628,6 @@ def write_file(contents=[], fname="",*args, **kwargs):
     import csv  # built-in
     from gtoolz import file_exists
     """--== Init ==--"""
-
-    # writefile = fname
-    # data_lines = []
-    # csv_lines = []        # this will become a list of comma delimited strings/lines and will include a header string/line as the first line
-    # content_lines = []    # lines read from the file (if it exists) - all non-comment lines
     comment_lines = []    # comments lines read from the file if it exists
     # file_type = "csv"   # this will either be a 'csv' or a 'dat' based on file name extension
     # raw_lines = []
@@ -1716,8 +1705,6 @@ def write_file(contents=[], fname="",*args, **kwargs):
     if dat_b or csv_b and not raw_b:
         # uses builtin csv tool(s)
         # dbug(f"dat_b: {dat_b} csv_b: {csv_b}")
-        # if dat_b:
-            # delimiter=" "
         if dict_b:
             dbug(f"dictionary csv delimiter: [{delimiter}]")
             mywriter = csv.DictWriter(fname, fieldnames=colnames)
@@ -1765,8 +1752,14 @@ def isempty(my_var):  # , *args, **kwargs):
     if my_var is None:
         return True
     if isinstance(my_var, list):
+        # dbug(type(my_var))
         if len(my_var) == 0:
             return True
+        # for item in my_var:
+        #     dbug(item)
+        #     if all([isempty(elem) for elem in item]):
+        #         dbug("found all elems empty... returning True")
+        #         return True
     if isinstance(my_var, str):
         if my_var.lower().startswith("none") or len(my_var) == 0:
             # yes, consider this empty
@@ -1791,11 +1784,10 @@ def gselect(selections, *args, **kwargs):
                 This is an important option and allows control over what gets returned. See the Notes below.
         - show: str="k"      # "k|key" or 'v|val|value' <-- tells gselect whether to display a list of keys or a list of values
         - indx: bool         # whether to index (place a number before) each selection shown
-        - quit: bool         # <-- add "q)uit" to the prompt and will do a sys.exit() if ans in ("q","Q","exit")
+        - quit: bool=False   # <-- add "q)uit" to the prompt and will do a sys.exit() if ans in ("q","Q","exit")
         - multi: bool        # <-- allows multiple selections and returns them as a list
         - default|dflt='':   # allows you to /declare a default if enter is hit
         - cols: int=1        # default is 1 column for displaying selections
-        - quit: bool=False
         - title: str=""
         - footer: str=""
         - color: str=""
@@ -1806,6 +1798,7 @@ def gselect(selections, *args, **kwargs):
         - cols: int=1
         - col_limit: int    # limits col length noth keys and values
         - colnames: list    # Column names to use in the header
+        - timeout: int      # question will timeout after declared seconds with the default as the answer
     returns: str | list  -- either key(s) or value(s) as a *string* <---IMPORTANT  or list (if multiple), your choice
     Notes:
         - to understand this function know first that everything is turned into a dictionary first. A list would become a dictionary with  the keys being 1,2,3...
@@ -1831,8 +1824,8 @@ def gselect(selections, *args, **kwargs):
     """--== Config ==--"""
     prompt = kvarg_val("prompt", kwargs, dflt="Please select")
     # dbug(prompt)
-    centered_b = bool_val(["center", "centered"], args, kwargs, dflt=False)
-    quiet_b = bool_val(["quite", "silent"], args, kwargs, dflt=True)
+    centered_b = arg_val(["center", "centered"], args, kwargs, dflt=False)
+    quiet_b = arg_val(["quiet", "silent"], args, kwargs, dflt=True)
     # dbug(centered_b)
     shift = kvarg_val(["shift", "shft"], kwargs, dflt=0)  # only works with centered option
     title = kvarg_val("title", kwargs, dflt=" Selections ")
@@ -1848,7 +1841,7 @@ def gselect(selections, *args, **kwargs):
     # vc="|"
     # sep = kvarg_val(["sep"], kwargs, dflt=f" {vc} ")
     color = kvarg_val(["color"], kwargs, dflt="white on rgb(20,20,30)")
-    quit = bool_val(["quit", "exit"], args, kwargs, dflt=False)
+    quit = arg_val(["quit", "exit"], args, kwargs, dflt=False)
     # dbug(kwargs)
     rtrn_type = kvarg_val(["rtrn"], kwargs, dflt="v")  # can be key|k or value|v|val or ''
     # dbug(rtrn_type)
@@ -1856,12 +1849,13 @@ def gselect(selections, *args, **kwargs):
     # dbug(show)
     index_b = arg_val(["indx", "idx", "index", "indexes", 'number'], args, kwargs, dflt=False)
     # dbug(index_b)
-    multi_b = bool_val(["choose", "choices", "multi"], args, kwargs, dflt=False)
+    multi_b = arg_val(["choose", "choices", "multi"], args, kwargs, dflt=False)
     colnames = kvarg_val(['colnames', 'col_names', 'columns'], kwargs, dflt=["Choice", "Name"])
     # dbug(colnames, 'ask')
     sep = arg_val(["sep", "separation"], args, kwargs, default=" ")
     # dbug(colnames)
     col_limit = arg_val(["col_limit"], args, kwargs, dflt=False)
+    timeout = arg_val(['timeout', 'time'], args, kwargs, dflt=0)
     """--== Validate ==--"""
     if selections is None:
         dbug(f"Please provide valid selections: {selections}")
@@ -1874,6 +1868,8 @@ def gselect(selections, *args, **kwargs):
         dbug("Selections can not be a string. They must be either a list or dictionay")
         return None
     """--== Init ==--"""
+    dtype = data_type(selections)
+    # dbug(dtype)
     submitted_selections = selections
     selections_d = {}
     orig_vals = []
@@ -1884,12 +1880,13 @@ def gselect(selections, *args, **kwargs):
     # dict_submitted = False
     """--== Convert to dict... Type Mngmt ==--"""
     # dbug(submitted_selections)
-    dtype = data_type(selections)
     # dbug(dtype)
     if dtype in ('lol'):  # don't add 'los' to this list
+        # dbug(selections[:2], 'ask')
         for row in selections:
             selections_d[row[0]] = row[1]
             orig_vals.append(row[1])
+            # dbug(orig_vals)
             # dbug(selections_d)
     if dtype in ('dov'):
         # dbug(f"dtype: {dtype} should be 'dov'... selections: {selections} show_type: {show_type}")
@@ -1924,25 +1921,13 @@ def gselect(selections, *args, **kwargs):
     """--== Fixes ==--"""
     keys = [str(key) for key in selections_d.keys()]
     vals = [str(val) for val in selections_d.values()]
-    # if index_b:
-    #     if show_type == "k":  # this is currently the default
-    #         keys = [f"{indx:2})" for indx, key in enumerate(keys, start=1)]
-    #     if show_type == "v":
-    #         keys = [f"{indx:2})" for indx, val in enumerate(vals, start=1)]
-    #     dbug(keys)
-    # if rtrn_type == "v":
-    #     vals = list(selections_d.values())
-    # if rtrn_type == "k":
-    #     vals = list(selections_d.keys())
-    # selections_d = dict(zip(keys, vals))
-    # """--== Process ==--"""
+    """--== Process ==--"""
     """--== get width ==--"""
     if "%" in str(width):
         scr_cols = get_columns()
         width = width.replace("%", "")
         width = int(scr_cols * (int(width)/100))
-    # dbug('ask')
-    # dbug(width)
+    # dbug(width, 'xask')
     """--== determine prompt ==--"""
     if quit:
         prompt = prompt + " or q)uit"
@@ -1965,23 +1950,27 @@ def gselect(selections, *args, **kwargs):
                 footer = " Please add selections one at a time. "
         # dbug(selections_d)
         gtable(selections_d, 'prnt', 'hdr', centered=centered_b, pivot=True, colnames=colnames, cols=cols,
-               title=title, footer=footer, width=width, box_color=box_color, shadowed=shadowed, sep=sep,
+               ti=title, footer=footer, width=width, box_color=box_color, shadowed=shadowed, sep=sep,
                col_limit=col_limit)
         if multi_b:
             printit(f"Selected: {selected_l}", centered=centered_b, color=color)
         if centered_b:
             # dbug(centered_b)
-            ans = cinput(prompt, center=centered_b, shift=shift, quit=quit)
+            ans = cinput(prompt, center=centered_b, shift=shift, quit=quit, timeout=timeout)
+            # dbug(f"ans: {ans}")
+            # return default
         else:
-            ans = input(prompt)
+            ans = cinput(prompt, centered=False, timeout=timeout)
             if ans in ("q", "Q", "exit", ""):
                 # sys.exit()
+                # dbug("returning from timeout")
                 return ans
         # if ans in ("q", "Q", ""):
         if ans in (""):
             if ans == "":
                 ans = default
         selected = ans
+        # dbug(selected, 'ask')
         # orig_ans = ans
         # dbug(ans)
         if rtrn_type.lower() in ("k", "keys"):
@@ -2012,6 +2001,7 @@ def gselect(selections, *args, **kwargs):
         selected_l.append(selected)
         if not multi_b:
             break
+    # dbug(selected, 'ask')
     """--== SEP_LINE ==--"""
     selected = selected_l
     if selected_l == []:
@@ -2022,49 +2012,6 @@ def gselect(selections, *args, **kwargs):
     # dbug(f"Returning: {selected_l}")
     return selected
     # ### EOB def gselect(selections, *args, **kwargs): ### #
-
-
-# def gselect_qnd(*args, **kwargs):
-#     psuedo = """
-#     if list submitted 
-#         show indexed list and send back either key or val dependant on options
-#     if dict submitted
-#         show keys, values
-#         if no indx:
-#             show keys, vals return val
-#         if no indx, rtrn=v
-#             show keys, vals return val
-#         if no indx, rtrn=k
-#             show indx, keys rtrn key (wouldn't make much sense?)
-#         if indx
-#             show index, keys return val
-#         if indx, show=k, rtrn=k
-#             show indx, keys return val (same as above)
-#         if indx show=v, rtrn k
-#             show indx, vals, and rieturn key
-#         if indx, show=v, rtrn v:
-#             show indx, vals rtrn val
-#     """
-#     printit(psuedo, 'boxed', title="Psuedo", footer=dbug('here'))
-#     my_d = {"1234": "one", "5678": "two"}
-#     """--== SEP_LINE ==--"""
-#     args = ['indx']
-#     kwargs = {'rtrn': "k", 'show': "v"} 
-#     options = f'args: {args} kwargs: {kwargs}'
-#     my_kwargs = ", ".join([f"{k}={v}" for k,v in kwargs.items()])
-#     dbug(my_kwargs)
-#     print(repr(kwargs))
-#     printit(options)
-#     dbug(options, 'boxed')
-#     ans = gselect(my_d, *args, **kwargs)
-#     """--== SEP_LINE ==--"""
-#     args = ['indx']
-#     kwargs = {'rtrn': "v", 'show': "v"} 
-#     options = f"args: {args} kwargs: {kwargs}"
-#     dbug(options, 'boxed')
-#     ans = gselect(my_d, *args, **kwargs)
-#     """--== SEP_LINE ==--"""
-#     dbug(ans)
 
 
 # #########################################
@@ -2184,12 +2131,12 @@ def cfg_val(keys="", section="", cfg_d={}, dflt="", **kwargs):
     """--== Process ==--"""
     for key in keys:
         try:
-            dbug(f"grab the actual key: {key} value from user declared section if present")
+            # dbug(f"grab the actual key: {key} value from user declared section if present")
             rtrn = cfg_d[section][key]
             break
         except Exception:
             try:
-                dbug(f"grab the default 'key': {key} if present")
+                # dbug(f"grab the default 'key': {key} if present")
                 rtrn = cfg_d['default'][key]
                 break
             except Exception:
@@ -2257,12 +2204,12 @@ def getssid(*args, **kwargs):
     """
     """--== Debugging ==--"""
     # dbug(called_from())
-    # from gtoolz import run_cmd, bool_val
+    # from gtoolz import run_cmd, arg_val
     """--== Config ==--"""
-    prnt = bool_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
-    boxed_b = bool_val(['boxed'], args, kwargs, dflt=False)
-    centered_b = bool_val(['centered'], args, kwargs, dflt=False)
-    box_clr = bool_val(['box_clr', 'bxclr', 'box_color'], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
+    boxed_b = arg_val(['boxed'], args, kwargs, dflt=False)
+    centered_b = arg_val(['centered'], args, kwargs, dflt=False)
+    box_clr = arg_val(['box_clr', 'bxclr', 'box_color'], args, kwargs, dflt=False)
     with_netseg = arg_val(["netseg"], args, kwargs, dflt=False)
     """--== SEP_LINE ==--"""
     ssid = None
@@ -2304,7 +2251,7 @@ def fix_msgs(msgs, *args, **kwargs):
         - msgs as a string if 'lst' not invoked without the preceding 4x" " 
     """
     """--== Config ==--"""
-    lst = bool_val(["lst", "list"], args, kwargs, dflt=False)
+    lst = arg_val(["lst", "list"], args, kwargs, dflt=False)
     """--== SEP_LINE ==--"""
     dtype = data_type(msgs)
     dbug(dtype)
@@ -2421,8 +2368,6 @@ def handleCFG(cfg_file="", section="", key="", *args, **kwargs):
             dbug(f"cfg_file not found (cfg_file: {cfg_file})... returning None ...")
         # cfg_file = os.path.splitext(__file__)[0]
         # cfg_file += ".cfg"
-        # dbug("Returning None")
-        # return None
         if len(cfg_files) == 0:
             dbug("No cfg_file(s)... returning...")
             if askYN(f"Would you like to edit one: {bname}.toml", "y", 'centered'):
@@ -2433,10 +2378,6 @@ def handleCFG(cfg_file="", section="", key="", *args, **kwargs):
             cfg_d = handleCFG(cfg_files)
             # dbug(cfg_d)
             return cfg_d
-    # https://hackersandslackers.com/simplify-your-python-projects-configuration/
-    # if type.lower() == 'env':
-    #     from  dotenv import load_dotenv
-    #     dbug("do_env")
     # dbug(type, 'ask')
     if type.lower() == 'env':
         content_l = purify(cfg_file, 'lst')
@@ -2509,7 +2450,11 @@ def handleCFG(cfg_file="", section="", key="", *args, **kwargs):
         cfg_d = cfg_d[my_section]
     if my_key != "":
         # kv_cols(cfg_d, 4, 'prnt', title="debugging", footer=dbug('here'))
-        cfg_d = cfg_d[my_key]  # assumes section done above
+        if my_key in cfg_d:
+            cfg_d = cfg_d[my_key]  # assumes section done above
+        else:
+            dbug(f"Failed to find my_key: {my_key}")
+            return
     # dbug(f"Returning: {cfg_d} using file: {cfg_file} type: {type} EOB")
     return cfg_d
     # ### EOB def handleCFG(cfg_file=""): ### #
@@ -2573,75 +2518,48 @@ def handleOPTS(args):
           {0} -T <funcname> [<fargs>...]
         You can use this while you are editing... in vim: <ESC>:! ./% -T your_function <args>
         """
-        # dbug(args)
-        funcname = args['-T']
-        fargs = args['<fargs>']
-        run_func(funcname, fargs)
-        do_close("", 'center')
-        # """
-        # this is to test a single function
-        # Put this in Usage section:
-        #   {0} -T <funcname> [<fargs>]
-        # """
-        # if isinstance(args['-T'], bool):
-        #     funcname = args['<func>']
-        # else:
-        #     funcname = args['-T']
-        # # dbug(funcname)
-        # fargs = args['<fargs>']
-        # args_d = get_args(fargs)
-        # if args_d is None:
-        #     # dbug(funcname)
-        #     globals()[funcname]()
-        # else:
-        #     if args_d['kwargs'] is None:
-        #         dbug(args_d['args'])
-        #         dbug(args_d['kwargs'])
-        #         globals()[funcname](*args_d['args'])
-        #     else:
-        #         # dbug(funcname)
-        #         # dbug(args_d['args'])
-        #         # dbug(args_d['kwargs'])
-        #         args = args_d['args']
-        #         kwargs = args_d['kwargs']
-        #         # dbug(args)
-        #         # dbug(kwargs)
-        #         # dbug(f"full cmd: {funcname}({args}, {kwargs}")
-        #         if isempty(args) and isempty(kwargs):
-        #             # this is in case the funcname lacks any arguments ie funcname(*args, **kwargs)
-        #             globals()[funcname]()
-        #         else:
-        #             globals()[funcname](*args_d['args'], **args_d['kwargs'])
-        # return
-        # """--== SEP_LINE ==--"""
-        # args_d = get_args(fargs)
-        # if args_d is None:
-        #     globals()[funcname]()
-        # else:
-        #     if args_d['kwargs'] is None:
-        #         globals()[funcname](*args_d['args'])
-        #     else:
-        #         globals()[funcname](*args_d['args'], **args_d['kwargs'])
-        # do_close("", 'center')
-        # return
-    # """--== SEP_LINE ==--"""
-    if args['<cmd>']:  # and args['<fargs>']:
-        # this handles do_cli situations
-        funcname = args['<cmd>']
-        my_args = ""
-        my_kwargs = {}
-        if args['<fargs>']:
-            args_d = get_args(args['<fargs>'])
-            my_args = args_d['args']
-            my_kwargs = args_d['kwargs']
-        # dbug(globals())
-        if funcname not in globals():
-            dbug(f"failed to find cmd: {funcname} ...")
+        dbug(args)
+        if isinstance(args['-T'], bool):
+            fname = args['<func>']
         else:
-            out = globals()[funcname](*my_args, **my_kwargs)
-            # sys.stdout.flush(out)
-            # print(out, flush=True)
-        sys.exit()
+            fname = args['-T']
+        def get_args(string):
+            # dbug(f"fname(): {fname} string: {string}")
+            if isinstance(string, str):
+                my_args = string.split(',')
+                my_args = [my_arg.strip() for my_arg in my_args]
+            else:
+                my_args = []
+            new_args = []
+            my_kwargs = {}
+            for my_arg in my_args:
+                if '=' in my_arg:
+                    key, val = my_arg.split('=')
+                    my_kwargs[key.strip()] = val.strip()
+                    # dbug(my_kwargs)
+                else:
+                    new_args.append(my_arg)
+            # dbug(f"Returning my_args: {new_args} and my_kwargs: {my_kwargs}")
+            rtrn_d = {'args': new_args, 'kwargs': my_kwargs}
+            return rtrn_d
+        # fargs = "".join(fargs)
+        fargs = args['<fargs>']
+        if isinstance(fargs, list):
+            # for arg in fargs:
+            fargs = "".join(fargs)  # turn it into a str 
+        args_d = get_args(fargs)
+        # dbug(args_d)
+        # dbug(args_d)
+        if args_d is None:
+            globals()[fname]()
+        else:
+            if args_d['kwargs'] is None:
+                globals()[fname](*args_d['args'])
+            else:
+                globals()[fname](*args_d['args'], **args_d['kwargs'])
+        # dbug('ask')
+        do_close()
+        """--== SEP_LINE ==--"""
     """--== edit __file__ ==--"""
     if "-E" in sys.argv:
         global FULL_PATH_SCRIPT
@@ -2731,13 +2649,6 @@ def centered(msgs, *args, **kwargs):
     # dbug(funcname())
     # dbug(msgs)
     # dbug(kwargs)
-    # """--== SEP_LINE ==--"""
-    # try:
-    #    # sometimes there is no stty... like with wsgi
-    #     rows, columns = os.popen("stty size", "r").read().split()
-    # finally:
-    #     rows = 0
-    #     columnns = 0
     # """--== Config ==--"""
     shift = kvarg_val('shift', kwargs, dflt=0)
     length = kvarg_val(['length'], kwargs, dflt=0)  # canvas columns instead of screen columns
@@ -2746,15 +2657,15 @@ def centered(msgs, *args, **kwargs):
     if width > length:
         length = width
     # dbug(f"length: {length} width: {width}")
-    lst = bool_val(['lst', 'list'], args, kwargs, dflt=True)
-    string_b = bool_val(['str', 'string'], args, kwargs, dflt=False)
+    lst = arg_val(['lst', 'list'], args, kwargs, dflt=True)
+    string_b = arg_val(['str', 'string'], args, kwargs, dflt=False)
     pad = kvarg_val(["pad"], kwargs, dflt=" ")
     # dbug(f"pad: [{pad}]")
-    prnt = bool_val(["prnt", "print", "show", "verbose"], args, kwargs, dflt=False)
+    prnt = arg_val(["prnt", "print", "show", "verbose"], args, kwargs, dflt=False)
     # margin = 0
     # """--== Validation ==--"""
     if msgs is None:
-        dbug(f"msgs: {msgs} appear to be empty... returning")
+        dbug(f"msgs: {msgs} appear to be empty... {called_from('verbose')} returning")
         return None
     if not isinstance(shift, int):
         shift = 0
@@ -2765,7 +2676,6 @@ def centered(msgs, *args, **kwargs):
         msgs = margin + msgs + margin
         if len(msgs) < length:
             msgs = msgs + ' ' * (length - len(msgs))
-            # dbug(msgs)
         # dbug(len(msgs))
         # dbug(length)
         # dbug(msgs)
@@ -2835,8 +2745,8 @@ def ruleit(*args, **kwargs):
     """
     # """--== Config ==--"""
     width = kvarg_val(["width", "w", "length", "l"], kwargs, dflt=0)
-    cntr = bool_val(["cntr", "center"], args, kwargs, dflt=False)
-    prnt = bool_val(["prnt", "print"], args, kwargs, dflt=True)
+    cntr = arg_val(["cntr", "center"], args, kwargs, dflt=False)
+    prnt = arg_val(["prnt", "print"], args, kwargs, dflt=True)
     # """--== Init ==--"""
     line = ""
     tick_line = ""
@@ -2947,14 +2857,14 @@ def do_close(msg="", *args, **kwargs):
     # """--== Config ==--"""
     quote = kvarg_val('quote', kwargs, dflt="")
     quote_box_color = kvarg_val(["qbox_clr", "quote_box_color", "quote_box_clr"], kwargs, dflt="white! on black")
-    centered = bool_val(['center', 'centered'], args, kwargs, dflt=True)
+    centered = arg_val(['center', 'centered'], args, kwargs, dflt=True)
     txt_center = kvarg_val(['txt_center', 'txt_cntr', 'text_center', 'cntr_txt', 'txt_centered'], kwargs, dflt=0)
     color = kvarg_val(['color', 'clr'], kwargs, dflt="")
-    shadowed = bool_val(['shadow', 'shadowed'], args, kwargs)
+    shadowed = arg_val(['shadow', 'shadowed'], args, kwargs)
     box_color = kvarg_val(["box_clr", 'box_color', "bx_clr", "bxclr"], kwargs, dflt="")
-    figlet = bool_val(['figlet'], args, kwargs)
+    figlet = arg_val(['figlet'], args, kwargs)
     footer = kvarg_val(['footer', 'ftr'], kwargs, dflt="")
-    exit_b = bool_val(['exit', 'quit', 'ext'], args, kwargs, dflt=True)
+    exit_b = arg_val(['exit', 'quit', 'ext'], args, kwargs, dflt=True)
     # """--== Init ==--"""
     dflt_msg = "Wanted: Software Developer. Python experience is a plus. Pay commensurate with skill set. Apply within."
     # dflt_msg = "All is well that ends well!"
@@ -3049,18 +2959,18 @@ def do_logo(content="", *args, **kwargs):
     # dbug(kwargs)
     # dbug(center)
     # """--== Config ==--"""
-    center = bool_val(['center', 'cntr', 'centered'], args, kwargs, dflt=True)
+    center = arg_val(['center', 'cntr', 'centered'], args, kwargs, dflt=True)
     center_txt = kvarg_val(['cntr_txt', 'center_txt', 'center_text', 'cntr_txt', 'txt_cntr', 'cntrtxt', 'txtcntr'], kwargs, dflt=0)
     # dbug(center_txt)
-    shadow = bool_val(['shadow', 'shadowed'], args, kwargs, dflt=False)
+    shadow = arg_val(['shadow', 'shadowed'], args, kwargs, dflt=False)
     quote = kvarg_val('quote', kwargs, dflt="")
-    fortune = bool_val('fortune', args, kwargs)
+    fortune = arg_val('fortune', args, kwargs)
     color = kvarg_val('color', kwargs)
     box_color = kvarg_val(['box_color', 'box_clr'], kwargs)
-    prnt = bool_val('prnt', args, kwargs, dflt=True)
+    prnt = arg_val('prnt', args, kwargs, dflt=True)
     title = kvarg_val('title', kwargs, dflt="")
     footer = kvarg_val('footer', kwargs, dflt="")
-    figlet = bool_val('figlet', args, kwargs, dflt=False)
+    figlet = arg_val('figlet', args, kwargs, dflt=False)
     # """--== Convert ==--"""
     if "\n" in content:
         content = content.split('\n')
@@ -3186,9 +3096,9 @@ def askYN(msg="Continue", *args, dflt="y", auto=False, **kwargs):
         if args[0] in ["n", "N", "Y", "y"]:
             dflt = args[0]
     color = kvarg_val(['color', 'clr'], kwargs, kwargs, dflt="")
-    center_b = bool_val(['center', 'centered'], args, kwargs, dflt=False)
-    shadow_b = bool_val(['shadow', 'shadowed'], args, kwargs, dflt=False)
-    boxed_b = bool_val(['box', 'boxed'], args, kwargs, dflt=False)
+    center_b = arg_val(['center', 'centered'], args, kwargs, dflt=False)
+    shadow_b = arg_val(['shadow', 'shadowed'], args, kwargs, dflt=False)
+    boxed_b = arg_val(['box', 'boxed'], args, kwargs, dflt=False)
     # dbug(center)
     auto = True if 'auto' in args else auto
     # dbug(auto)
@@ -3200,8 +3110,11 @@ def askYN(msg="Continue", *args, dflt="y", auto=False, **kwargs):
     # """--== Init ==--"""
     shift = int(shift)
     # """--== Validate ==--"""
+    if isnumber(timeout):
+        timeout = int(timeout)
     if not isinstance(timeout, int):
         timeout = 0
+    # dbug(timeout)
     # """--== Process ==--"""
     # dbug(repr(msg))
     # dbug(RESET)
@@ -3223,10 +3136,10 @@ def askYN(msg="Continue", *args, dflt="y", auto=False, **kwargs):
             # dbug(prompt)
             if boxed_b:
                 printit(prompt, 'centered', 'boxed')
-                ans = cinput(dflt_msg + " -> ", shift=-shift)
+                ans = cinput(dflt_msg + " -> ", shift=-shift, timeout=timeout)
             else:
                 # dbug(repr(prompt))
-                ans = cinput(prompt)
+                ans = cinput(prompt, timeout=timeout)
     else:
         # dbug(msg)
         if auto:
@@ -3235,11 +3148,8 @@ def askYN(msg="Continue", *args, dflt="y", auto=False, **kwargs):
         else:
             # ddbug(f"timeout: {timeout}", 'ask')
             if timeout > 0:
-                from threading import Timer
-                t = Timer(timeout, print, ['Sorry, time is up... '])
-                t.start()
-                ans = input(msg + dflt_msg)
-                t.cancel()
+                ans = cinput(msg + dflt_msg, timeout=timeout, centered=False)
+                # t.cancel()
             else:
                 if isinstance(msg, list):
                     msg = "".join(msg)
@@ -3248,12 +3158,13 @@ def askYN(msg="Continue", *args, dflt="y", auto=False, **kwargs):
                 # dbug(RESET)
                 prompt = RESET + msg + dflt_msg
                 # dbug(prompt)
+                # dbug(timeout)
                 if boxed_b:
                     # dbug(prompt)
-                    ans = input(boxed(prompt))
+                    ans = cinput(boxed(prompt), centered=False, timeout=timeout)
                 else:
                     # dbug(prompt)
-                    ans = input(prompt)
+                    ans = cinput(prompt, centered=False, timeout=timeout)
     if ans.upper() == "":
         ans = dflt
     if msg != "":
@@ -3344,28 +3255,28 @@ def cat_file(fname, *args, prnt=False, lst=False, **kwargs):
     # dbug(args)
     # dbug(kwargs)
     # """--== Config ==--"""
-    csv_b = bool_val(['csv', 'csv_file', 'csvfile'], args, kwargs, dflt=False)
-    dat_b = bool_val(['dat', 'datfile', 'dat_file'], args, kwargs, dflt=False)
-    lst_b = bool_val(['lst', 'list', 'lol'], args, kwargs, dflt=lst)
-    xlsx = bool_val('xlsx', args, kwargs, dflt=False)
-    prnt = bool_val('prnt', args, kwargs, dflt=prnt)
-    boxed_b = bool_val(['box', 'boxed', 'bx', 'bxd'], args, kwargs, dflt=False)
-    centered_b = bool_val(['centered', 'center', 'cntr'], args, kwargs, dflt=False)
+    csv_b = arg_val(['csv', 'csv_file', 'csvfile'], args, kwargs, dflt=False)
+    dat_b = arg_val(['dat', 'datfile', 'dat_file'], args, kwargs, dflt=False)
+    lst_b = arg_val(['lst', 'list', 'lol'], args, kwargs, dflt=lst)
+    xlsx = arg_val('xlsx', args, kwargs, dflt=False)
+    prnt = arg_val('prnt', args, kwargs, dflt=prnt)
+    boxed_b = arg_val(['box', 'boxed', 'bx', 'bxd'], args, kwargs, dflt=False)
+    centered_b = arg_val(['centered', 'center', 'cntr'], args, kwargs, dflt=False)
     # dbug(f"prnt: {prnt} boxed_b: {boxed_b} cemtered_b: {centered_b}")
     title = kvarg_val("title", kwargs, dflt="")
     footer = kvarg_val("footer", kwargs, dflt="")
-    # hdr_b = bool_val('hdr', args, kwargs, dflt=False)
+    # hdr_b = arg_val('hdr', args, kwargs, dflt=False)
     # dbug(hdr_b)
-    df_b = bool_val('df', args, kwargs, dflt=False)  # rtrn as df?
+    df_b = arg_val('df', args, kwargs, dflt=False)  # rtrn as df?
     # dbug(df_b)
     rtrn = kvarg_val('rtrn', kwargs, dflt='')  # rtrn value is  df or str  same as above, just another way to do it
-    purify_b = bool_val(['purify', 'decomment', 'pure', 'uncomment'], args, kwargs, dflt=False)  # 20240123 changed to False
+    purify_b = arg_val(['purify', 'decomment', 'pure', 'uncomment'], args, kwargs, dflt=False)  # 20240123 changed to False
     # dbug(purify_b)
-    # nums_b = bool_val(["nums", "numbers", 'num', 'number'], args, kwargs, dflt=False)
+    # nums_b = arg_val(["nums", "numbers", 'num', 'number'], args, kwargs, dflt=False)
     # delimiter = kvarg_val(["delim", "delimiter"], kwargs, dflt=",")
-    index_b = bool_val(["index", "indexes", "idx", "indx"], args, kwargs, dflt=False)
-    blanks = bool_val(["blank", "blanks"], args, kwargs, dflt=True)
-    raw_b = bool_val(['raw'], args, kwargs, dflt=False)
+    index_b = arg_val(["index", "indexes", "idx", "indx"], args, kwargs, dflt=False)
+    blanks = arg_val(["blank", "blanks"], args, kwargs, dflt=True)
+    raw_b = arg_val(['raw'], args, kwargs, dflt=False)
     ask_b = arg_val(['ask'], args, kwargs, dflt=False)  # this used for remote file xfer
     # dbug(raw_b)
     """--== Init ==--"""
@@ -3454,11 +3365,6 @@ def cat_file(fname, *args, prnt=False, lst=False, **kwargs):
             df = pd.DataFrame(my_rows)
             if index_b:
                 df = df.reset_index()
-                # dbug(df.head())
-                # dbug(df.index.name)
-            # dbug(f"Returning df: {df[:2]}")
-            # df.columns = df.iloc[0]
-            # df = df[1:]
             df = df.rename(columns=df.iloc[0]).drop(df.index[0])
             df = df.set_index(list(df)[0])
             # dbug(f"Returning df: {df[:2]}", 'ask')
@@ -3471,11 +3377,6 @@ def cat_file(fname, *args, prnt=False, lst=False, **kwargs):
                 if dat_b:
                     rows_lol = [[n] + row for n, row in enumerate(my_rows, start=0)]
                     rows_lol[0][0] = 'id'
-                    # row1_l.insert(0, 'id')
-                    # dbug(new_lol)
-                    # # rows_lol = [[n] + row for n, row in enumerate(rows_lol[1:], start=1)]
-                    # new_lol.extend([[n] + row for n, row in enumerate(rows_lol, start=1)])
-                    # rows_lol = new_lol
                     rows = rows_lol
                 else:
                     rows_lol = [[n] + row for n, row in enumerate(rows_lol, start=1)]
@@ -3580,14 +3481,14 @@ def purify(content, *args, **kwargs):
     """--== SEP_LINE ==--"""
     # DONE make this simply purify() and accept, filename, lines: list, or line: str for "purifying" (decommenting)
     # """--== Config ==--"""
-    dat_b = bool_val(["dat", "dat_file", "datfile"], args, kwargs, dflt=False)
-    purify_b = bool_val(["purify", "purify_b", "decomment"], args, kwargs, dflt=True)  # this might seem strange but there is an occasion
-                                                                                       # where I need this to NOT strip comments (except first line of a '.dat' file)
-                                                                                       # This is not defined int the function doc above because it is probably never needed
+    dat_b = arg_val(["dat", "dat_file", "datfile"], args, kwargs, dflt=False)
+    purify_b = arg_val(["purify", "purify_b", "decomment"], args, kwargs, dflt=True)  # this might seem strange but there is an occasion
+    # where I need this to NOT strip comments (except first line of a '.dat' file)
+    # This is not defined int the function doc above because it is probably never needed
     # this dat_b option is primarily for me (the author) - I have legacy ".dat" files that have a commented first line which has column names for a csv type file
     # this dat_b option will preserve that first line but decomment it - it is not listed above because it simply for me
-    partials_b = bool_val(["partial", "partials", "truncate"], args, kwargs, dflt=True)
-    blanks = bool_val(["blanks", "blanks"], args, kwargs, opposite=["noblank", "noblanks", "no_blanks", "no_blank"], dflt=False)
+    partials_b = arg_val(["partial", "partials", "truncate"], args, kwargs, dflt=True)
+    blanks = arg_val(["blanks", "blanks"], args, kwargs, opposite=["noblank", "noblanks", "no_blanks", "no_blank"], dflt=False)
     # dbug(blanks)
     """--== function(s) ==--"""
     def purify_line(line):
@@ -3641,10 +3542,6 @@ def purify(content, *args, **kwargs):
                         continue
                     # dbug(f"Adding purified_line: {purified_line}")
                     purified_lines.append(purified_line)
-                # else:
-                #     if "\n" in content:
-                #         content = content.split("\n")
-                #     dbug(content[:3], 'ask')
         else:
             # assuming this is a simple string or a single line
             # dbug(line)
@@ -3789,7 +3686,7 @@ def pivot(data, *args, **kwargs):
         - name id gpivoty to avoid conflicts with pandas pivot
     """
     """--== Config ==--"""
-    hdr_b = bool_val(["hdr", "header", "colnames", "hdr_b"], args, kwargs, dflt=False)
+    hdr_b = arg_val(["hdr", "header", "colnames", "hdr_b"], args, kwargs, dflt=False)
     dtype = data_type(data)
     # dbug(dtype)
     """--== Convert ==--"""
@@ -3851,35 +3748,42 @@ def kvcols(data_d={}, cols=2, *args, **kwargs):
     # from math import ceil
     """--== Config ==--"""
     cols = kvarg_val(['cols', 'columns'], kwargs, dflt=cols)
-    prnt = bool_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
-    centered_b = bool_val(['cntrd', 'cntr', 'center', 'centered'], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
+    centered_b = arg_val(['cntrd', 'cntr', 'center', 'centered'], args, kwargs, dflt=False)
     title = kvarg_val(['title'], kwargs, dflt="")
     mstr_title = kvarg_val(['mstr_title'], kwargs, dflt="")
     footer = kvarg_val(['footer', 'foot'], kwargs, dflt="")
     mstr_footer = kvarg_val(['mstr_footer', 'mstr_foot'], kwargs, dflt="")
-    boxed_b = bool_val(["boxed", "box"], args, kwargs, dflt=False)
-    pivot_b = bool_val(["pivot", "transform"], args, kwargs, dflt=True)
+    boxed_b = arg_val(["boxed", "box"], args, kwargs, dflt=False)
+    pivot_b = arg_val(["pivot", "transform"], args, kwargs, dflt=True)
     box_clr = kvarg_val(['box_color', 'box_clr', '_bx_clr'], kwargs, dflt="")
     mstr_box_clr = kvarg_val(['master_box_color', 'mstr_box_clr', 'mstr_bx_clr', 'mstr_box_color'], kwargs, dflt="")
     col_limit = kvarg_val(["col_limit", 'col_max'], kwargs, dflt=99)  # arbitrary but can't be 0
-    human = bool_val(["human", "H", "h"], args, kwargs, dfault=False)
-    rnd = bool_val(["rnd", "round"], args, kwargs, dfault=False)
-    neg = bool_val('neg', args, kwargs, dflt=False)  # if a list is supplied here the syntax is [colname, colname, colanme...]
+    # dbug(f"col_limit: {col_limit} {called_from('verbose')}")
+    human = arg_val(["human", "H", "h"], args, kwargs, dfault=False)
+    rnd = arg_val(["rnd", "round"], args, kwargs, dfault=False)
+    neg = arg_val('neg', args, kwargs, dflt=False)  # if a list is supplied here the syntax is [colname, colname, colanme...]
     colnames = kvarg_val(['colnames'], kwargs, dflt=['Key', 'Value'])
     """--== Convert ==--"""
     dtype = data_type(data_d)
     # dbug(dtype)
-    data_lol = cnvrt(data_d, human=human, rnd=rnd, neg=neg, pivot=pivot_b, col_limit=col_limit, colnames=colnames)
-    # dbug(data_lol)
     """--== Validation ==--"""
     if dtype in ("doD"):
         dbug("This is a dictionary of different sized dictionaries... returning")
         return
+    if dtype in ('dov'):
+        # dbug("Test to make sure no key is empty")
+        if any(key == '' for key in data_d):
+            dbug(f"At least one key in data_d: {data_d} appears empty... returning....")
+            return 
     if not isnumber(cols):
         dbug(f"The second argument cols: {cols} must be an integer... caled_from: {called_from()}")
         return
     cols = int(cols)
     """--== Init ==--"""
+    data_lol = cnvrt(data_d, human=human, rnd=rnd, neg=neg, pivot=pivot_b, col_limit=col_limit, colnames=colnames)
+    # dbug(dtype)
+    # dbug(data_lol)
     # place holder
     """--== Process ==--"""
     # dbug(colnames)
@@ -3991,7 +3895,7 @@ def key_swap(orig_key, new_key, d):
 
 
 # ########################################################
-def gcolumnize(msg_l, *args, **kwargs):
+def gcolumnize(msg_l="", *args, **kwargs):
     # ####################################################
     """
     purpose: This will columnize (vertically) a list or a list of blocks or strings
@@ -4000,7 +3904,7 @@ def gcolumnize(msg_l, *args, **kwargs):
         - width|length=0: int              # max width or use cols below
         - cols: int                        # number of desired columns
         - sep|sep_chrs|sepchrs=' | ': str  # string or character to use between columns eg: sep=f" {chr(9475)} "
-                                           # if sep='solid' then sep = f" {chr(9475} "
+                                           # if sep='solid' then sep = f" {chr(9475} " box_color will be used for the color of this separation chr
         - prnt|print|show = False: bool
         - boxed: bool                      # box the output
         - box_color: str                   # color to use for box border
@@ -4060,35 +3964,37 @@ def gcolumnize(msg_l, *args, **kwargs):
     Three potato
     """
     """--== Debugging ==--"""
-    # dbug(f"{funcname()} called_from:{called_from()}" )
+    # dbug(called_from())
     # dbug(msg_l)
     # dbug(args)
     # dbug(kwargs)
     # for box in msg_l:
     #     printit(box)
-    if msg_l in ('tst', 'test'):
-        import gtoolz_tsts
-        gtoolz_tsts.gcolumnize_tst()
-        return
+    # if msg_l in ('tst', 'test', 'demo'):
+    #     import gtoolz_tsts
+    #     gtoolz_tsts.gcolumnize_tst()
+    #     return
     """--== Config ==--"""
     pad = kvarg_val(["pad", "fill"], kwargs, dflt=" ")
     sep_chrs = kvarg_val(['sep', 'sepchr', 'sepchrs', 'sep_chr', 'sep_chrs'], kwargs, dflt=" ")
     # dbug(sep_chrs)
     # cntr_cols = kvarg_val(["cntr_cols", "center_cols", "cols_cntr", "cols_center"], kwargs, dflt=[])
     # my_lol = msg_l
-    prnt = bool_val(['prnt', 'print', 'show'], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print', 'show'], args, kwargs, dflt=False)
     # dbug(prnt)
-    boxed_b = bool_val(['boxed', 'box', 'boxed_b'], args, kwargs, dflt=False)
+    boxed_b = arg_val(['boxed', 'box', 'boxed_b'], args, kwargs, dflt=False)
+    # dbug(boxed_b)
     # dbug(boxed_b)
     # boxed = boxed_b
     # dbug(boxed)
-    box_color = kvarg_val(['box_color', 'box_clr', 'border_color', 'border_style', 'bxclr'], kwargs, dflt="")  # white! on grey(50)?
+    box_color = kvarg_val(['box_color', 'box_clr', 'border_color', 'border_style', 'bxclr', 'boxclr'], kwargs, dflt="")  # white! on grey(50)?
+    # dbug(box_color)
     color = kvarg_val(["color", "clr", "txt_clr"], kwargs, dflt="")                                   # white! ?
-    centered_b = bool_val(['center', 'centered', 'cntr', 'cntrd'], args, kwargs, dflt=False)
+    centered_b = arg_val(['center', 'centered', 'cntr', 'cntrd'], args, kwargs, dflt=False)
     # dbug(centered_b)
     title = kvarg_val(['title'], kwargs, dflt="")
     footer = kvarg_val(['footer'], kwargs, dflt="")
-    # aligned = bool_val(["cols", 'aligned', "evencols"], args, kwargs, dflt=False)
+    # aligned = arg_val(["cols", 'aligned', "evencols"], args, kwargs, dflt=False)
     width = kvarg_val(["width", "length"], kwargs, dflt=0)
     # dbug(width)
     cols = kvarg_val(["cols", "size"], kwargs, dflt=0)  # TODO this is WIP and is only used now to stack blocks of lines when it equals 1
@@ -4097,20 +4003,38 @@ def gcolumnize(msg_l, *args, **kwargs):
     # positions = kvarg_val(["positions"], kwargs, dflt=[])
     # dbug(my_lol, 'ask')
     # dbug(color)
+    test_b = arg_val(['test'], args, kwargs, dflt=False)
     """--== Validate ==--"""
+    if test_b:
+        from gtoolz_tsts import gcolumnize_tst
+        gcolumnize_tst()
     if isempty(msg_l):
         dbug(f"msg_l: {msg_l} appears to be empty... {called_from()}... returning...")
         return
     """--== Init ==--"""
+    msg_l_dtype = data_type(msg_l)
+    # dbug(f"msg_l_dtype: {msg_l_dtype} called_from: {called_from()} len(msg_l): {len(msg_l)} cols: {cols} {called_from()}")
     COLOR = gclr(color)
     scr_col_len = get_columns()  # get the number of columns on the terminal screen
     lines = []
-    if sep_chrs.lower() == "solid":
-        sep_chrs = f" {chr(9475)} "
+    if sep_chrs.lower() ==  "solid":
+        # dbug(box_color)
+        sep_chrs = f"{sub_color(box_color)} {chr(9475)} {RESET} "
+        # dbug(repr(sep_chrs))
     sep_chrs = COLOR + sep_chrs
     """--== Convert ==--"""
-    msg_l_dtype = data_type(msg_l)
-    # dbug(f"msg_l_dtype: {msg_l_dtype} called_from: {called_from()}")
+    if msg_l_dtype in ("lom"):
+        # dbug("Lets deal with the possibility that one or more elems is not a block of lines")
+        new_msg_l = []
+        for msg in msg_l:
+            if isinstance(msg, str):
+                msg = gblock(msg)  # this works but might be overkill
+                msg = [msg]
+            new_msg_l.append(msg)
+        if data_type(new_msg_l, ('lob')):
+            msg_l = new_msg_l
+            msg_l_dtype = 'lob'
+            # dbug("we did it")
     if str(width).endswith("%"):
         amnt = width.rstrip("%")
         pamnt = int(amnt)/100
@@ -4131,63 +4055,36 @@ def gcolumnize(msg_l, *args, **kwargs):
             # rows = []
             # row = []
             # """--== SEP_LINE ==--"""
+            # dbug(msg_l, 'lst')
             msg_l = chunkit(msg_l, cols, 'full')
+            # dbug(msg_l, 'lst')
+            new_rows = []
+            for row in msg_l:
+                new_row = gcolumnize(row, 'prnt')
+                new_rows += new_row
+            # printit(new_rows, prnt=prnt, title="debugging", footer=dbug('here'))
+            return new_rows 
+            # dbug('ask')
     # dbug(cols)
     # """--== EOB if all([islos(elem) for elem in msg_l]): ==--"""
     # if not islol(my_lol):
     # if not islol(msg_l):
     # dtype = data_type(msg_l)
     # dbug(dtype)
-    if  msg_l_dtype not in ('lol', 'lob'):  # do not add 'los' here!
-        # dbug(f"Simple list cols: {cols}")
+    if  msg_l_dtype not in ('lol', 'lob', 'lom'):  # do not add 'los' here!
+        # dbug(f"Simple list cols: {cols} msg_l_dtype: {msg_l_dtype} len(msg_l: {len(msg_l)}", 'ask')
         # dbug("calling columned()")
         if isempty(msg_l):
             dbug(f"msg_l: {msg_l} {called_from()}")
         lines = columned(msg_l, width=width, cols=cols, box_color=box_color, color=color, centered=centered_b, sep=sep_chrs)
         if not isempty(lines):
             printit(lines, prnt=prnt, boxed=boxed_b, centered=centered_b, box_color=box_color, color=color, title=title, footer=footer)
-        # dbug("Returning lines")
-        # dbug(f"Returning lines: {lines}")
+            # dbug(f"Returning lines[:3]: {lines[:3]}")
         return lines
-    # """--== is this an lol of an lol ie: rows of boxes of lines ==--"""
-    # dbug("This may be a list of lists of lists... ie: rows of boxes of lines so let's test for it")
-    # islolol = True
-    # for item in msg_l:
-    #     # if not islol(item):
-    #     # this_dtype = data_type(item)
-    #     # dbug(this_dtype)
-    #     if not data_type(item, ('lol', 'los')):
-    #         # dbug(this_dtype)
-    #         # printit(item)
-    #         # dbug('ask')
-    #         islolol = False
-    # dbug(islolol)
-    # if dtype == 'lob':
-    #     islolol = True
-    # dbug("it is probably a list of a list of boxes which we determine to be a list of rows containing boxes - not a single row of boxes (see below)")
-    # rows_cols_of_boxes = False
-    # # dbug(rows_cols_of_boxes)
-    # nlvl = nestlvl(msg_l)
-    # dbug(nlvl)
-    # if nlvl == 3:
-    #     lines = []
-    #     for row in msg_l:
-    #         gb_row = gblock(gcolumnize(row))
-    #         for lnum, line in enumerate(gb_row):
-    #             lines.append(line)
-    #             # dbug(f"lnum: {lnum} line nclen: {nclen(line)}")
-    #     # dbug(lines)
-    #     # dbug("Returning lines")
-    #     return lines
-    # else:
-    #     dbug('ask')
     # """--== SEP_LINE ==--"""
-    # dbug(f"is this a list of rows of boxes ie a list of lob --- an lolob")
-    # for item in msg_l:
-    #     if data_type(item, 'lob'):
-    #         dbug(f"data_type: {data_type(item)}") 
     if all([data_type(item, 'lob') for item in msg_l]):
         # dbug("this is probabaly a list of rows with boxes in each row - ie lolob")
+        msg_l = [row for row in msg_l if not isempty(row)]  # first attempt to clean out empty rows
         lines = []
         max_width = 0
         row_line_sets = []
@@ -4195,6 +4092,11 @@ def gcolumnize(msg_l, *args, **kwargs):
             # dbug("processing row")
             # dbug(row, 'lst')
             # printit(row[0])
+            row_dtype = data_type(row)
+            # dbug(row_dtype)
+            if row_dtype in ("empty"):  # second test for an empty row. eg: ['']
+               continue
+            # dbug(len(row))
             row_lines = gcolumnize(row)
             # dbug(row_lines, 'lst')
             # printit(row_lines)
@@ -4209,7 +4111,7 @@ def gcolumnize(msg_l, *args, **kwargs):
             # this centers the row_lines (row of boxes) into the largest row length (max_width)
             # dbug("calling gblock()")
             lines += gblock(row_lines, length=max_width, position=5)
-            dbug(len(lines))
+            # dbug(len(lines))
         # return
     # if islolol:
     if msg_l_dtype in ('lob'):
@@ -4229,6 +4131,8 @@ def gcolumnize(msg_l, *args, **kwargs):
         for line_no in range(max_height):
             new_line = ""
             for box_num, box in enumerate(msg_l):
+                box_dtype = data_type(box)
+                # dbug(box_dtype)
                 # dbug(type(box))
                 # dbug(box[line_no])
                 # dbug(f"line_no: {line_no} len(box): {len(box)}")
@@ -4239,11 +4143,22 @@ def gcolumnize(msg_l, *args, **kwargs):
                     # dbug("building new_line")
                     new_line += COLOR + pad * col_widths[box_num]
                 else:
-                    new_line += box[line_no]
+                    this_dtype = data_type(box)
+                    # dbug(this_dtype)
+                    if this_dtype in ("lob"):
+                        new_line = box
+                    else:
+                        new_line += box[line_no]
                 # dbug(new_line)
             lines.append(new_line)
+    if msg_l_dtype in ('lom'):
+        for item in msg_l:
+            printit(item)
     if prnt:
+        lines_dtype = data_type(lines)
+        # dbug(f"We are here lines_dtype: {lines_dtype}")
         printit(lines, prnt=prnt, boxed=boxed_b, centered=centered_b, box_color=box_color, color=color, title=title, footer=footer)
+        # dbug('ask')
     # if isempty(lines):
         # dbug(f"lines empty... called_from: {called_from()}")
     # dbug(len(lines))
@@ -4255,21 +4170,50 @@ def gcolumnize(msg_l, *args, **kwargs):
 # gcolumnized = gcolumnize
 
 
-def matrix(rows, cols, *args, **kwargs):
+def mygcol():
+    box1 = boxed("one")
+    box2 = boxed("two")
+    gcolumnize([box1, box2], 'prnt')
+    gcolumnize([box1, box2], 'prnt', cols=2)
+
+# #######################################
+def matrix(rows=None, cols=None, *args, **kwargs):
+    # ##################################
     """
     purpose: initialize a matirx (ie array)
     required: rows/dim1: int, cols/dim2: int
     options:
-        - dflt_val=None: anything  # default "value" to initialize each "cell" to
-    returns: 2 dim initialized array/matrix
-    aka: init_arr | initarray | init_arr
+        - dflt_val: str=None   # default "value" to initialize each "cell" to
+        - rndm: list|tuple     # fill in vals with  random integers between [start_num, end_num]
+        - colnames: list       # this will add yor colnames
+        - colnums: bool        # this will make colmanes = ["col1", "col2", "col3"....]
+    returns: 
+        - 2 dim initialized array/matrix ie a list of lists (lol) or rows of columns
     """
     # """--== Config ==--"""
-    dflt_val = kvarg_val(['dflt', 'dflt_val'], kwargs, dflt=None)
+    dflt_val = arg_val(['dflt', 'dflt_val'], args, kwargs, dflt=None)
+    rndm = arg_val(['rndm', 'random'], args, kwargs, dflt=None)
+    colnames = arg_val(['colnames', 'columns'], args, kwargs, dflt=None)
+    colnums = arg_val(['colnums', 'addcols', "addcolnums"], args, kwargs, dflt=None)
     # """--== SEP_LINE ==--"""
+    my_lol = []
     # row col array
-    rc_arr = [[dflt_val for c in range(cols)] for r in range(rows)]
-    return rc_arr
+    if isinstance(rndm, (list, tuple)):
+        import random
+        start, end = rndm
+        # dbug(f"start: {start} end: {end}")
+        my_lol = [[random.randint(start, end) for _ in range(cols)] for r in range(rows)]
+    else:    
+        my_lol = [[dflt_val for c in range(cols)] for r in range(rows)]
+    if colnums:
+        colnames = ["col" + str(_) for _ in range(1, int(cols) + 1)]
+    if not isempty(colnames):
+        if len(colnames) != int(cols):
+            dbug("Not adding colnames because the number does not eqaul the number of columns...")
+        else:
+            my_lol.insert(0, colnames)
+    return my_lol
+    # ### EOB def matrix(rows, cols, *args, **kwargs): ### #
 
 
 # #################################
@@ -4285,21 +4229,11 @@ def sayit(msg, *args, prnt=True, **kwargs):
     - tone: int                 # 1 - 5  <-- this does not seem to do anything???
     returns: None
     notes:
-    # use espeak --voices to see them all then add +m|f1-?
-    # genders = ["m", "f"]
-    # tonals = ["1", "2", "3", "4", "5"]
-    # for gender in genders:
-    #    for tone in tonals:
-    #        voice =  f"'english-us+{gender}{tone}'"
-    #        engine.setProperty('voice', voice)
-    #        msg = f"The time is {date.today().strftime('%B %d %Y')}. My voice is {voice}"
-    #        print(msg)
-    #        engine.say(msg)
     """
     # """--== Imports ==--"""
     import pyttsx3
     # """--== Config ==--"""
-    prnt = bool_val(["prnt", "print"], args, kwargs)
+    prnt = arg_val(["prnt", "print"], args, kwargs)
     rate = kvarg_val(['rate'], kwargs, dflt=150)
     volume = kvarg_val(['vol', 'volume'], kwargs, dflt=0.8)
     gender = kvarg_val(['gender'], kwargs, dflt="m")
@@ -4310,11 +4244,6 @@ def sayit(msg, *args, prnt=True, **kwargs):
     engine.setProperty('volume', volume)
     engine.setProperty('voice', f'english-us+{gender}{tone}')
     # """--== Debugging ==--"""
-    # voices = engine.getProperty('voices')
-    # for n, voice in enumerate(voices):
-    #     dbug(msg + f"index-> {n} voice name is: {voice.name}")
-    #     if 'rench' in voice.name:
-    #         engine.setProperty('voice', voices[28].id)
     # """--== Process ==--"""
     engine.say(msg)
     engine.runAndWait()
@@ -4357,28 +4286,27 @@ def printit(msg, *args, **kwargs):
         width: int  # forces msg to fit in this width using text wrap
         rtrn_type: "list" | "str"  # default is list
         function is pretty extensive...
-        color coding: activates decoding using color tag(s)
-            eg msg = "my  message[blink red on black]whatever goes here[/]. The end or close tag will reset color")
+        no_blanks: bool    # removes any blank lines
+    notes:
+        - This function will decode color "tags"
+           eg msg = "my  message[blink red on black]whatever goes here[/]. The end or close tag will reset color")
     returns: msgs  # list [default] or str depending on rtrn_type
     """
     # """--== Debugging ==--"""
-    # ddbug(f"{funcname()} {called_from()}")
-    if isempty(msg):
-        ddbug(f"msg: {msg} {called_from()}")
-        # ddbug(type(msg))
+    # ddbug(f"{funcname()} {called_from('verbose')}")
     # ddbug(f"args: {args}")
     # ddbug(f"kwargs: {kwargs}")
     # """--== Config ==--"""
-    centered_b = bool_val(['centered', 'center'], args, kwargs, dflt=False)
+    centered_b = arg_val(['centered', 'center'], args, kwargs, dflt=False)
     # ddbug(f"centered_b: {centered_b}")
     txt_center = kvarg_val(['text_center', 'txt_center', 'txt_centered', 'txt_cntr', 'txt_cntrd', 'lines_centered', 'center_txt', 'cntr_txt'], kwargs, dflt=0)
     txt_right = kvarg_val(['txt_right'], kwargs, dflt=0)
     # ddbug(f"txt_center: {txt_center}")
     # if not isinstance(mycentered, bool):
     #     txt_center = mycentered
-    prnt = bool_val('prnt', args, kwargs, dflt=True, opposites=['noprnt', 'no_prnt', 'no_print'])
+    prnt = arg_val('prnt', args, kwargs, dflt=True, opposites=['noprnt', 'no_prnt', 'no_print'])
     # ddbug(f"prnt: {prnt} {called_from()}")
-    boxed_b = bool_val(['box', 'boxed'], args, kwargs, dflt=False)
+    boxed_b = arg_val(['box', 'boxed'], args, kwargs, dflt=False)
     # dbug(boxed_b)
     box_color = kvarg_val(['box_color', 'box_clr', 'border_color', 'border_style', 'bx_clr', 'bxclr'], kwargs, dflt="")
     # ddbug(f"box_color: {box_color}")
@@ -4386,23 +4314,24 @@ def printit(msg, *args, **kwargs):
     footer = kvarg_val(['footer'], kwargs, dflt="")
     color = kvarg_val(['color', 'txt_color', 'text_style'], kwargs, dflt="")
     # dbug(color)
-    # color_coded = bool_val(['clr_coded', 'colorized', 'color_coded', 'colored', 'coded'], args, kwargs, dflt=False)
-    shadow = bool_val(['shadow', 'shadowed'], args, kwargs, dflt=False)
+    # color_coded = arg_val(['clr_coded', 'colorized', 'color_coded', 'colored', 'coded'], args, kwargs, dflt=False)
+    shadow = arg_val(['shadow', 'shadowed'], args, kwargs, dflt=False)
     style = kvarg_val(['style', 'box_style'], kwargs, dflt="round")
     width = kvarg_val(['width', 'length'], kwargs, dflt=0)
     # ddbug(f"width: {width}")
-    columnize = bool_val(['columnize', 'columns'], args, kwargs, dflt=False)
+    columnize = arg_val(['columnize', 'columns'], args, kwargs, dflt=False)
     pad = kvarg_val(['pad'], kwargs, dflt=" ")
     shift = kvarg_val('shift', kwargs, dflt=0)
     # dbug(shift)
     rtrn_type = kvarg_val(['rtrn_type', 'rtrn'], kwargs, dflt='list')
-    str_b = bool_val(["str", "string"], args, kwargs, dflt=False)
+    str_b = arg_val(["str", "string"], args, kwargs, dflt=False)
     if str_b:
         rtrn_type = "str"
     # end = kvarg_val('end', kwargs, dflt="\n")
+    noblanks_b = arg_val(['noblank', 'noblanks','skipblanks', 'no_blanks', 'skip_blanks'], args, kwargs, dflt=False)
     # """--== Validate ==--"""
     if isempty(msg):
-        dbug(f"Nothing to print msg: {msg} {called_from()}")
+        dbug(f"Nothing to print msg: {msg} {called_from('verbose')}")
         return
     if not isinstance(columnize, bool):
         columnize = False
@@ -4437,20 +4366,12 @@ def printit(msg, *args, **kwargs):
             # dbug(msg)
             # dbug("Splitting up msg on \n")
             msgs = msg.split("\n")
-            # dbug(len(msgs))
-            # dbug(msgs, 'ask')
-            # mymsgs = msg.splitlines()
-            # dbug(mymsgs, 'ask')
         else:
             # dbug(msg)
             msgs = [msg]
         # ddbug(f"columnize: {columnize}")
         # ddbug(f"width: {width}", 'ask')
         if not columnize and width > 0:
-            # dbug(msgs)
-            # msgs = wrapit(msgs, width-2)
-            # ddbug(msgs)
-            # dbug(width)
             msgs = gwrap(msgs, width-2)
             # ddbug(msgs)
         # dbug(msgs)
@@ -4462,6 +4383,9 @@ def printit(msg, *args, **kwargs):
     if not isinstance(msgs, list):
         dbug(f"Failed to convert msg to list ...: type(msg): {type(msg)}... returning")
         return
+    if noblanks_b:
+        msgs = [msg for msg in msgs if not isempty(msg)]
+        # dbug(msgs)
     # """--== Process ==--"""
     # ddbug(f"repr(msgs): {repr(msgs)}")
     color_coded = False  # init color_coded before test
@@ -4501,6 +4425,9 @@ def printit(msg, *args, **kwargs):
         msgs = shadowed(msgs)
     # ddbug(f"{RESET}msgs: {msgs}")
     if centered_b:
+        if isempty(msgs):
+            dbug(f"msgs: {msgs} appears to be empty... {called_from()} returning....")
+            return
         msgs = centered(msgs, shift=shift, width=width)
         # dbug(repr(msgs))
     # dbug(prnt)
@@ -4542,10 +4469,10 @@ def clr_coded(msg_s, *args, **kwargs):
     # ddbug(f"msg_s: {msg_s}")
     # ddbug(f"args: {args}")
     """--== Config ==--"""
-    prnt = bool_val(['debug', 'dbug', 'verbose', 'prnt', 'show'], args, kwargs, dlft=False)
-    test_b = arg_val(['tst', 'test'], args, kwargs, dflt=False)
+    prnt = arg_val(['debug', 'dbug', 'verbose', 'prnt', 'show'], args, kwargs, dlft=False)
+    test_b = arg_val(['tst', 'test'], [], kwargs, dflt=False)  # forces needing test=True to invoke this
     """--== untested ==--"""
-    if test_b or msg_s in ('tst', 'test'):
+    if test_b:
         import gtoolz_tsts
         gtoolz_tsts.clr_coded_tst()
         return
@@ -4554,14 +4481,14 @@ def clr_coded(msg_s, *args, **kwargs):
         new_l = [clr_coded(line) for line in msg_s]
         return new_l
     # """--== Init ==--"""
-    msg_s = msg_s.replace(r"[/]", RESET)
+    msg_s = str(msg_s).replace(r"[/]", RESET)
     colors = ['red', 'red!', 'black', 'black!', 'white', 'white!', 'grey', 'gray', 'cyan', 'cyan!',
               'magenta','magenta!', 'green','green!', 'blue', 'blue!', 'yellow', 'yellow!', 'brown', 'purple']
     # find anything that starts with \[ followed by any char that is not \[ upto \] grab substring group() between \[ and \]
     pattern   = r'\[([ a-zA-Z!\(\0-9)]*)?\]'  # [(specific chars) ]
     """--== Process ==--"""
     res = re.findall(pattern, msg_s)
-    # ddbug(f"res: {res}")  # this shoul be a list of what we want to test for colors
+    # ddbug(f"res: {res}")  # this should be a list of what we want to test for colors
     colors_set = set(colors)
     for color in res:
         # test for colors
@@ -4724,7 +4651,7 @@ def gclr(color='normal', text="", **kwargs):
                         FG_CODE = FG_CODE.lstrip(';')
                     except Exception as Error:
                         # sometimes the code submitted is really wrong so just return - especially trying to parse out color coded msgs
-                        dbug(f"Error: {Error} returning... fg_color: {fg_color} failed...")
+                        dbug(f"Error: {Error} returning... repr(fg_color): {repr(fg_color)} failed {called_from('verbose')}...")
                         return
     # ddbug(f"repr(FG_CODE): {repr(FG_CODE)}")
     # ddbug(f"Test fg_color: [{fg_color}] {RESET}{FG_CODE}This should be in assigned fg_color {RESET}Here is the repr(FG_CODE): {repr(FG_CODE)}")
@@ -4786,11 +4713,6 @@ def gclr(color='normal', text="", **kwargs):
     # ### EOB def gclr(color='normal', text=""): ### #
 
 
-def gclr_qnd(*args, **kwargs):
-    printit("[flash red]whatever[/]")
-    return
-
-
 # ########################
 def shades(color='white', num=16, *args, **kwargs):
     # ####################
@@ -4817,7 +4739,7 @@ def shades(color='white', num=16, *args, **kwargs):
     start  = 40
     step = (255 - start) // num
     colors = []
-    shades = []
+    # shades = []
     for shade in range(start, 255, step):
         if fg_color.lower() == 'red':
             my_color = f'rgb({shade}, 0, 0)'
@@ -4845,10 +4767,6 @@ def shades(color='white', num=16, *args, **kwargs):
             my_color += " on " + bg_color
         # dbug(f"appending my_color: {repr(my_color)}")
         colors.append(my_color)
-        # shades.append(my_color)
-    # dbug(f"{repr(colors)}")
-    # for clr in colors:
-    #     printit(f"This is the {gclr(clr)} clr: {clr}")
     # dbug(colors)
     return colors
     # ### EOB def shades(color, num=16): ### #
@@ -4869,7 +4787,7 @@ def rgb(r=80, g=80, b=140, text="", fg=False, bg=False, prfx=False, reset=False,
     """--== Debugging ==--"""
     # ddbug(f"funcname: {funcname()}")
     """--== Config ==--"""
-    raw_b = bool_val(['raw'], args, kwargs, dflt=False)
+    raw_b = arg_val(['raw'], args, kwargs, dflt=False)
     """--== Process ==--"""
     # ddbug(f"r: {r} g: {g} b: {b}")
     # PRFX = "\033["
@@ -4933,17 +4851,13 @@ def xlate_clr(color, *args, **kwargs):
     # """--== Debugging ==--"""
     # dbug(color)
     # """--== Config ==--"""
-    rgb_b = bool_val(["all", "rgb"], args, kwargs, dflt=False)
+    rgb_b = arg_val(["all", "rgb"], args, kwargs, dflt=False)
     # --== Xlate special colors to rgb() ==--
     grey_tone = re.search(r"(gr[ea]y)(\d+)", color)
     # dbug(grey_tone)
     if grey_tone:
         grey_word = grey_tone[1]
         grey_tone = grey_tone.group(2)
-        # ddbug(f"grey_word: {grey_word} grey_tone: {grey_tone}")
-        # grey = f"rgb({grey_tone}, {grey_tone}, {grey_tone})"
-        # dbug(f"Found grey in color: {color}")
-        # color = re.sub(r"gr[ea]y(\d+)", grey, color)
         r = g = b = int(grey_tone)
         grey_color = f"rgb({r}, {g}, {b})"
         color = re.sub(f"{grey_word}{grey_tone}", grey_color, color)
@@ -5134,10 +5048,6 @@ def escape_ansi(line, *args, **kvargs):
         # rgx = re.findall(ansi_escape, line)
         # dbug(rgx)
         ncline = ansi_escape.sub("", line)
-        # ncline = ansi_escape2.sub("", ncline)
-    # if ncline == " None":  # debugging
-        # dbug(called_from())
-        # dbug(repr(ncline))
     return ncline
     # ### EOB def escape_ansi(line, *args, **kvargs): ### #
 
@@ -5183,7 +5093,7 @@ def sub_color(clr, *args, **kwargs):
     """
     # dbug(called_from())
     # dbug(f"clr: {clr} repr(clr): {repr(clr)}")
-    rset_b = bool_val(['reset', 'rst', 'rset'], args, kwargs, dflt=False)
+    rset_b = arg_val(['reset', 'rst', 'rset'], args, kwargs, dflt=False)
     PRFX = "\x1b["  # PRFX2 = "\033["
     if isinstance(clr, list):
         # dbug(f"Submitted clr: {clr} should be a string... returning...")
@@ -5232,21 +5142,20 @@ def gwrap(text="", length=60, *args, **kwargs):
     """--== Imports ==--"""
     # from gtoolz import nclen, split_codes, RESET, clr_coded
     """--== Debugging ==--"""
-    # dbug(f"length: {length} {called_from()}")
+    # dbug(f"length: {length} {called_from()}", 'ask')
     # dbug(args)
     # dbug(kwargs)
     """--== Config ==--"""
-    prnt = bool_val("prnt", args, kwargs, dflt=False)  # make this True for debugging
-    boxed_b = bool_val(["box", "boxed"], args, kwargs, dflt=True)
+    prnt = arg_val("prnt", args, kwargs, dflt=False)  # make this True for debugging
+    boxed_b = arg_val(["box", "boxed"], args, kwargs, dflt=True)
     title = arg_val(["title"], args, kwargs, dflt="")
     footer = arg_val(["footer"], args, kwargs, dflt="")
     centered_b = arg_val(["center", "centered", "cntr"], args, kwargs, dflt=False)
     box_color = arg_val(["bxclr", "box_color", "box_clr", "boxclr"], args, kwargs, dflt="")
     text = kvarg_val("text", kwargs, dflt=text)
     """--== Debugging ==--"""
-    # dbug(called_from())
-    # dbug(length)  # default=60
     # dbug(text)
+    # dbug(f"length: {length} {called_from()}", 'ask')
     """--== Validate ==--"""
     if not isinstance(length, int):
         dbug(f"Length (2nd argument) must be an integer length: {length} {called_from()}... returning...")
@@ -5297,14 +5206,20 @@ def gwrap(text="", length=60, *args, **kwargs):
                 # dbug(my_lines[-1])
                 my_last_line = my_lines[-1]
             last_code = ""
+            # dbug(f"nclen(line): {nclen(line)} prev_ws: {prev_ws} last_ws: {last_ws} length: {length} num: {num}")
             if char == " ":
+                # dbug(f"continuing char == space OR num: {num} > length: {length}")
                 last_ws = num
-                # dbug(f"continuing char == space num: {num}")
                 continue
+            # dbug(f"nclen(line): {nclen(line)} prev_ws: {prev_ws} last_ws: {last_ws} length: {length} num: {num}")
             if nclen(line[prev_ws:num]) >= length:
-                # dbug(f"length: {length} line: {line} prev_ws: {prev_ws} char num: {num}")
+                # dbug(f"length: {length} line: {line} prev_ws: {prev_ws} last_ws: {last_ws} char num: {num}", 'ask')
+                if last_ws == 0:
+                    # dbug("No space found but we need to split this line... setting last_ws to length.")
+                    last_ws = length
                 my_text = line[prev_ws:last_ws].strip()
-                if nclen(my_text) > 0:
+                # dbug(f"nclen(my_text): {nclen(my_text)} prev_ws: {prev_ws} last_ws: {last_ws} length: {length}")
+                if nclen(my_text) > 0 or (nclen(my_text) > length and last_code == ""):
                     if len(my_lines) > 0:
                         my_codes = split_codes(my_last_line, 'all')
                         if len(my_codes) > 0:
@@ -5330,84 +5245,6 @@ def gwrap(text="", length=60, *args, **kwargs):
     # ### EOB def gwrap(text="", *args, **kwargs) ### #
 
 
-# ###############################
-def wrapit(sentence, length=20, *args, **kwargs):
-    # ###########################
-    """
-    purpose: turns line(s) into a list of strings with full words less than or equal to length
-    requires:
-        input is sentence which can be a string or list
-        length: int=20
-    options:
-        - color: str=""  # colors the output (consider using gwrap() instead??
-    returns: lines from a list text wrapped using specified length and colorize text if stipulated
-    notes:
-        - NOTE: all color codes will get stripped out text before processing
-        - try using gwrap() which is designed to replace this func
-    """
-    # """--== Debugging ==--"""
-    dbug(f"This will get deprecated in favor of gwrap() {called_from()}")
-    # dbug(f"sentence: [{sentence}] length: {length} nclen(sentence): {nclen(sentence)}")
-    # dbug(length)
-    # dbug(args)
-    # dbug(kwargs)
-    # """--== Config ==--"""
-    length = kvarg_val(["width", "w", "length", "l"], kwargs, dflt=length)
-    color = kvarg_val(["color", "clr"], kwargs, dflt="")
-    """--== testing ==--"""
-    """--== Validation ==--"""
-    if length < 2:
-        dbug(f"length: {length} is a problem")
-        return
-    # """--== Convert ==--"""
-    if isinstance(sentence, str):
-        # dbug("string")
-        if "\n" in sentence:
-            sentence_l = sentence.split("\n")
-        else:
-            sentence_l = [sentence]
-    # dbug(sentence_l)
-    if isinstance(sentence, list):
-        new_lines = []
-        for line in sentence:
-            line = line.rstrip()
-            line = line.rstrip("\n")
-            if "\n" in line:
-                my_lines = line.split("\n")
-                new_lines.extend(my_lines)
-            else:
-                new_lines.append(line)
-        sentence_l = new_lines
-    if isinstance(sentence, dict):
-        sentence = str(sentence)
-    # """--== Process ==--"""
-    # dbug(length)
-    # maxof_sentence = maxof(sentence, 'len')  # debugging
-    # dbug(maxof_sentence)
-    # dbug(type(sentence))
-    # dbug(sentence)
-    sentence = escape_ansi(sentence)
-    RESET = COLOR = ""
-    import textwrap
-    wrapper = textwrap.TextWrapper(width=length)
-    lines = []
-    for line in sentence_l:
-        maxof_line = maxof(line)
-        if maxof_line > length:
-            lines.extend(wrapper.wrap(text=line))
-        else:
-            lines.append(line)
-    if color != "":
-        COLOR = sub_color(color)
-        RESET = sub_color('reset')
-        lines = [f"{COLOR}{line}{RESET}" for line in lines]
-    # maxof_lines = maxof(lines)  # debugging
-    # dbug(maxof_lines)
-    # dbug(lines)
-    return lines
-    # ###  EOB def wrapit(sentence, length=20, color="", *args, **kwargs): ### #
-
-
 def get_columns(*args, **kwargs):
     """
     purpose: gets screen/terminal cols OR rows
@@ -5425,8 +5262,8 @@ def get_columns(*args, **kwargs):
     # dbug(kwargs)
     # """--== Config ==--"""
     shift = kvarg_val("shift", kwargs, dflt=0)
-    rows_b = bool_val("rows", args, kwargs, dflt=False)
-    both_b = bool_val("both", args, kwargs, dflt=False)
+    rows_b = arg_val("rows", args, kwargs, dflt=False)
+    both_b = arg_val("both", args, kwargs, dflt=False)
     # """--== Init ==--"""
     columns = 200
     num_rows = 40
@@ -5495,28 +5332,25 @@ def boxed(msgs="", *args, **kwargs):
     returns boxed lines: list
     NOTES: this function does not print - it returns the box lines
     """
+    """--== Debugging ==--"""
     # dbug(called_from())
     # dbug(msgs)
     # dbug(args)
     # dbug(kwargs)
     # """--== Config ==--"""
-    # center = kvarg_val('center', kwargs, dflt=False)
-    # cornerchr = kvarg_val(['cornerchr'], kwargs, dflt="+")
-    # hchr = kvarg_val(['hchr'], kwargs, dflt="=")
-    # vchr = kvarg_val(['vchr'], kwargs, dflt="|")
     padmin = kvarg_val(['padmin'], kwargs, dflt=1)
     color = kvarg_val(['color'], kwargs, dflt="")
     title = kvarg_val(['title'], kwargs, dflt="")
     footer = kvarg_val(['footer'], kwargs, dflt="")
     style = kvarg_val(['style'], kwargs, dflt="single")
-    centered_b = bool_val(["centered", "center", "cntrd", "cntr"], args, kwargs, dflt=False)
-    prnt = bool_val(['prnt', 'print'], args, kwargs, dflt=False)
-    shadowed_b = bool_val(["shadow", "shadowed"], args, kwargs, dflt=False)
+    centered_b = arg_val(["centered", "center", "cntrd", "cntr"], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print'], args, kwargs, dflt=False)
+    shadowed_b = arg_val(["shadow", "shadowed"], args, kwargs, dflt=False)
     my_txt_center = 0
     txt_center = kvarg_val(["txt_center", "text_center", 'center_txt', 'centered_txt', 'cntr_txt', 'txt_cntr', 'txtcntrd', 'txt_cntrd'], kwargs, dflt=my_txt_center)
     # dbug(txt_center)
-    strip_b = bool_val(['strip'], args, kwargs, dflt=True, opposites=['nostrip', 'no_strip'])
-    # no_strip = bool_val(["nostrip", "no_strip"], args, kwargs, opposites=["strip"], dflt=False)  # default is to strip, used by gtable when centering columns
+    strip_b = arg_val(['strip'], args, kwargs, dflt=True, opposites=['nostrip', 'no_strip'])
+    # no_strip = arg_val(["nostrip", "no_strip"], args, kwargs, opposites=["strip"], dflt=False)  # default is to strip, used by gtable when centering columns
     txt_right = kvarg_val(["txt_right", "text_right", 'right_txt', 'rght_txt'], kwargs, dflt=0)
     # dbug(txt_right)
     box_color = kvarg_val(['bclr', 'bxclr', 'box_color', 'border_color', 'box_clr', 'border_clr', 'bx_clr', 'boxclr'], kwargs, dflt="")
@@ -5528,7 +5362,7 @@ def boxed(msgs="", *args, **kwargs):
     bottom_pad = kvarg_val(["bottom_pad", "bot_pad", "botpad"], kwargs, dflt=0)  # "semi" (ie " ") blank lines to add to the bottom
     width = kvarg_val(["width", "w", "length", "l"], kwargs, dflt=0)
     # dbug(width)
-    blanks_b = bool_val(['blank', 'blanks'], args, kwargs, dflt=True)
+    blanks_b = arg_val(['blank', 'blanks'], args, kwargs, dflt=True)
     # """--== Init ==--"""
     if "%" in str(width):
         width = width.replace("%", "")
@@ -5539,29 +5373,19 @@ def boxed(msgs="", *args, **kwargs):
     lines = []
     PRFX = "\x1b["
     box_chrs = get_boxchrs(box_style=style)
-    # tl = top left         = box_chrs[0]
-    # hc = horz char        = box_chrs[1]
-    # tr = top right        = box_chrs[2]
-    # vc = vert char        = box_chrs[3]
-    # rs = right separator  = box_chrs[4]
-    # ms = mid sep          = box_chrs[5]
-    # bl = bot left         = box_chrs[6]
-    # bs = bot sep          = box_chrs[7]
-    # br = bot right = box_chrs[0
     tl, hc, ts, tr, vc, ls, rs, ms, bl, bs, br = box_chrs
     pad = gclr(color) + str(pad)
     # """--== Validate ==--"""
+    # dbug("Validating")
     if isempty(msgs):
         # dbug(f"msgs appears to be None or empty... msgs: {msgs}")
         # rtrn_box = printit("Nothing to print...", 'boxed', title=title, footer=footer + f" {dbug('here')}")
         return None
-        # return rtrn_box
-    # if not isinstance(top_pad, int):
-    #    top_pad = 0
-    # if not isinstance(bottom_pad, int):
-        # bottom_pad = 0
-    # dbug(type(msgs))
     # """--== Convert ==--"""
+    dtype = data_type(msgs)
+    # dbug(dtype)
+    if dtype in ('file'):
+        msgs = cat_file(msgs, 'lst')
     if isinstance(msgs, pd.DataFrame):
         msgs = printit(msgs, 'noprnt')
     if isinstance(msgs, list):
@@ -5623,6 +5447,7 @@ def boxed(msgs="", *args, **kwargs):
             msgs = new_msgs
     # dbug(msgs)
     # """--== Process ==--"""
+    # dbug("Starting Process")
     max_msg_len = 0
     maxof_msgs = maxof(msgs)
     # dbug(maxof_msgs)
@@ -5653,6 +5478,7 @@ def boxed(msgs="", *args, **kwargs):
     lines.append(topline)
     new_lines = []
     # """--== SEP LINE ==--"""
+    # dbug("Looping through msgs")
     for m in msgs:
         # dbug(nclen(m))
         # dbug(width)
@@ -5683,7 +5509,9 @@ def boxed(msgs="", *args, **kwargs):
     if bottom_pad > 0:
         for n in range(bottom_pad):
             new_lines.append("    ")
+    # dbug(f"for cnt, msg in new_lines new_lines[:2]: {new_lines[:2]}")
     for cnt, msg in enumerate(new_lines):
+        # dbug(msg)
         just = 'left'
         if txt_center != 0:
             cntr_start = 0
@@ -5758,8 +5586,6 @@ def gline(width=0, *args, **kwargs):
     # dbug(called_from())
     # dbug(args)
     # dbug(kwargs)
-    # if "TEST" in msg:
-    # dbug(f"msg: [{msg}]")
     # """--== Config ==--"""
     width = kvarg_val(['width', 'length', 'len'], kwargs, dflt=width)
     msg = kvarg_val(['msg', 'message', 'title'], kwargs, dflt="")
@@ -5772,7 +5598,7 @@ def gline(width=0, *args, **kwargs):
     fc = kvarg_val(['fc', 'fill_chr', 'hc', 'fill'], kwargs, dflt=" ")
     lc = kvarg_val(['lc', 'ec', 'echr'], kwargs, dflt=fc)
     rc = kvarg_val(['rc', 'tr', 'br', 're'], kwargs, dflt=lc)
-    boxed_b = bool_val(["boxed", "box"], args, kwargs, dflt=False)
+    boxed_b = arg_val(["boxed", "box"], args, kwargs, dflt=False)
     title = kvarg_val(['title'], kwargs, dflt="")
     footer = kvarg_val(['footer'], kwargs, dflt="")
     box_color = kvarg_val(['box_color'], kwargs, dflt="")
@@ -5787,13 +5613,13 @@ def gline(width=0, *args, **kwargs):
     # the order here for just is important
     just = kvarg_val(["just", "justification"], kwargs, dflt='ljust')
     # dbug(f"msg: {msg} just: {just}")
-    centered_b = bool_val(["centered", "center"], args, kwargs, dflt=False)
+    centered_b = arg_val(["centered", "center"], args, kwargs, dflt=False)
     if centered_b:
         # change just(ification) to 'center' - the bool val centered_ gets ignored after this
         just = 'c'
     just = kvarg_val(['ljust'], kwargs, dflt=just)
     just = kvarg_val(['rjust'], kwargs, dflt=just)
-    prnt = bool_val(["print", "prnt", "show", "verbose"], args, kwargs, dflt=False)
+    prnt = arg_val(["print", "prnt", "show", "verbose"], args, kwargs, dflt=False)
     # """--== VaT      15@14iv31pom79cp16.24        20240415      1xB: pp28SRB+pe8fpe7div6.81roe13r13-20fv29mv036peg10.39           200shrs 1494 lidate ==--"""
     if isinstance(width, str) and not width.endswith("%"):
         # in case the user gets the args mixed up
@@ -5816,8 +5642,6 @@ def gline(width=0, *args, **kwargs):
             rtrn = gline(width=my_width, msg=" Separation Line ", just="c", prnt=False, centered=centered_b, boxed=boxed_b, fc="=", title=title, footer=footer)
             return rtrn
     # dbug(prnt)
-    #if not isinstance(width, int):
-    #     width = 0
     # """--== Init ==--"""
     if "%" in str(width):
         width = width.replace("%", "")
@@ -5840,10 +5664,6 @@ def gline(width=0, *args, **kwargs):
     RFILL_COLOR = sub_color(rfill_color)
     # """--== color_coded??? ==--"""
     # color_coded = False
-    # if re.search(r"\[.+?\].+\[/]", str(msg)):
-    #     # dbug(f"msg: {msg} appears to be color_coded")
-    #     color_coded = True
-    # if color_coded:
     msg = clr_coded(msg)
     # """--== EOB ==--"""
     if nclen(msg) > 0:
@@ -5877,18 +5697,12 @@ def gline(width=0, *args, **kwargs):
         else:
             # dbug(f"{RESET}BOX_COLOR: " + BOX_COLOR + "box color " + RESET + "COLOR: " + COLOR + f"color fc: [{fc}] msg: [{msg}]")
             # line = BOX_COLOR + COLOR + lc + (fc * llen) + msg + BOX_COLOR + (fc * rlen) +  RESET + rc + RESET
-            line = RESET + BOX_COLOR + lc + (fc * llen) + COLOR + msg + BOX_COLOR + (fc * rlen) + rc + RESET
+            line = RESET + BOX_COLOR + lc + (fc * llen) + RESET + COLOR + msg + BOX_COLOR + (fc * rlen) + rc + RESET
         # dbug(repr(line))
     else:
         line = RESET + BOX_COLOR + lc + (fc * llen) + (fc * rlen) + rc + RESET
     if prnt:
-        # dbug(boxed_b)
-        # dbug(msg)
-        # dbug(line)
-        # dbug(f"prnt: {prnt}")
-        # printit(line, centered=centered_b, boxed=boxed_b, box_clr=box_color, title=title, footer=footer)
         printit(line, centered=centered_b, boxed=boxed_b, box_clr=box_color, footer=footer)
-        # dbug('ask')
     # dbug(f"repr(color): {repr(color)} repr(box_color): {repr(box_color)}  line: [{line}]")
     return line
     # ### EOB def gline(width=0, *args, **kwargs): ### #
@@ -5904,7 +5718,7 @@ def isnumber(elem, *args, **kwargs):
         - elem: int or float or a list of elem- variable to be tested. If a list is submitted than all must pass or False will be returned
     options:
         - float:  bool   # default=False  specifically test if this a float
-        - human:  test   # default=False  the submission after stripping off "human" symbols like "M" or "G" or "%" etc
+        - human:  bool   # default=False  the submission after stripping off "human" symbols like "M" or "G" or "%" etc
         - european: bool # default=False  whether commas are allowed
         - prnt: bool     # default=False  will show failure info
     returns: True|False
@@ -5912,17 +5726,18 @@ def isnumber(elem, *args, **kwargs):
         Can be used on financial data which often includes M(illions) or B(illions) if human option included
     """
     # """--== Debugging ==--"""
-    # dbug(funcname())
+    # dbug(called_from())
+    # dbug(elem, 'ask')
     # dbug(number)
     # dbug(args)
     # dbug(kwargs)
     # dbug(repr(x))
     # dbug(type(x))
     # """--== Config ==--"""
-    float_b = bool_val(["flt", "float"], args, kwargs, dflt=False)
-    human = bool_val(["human", "H", "h"], args, kwargs, dfault=False)
-    european = bool_val(["european", "europ"], args, kwargs, dflt=False)
-    prnt = bool_val(["prnt", "show", 'verbose', 'print'], args, kwargs, dflt=False)
+    float_b = arg_val(["flt", "float"], args, kwargs, dflt=False)
+    human = arg_val(["human", "H", "h"], args, kwargs, dfault=False)
+    european = arg_val(["european", "europ"], args, kwargs, dflt=False)
+    prnt = arg_val(["prnt", "show", 'verbose', 'print'], args, kwargs, dflt=False)
     # """--== Validate ==--"""
     if elem is None:
         # dbug(x)
@@ -5933,19 +5748,23 @@ def isnumber(elem, *args, **kwargs):
     number = escape_ansi(str(elem)).strip()  # strip off any ansi codes/color codes
     # number = number.lstrip("-")
     # """--== recycle ==--""" #
-    if isinstance(number, list):
-        for elem in number:
-            if not isnumber(elem, human=human, float=float):
+    if isinstance(elem, list):
+        # dbug(f"elem: {elem}")
+        for item in elem:
+            if not isnumber(item, human=human, float=float):
                 if prnt:
-                    dbug(f"elem: {elem} failed as a number")
+                    dbug(f"item: {item} failed as a number")
                 return False  # at least one failed
         return True  # they all passed
     # """--== Process ==--"""
+    number = escape_ansi(number).strip()
+    if "343.2" in number:
+        dbug(number, 'ask')
     if not any(char.isdigit() for char in number):
         return False
-    if human:
+    if human or 1:
         number = re.sub("[BGMK%e]$", "", number)
-        # dbug(number, 'ask')
+        # ddbug(f"number: {number}", 'ask')
     if european:
         number = number.replace(",", "")
     if float_b:
@@ -6047,8 +5866,8 @@ def flatten_d(my_d, colname="", *args, **kwargs):
     returns: rows of columns ie data in the form of a list of list, aka an lol
     """
     """--== Config ==--"""
-    prnt = bool_val(["prnt", "print", "show", "verbose"], args, kwargs, dflt=False)
-    centered_b = bool_val(['center', "centered", "cntr"], args, kwargs, dflt=False)
+    prnt = arg_val(["prnt", "print", "show", "verbose"], args, kwargs, dflt=False)
+    centered_b = arg_val(['center', "centered", "cntr"], args, kwargs, dflt=False)
     title = kvarg_val(["title"], kwargs, dflt="")
     footer = kvarg_val(["footer"], kwargs, dflt="")
     """--== Process ==--"""
@@ -6098,7 +5917,7 @@ def fixlol(my_lol=[], *args, **kwargs):
     length = kvarg_val(["len", "length"], kwargs, dflt=length)  # num of colnames(ie my_lol[0]) or what is declared
     length = int(length)
     blanks = kvarg_val(["blank", "blanks", "pad"], kwargs, dflt=" ")
-    pivot_b = bool_val(["pivot", "pivot_b", "transpose", "pvt"], args, kwargs, dflt=False)
+    pivot_b = arg_val(["pivot", "pivot_b", "transpose", "pvt"], args, kwargs, dflt=False)
     # """--== Process ==--"""
     my_lol = [row[:length] for row in my_lol]  # truncate first
     # now pad each row with None
@@ -6123,13 +5942,6 @@ def fixlol(my_lol=[], *args, **kwargs):
     if pivot_b:
         # list(map(list, zip(*msg_l))  # to pivot??? 
         my_lol = pivot(my_lol)
-        # transposed = list()
-        # for i in range(len(my_lol[0])):
-        #     row = list()
-        #     for sublist in my_lol:
-        #         row.append(sublist[i])
-        #     transposed.append(row)
-        # my_lol = transposed
     return my_lol
     # ### EOB def fixlol(my_lol=[], *args, **kwargs): ### #
 
@@ -6154,6 +5966,7 @@ def cnvrt(data, *args, **kwargs):
         - cols_limit: int         # sets max column size
         - no_prcnt: bool          # default=False - whether to strip off percent symbol
         - ci: bool=False          # case insensite, only applies to filterby
+        - human: bool|list        # convert  numbers to a human readable number eg 6.35B - list of colnames or bool=all 
         - rtrn: str               # default = 'lol' ie list of lists... other options eg rtrn='df', rtrn="lod" (list of dictionaries)
     returns: 
         - default: a list of lists (rows of columns) with the first row having colnames
@@ -6175,28 +5988,28 @@ def cnvrt(data, *args, **kwargs):
     colnames = kvarg_val(["colnames"], kwargs, dflt=[])
     # dbug(f"supplied colnames: {colnames}")
     delimiter = kvarg_val(["delim", "delimiter"], kwargs, dflt=",")
-    # fix_b = bool_val("fix", args, kwargs, dflt=False)
-    fix_b = bool_val("fix", args, kwargs, dflt=True)
+    # fix_b = arg_val("fix", args, kwargs, dflt=False)
+    fix_b = arg_val("fix", args, kwargs, dflt=True)
     blanks = kvarg_val(["blank", "blanks"], kwargs, dflt=" ")
-    index_b = bool_val(["indx", 'index', "indexes"], args, kwargs, dflt=False)
-    purify_b = bool_val(["purify", "purify_b", "decomment"], args, kwargs, dflt=True)
+    index_b = arg_val(["indx", 'index', "indexes"], args, kwargs, dflt=False)
+    purify_b = arg_val(["purify", "purify_b", "decomment"], args, kwargs, dflt=True)
     selected_cols = kvarg_val(["selected_cols", "selected", "fields", "cols", 'select'], kwargs, dflt=[])  # TODO
     # dbug(selected_cols)
     filterby = kvarg_val(["filterby"], kwargs, dflt={})  # TODO
     sortby = kvarg_val(["sortby", "orderby"], kwargs, dflt="")  # TODO
     # dbug(sortby)
     col_limit = kvarg_val(["col_limit", 'col_size', 'col_max', "collimit", "colmax"], kwargs, dflt=0)
-    wrap_b = bool_val(['wrap', 'wrapit'], args, kwargs, dflt=False)
-    strip_b = bool_val(['wrap', 'wrapit'], args, kwargs, dflt=False)
+    wrap_b = arg_val(['wrap', 'wrapit'], args, kwargs, dflt=False)
+    strip_b = arg_val(['wrap', 'wrapit'], args, kwargs, dflt=False)
     # dbug(wrap_b)
-    ci_b = bool_val(["case_insensitive", "ci", "ignore_case", "ic", "ci_b"], args, kwargs, dflt=False)
-    pivot_b = bool_val(['pivot', 'pivot_b', 'invert', 'transpose'], args, kwargs, dflt=False)
+    ci_b = arg_val(["case_insensitive", "ci", "ignore_case", "ic", "ci_b"], args, kwargs, dflt=False)
+    pivot_b = arg_val(['pivot', 'pivot_b', 'invert', 'transpose'], args, kwargs, dflt=False)
     # dbug(pivot_b)
-    human = bool_val(['human', 'H', 'h'], args, kwargs, dflt=False)
-    # rnd = bool_val(['rnd', 'round'], args, kwargs, dflt=False)
+    human = arg_val(['human', 'H', 'h'], args, kwargs, dflt=False)
+    # rnd = arg_val(['rnd', 'round'], args, kwargs, dflt=False)
     rnd = kvarg_val(['rnd', 'round'], kwargs, dflt="")
     # dbug(rnd)
-    neg = bool_val(['neg'], args, kwargs, dflt=False)
+    neg = arg_val(['neg'], args, kwargs, dflt=False)
     # dbug(neg)
     rtrn_type = kvarg_val(['rtrn', 'rtrn_type', 'rtn'], kwargs, dflt='lol')  # TODO this is WIP to make this a universal cnvrt() func
     """--== Validate ==--"""
@@ -6218,6 +6031,9 @@ def cnvrt(data, *args, **kwargs):
     my_fname = ""
     """--== deal with doD misaligned distioanries ==--"""
     if dtype in ("doD"):
+        dbug(data)
+        for k,v in data.items():
+            gtable(v, 'prnt', title=k, footer=dbug('here'))
         dbug(f"Not sure how to handle this dtype: {dtype} as the dictionaries are different sizes... returning")
         return
     """--== deal with lol no conversion needed ==--"""
@@ -6267,9 +6083,6 @@ def cnvrt(data, *args, **kwargs):
             return list(index_values) == list(expected_index)
         # dbug(df.info)
         # dbug(df.head())
-        # my_usr_cols = str(usr_colnames)[1:-1]
-        # df_colnames = str(df.columns.tolist()).replace("]","").replace("[","")
-        # # dbug(f"hasindex: {hasindex} indx_consecutive: {indx_consecutive(df)} has1col: {has1col} len(df): {len(df)} index_b: {index_b} usr_colnames: {my_usr_cols} df_colnames: {df_colnames} pivot_b: {pivot_b} : {called_from()}", 'ask', 'boxed')
         if has1col and hasindex:
             dbug(f"do we care about has1col: {has1col} hasindex: {hasindex}")
             lol = [[df.index[n], str(item)] for n,item in enumerate(df[df.columns[0]].to_list())]
@@ -6312,10 +6125,8 @@ def cnvrt(data, *args, **kwargs):
                 dbug(f"hmmm there was already orig_colnames {orig_colnames} this is all so kludgy colnames: {colnames} usr_colnames: {usr_colnames} pivot_b: {pivot_b}...")
                 dbug(f"but colnames: {colnames} is not empty so inserting... is this needed?")
                 lol.insert(0, colnames)
-            # else:
-            #     lol.insert(0, orig_colnames)
-            # dbug(lol[:3])
     # dbug(lol[:3])
+    # printit(" ".join(lol[1]), 'boxed', title='debugging', footer=dbug('here'))
     # """--== deal with dict ==--"""
     if data_type(data, ['dom', 'dov']):
         # dbug("we should do simple work here")
@@ -6334,11 +6145,6 @@ def cnvrt(data, *args, **kwargs):
             lol = list(zip(*list(data.values())))
             lol = [list(elem) for elem in lol]
             lol.insert(0, colnames)
-            # dbug(f"len(lol[0]: {len(lol[0])} vs len(lol): {len(lol)}")
-            # if len(lol) < len(lol[0]):
-            #      dbug("this might display better if pivot is used")
-            #      lol = pivot(lol)
-            # gtable(lol, 'prnt', title='debugging', footer=dbug('here'))
         else:
             dbug("moving on with old code....")
             for k, v in data.items():
@@ -6383,18 +6189,11 @@ def cnvrt(data, *args, **kwargs):
         if dtype in ('loD'):
             # dbug("fixing lol")
             lol = fixlol(lol)
-        # dbug(f"lol: {lol}\ncolnames: {colnames}\nselected_cols: {selected_cols}")
-    # dbug(f"lol[:5]: {lol[:5]} len(lol): {len(lol)} {called_from()}")
     # """--== deal with simple list ==--"""
     # dbug(f"dtype: {dtype} data_type(lol): {data_type(lol)} lol[:2]: {lol[:2]} {called_from()}")
     # dbug('ask')
     if isempty(lol):
         lol = data
-    # dbug(data[:2])
-    # dbug(dtype)
-    # dbug(rtrn_type)
-    # dbug(data)
-    # dbug(lol)
     if not isempty(lol) and isinstance(lol, list) and isinstance(lol[0], (str, int, float)):
         # dtype = data_type(lol)
         # dbug(dtype, 'ask')
@@ -6436,11 +6235,6 @@ def cnvrt(data, *args, **kwargs):
     # dbug(dtype)
     # dbug(data_type(lol))
     if data_type(lol, 'lol') and not isempty(lol):
-        # dbug(type(lol))
-        # dbug(lol[:3])
-        # dbug(colnames)
-        # dbug(lol[0])
-        # dbug(lol)
         if all([str(elem).endswith(':') for elem in lol[0]]):
             # dbug("OK, we got here")
             lol[0] = [item.rstrip(':') for item in lol[0]]
@@ -6448,10 +6242,8 @@ def cnvrt(data, *args, **kwargs):
             #     title = lol[0][0]
             #     dbug(title)
             lol[0] = lol[0][1:]
-            # dbug(colnames, 'ask')
-            # colnames = lol[0]
-            # dbug(colnames)
     # dbug(lol[:3])
+    # printit(" ".join(lol[1]), 'boxed', title='debugging', footer=dbug('here'))
     """--== EOB ==--"""
     """--== fix_blanks? ==--"""
     if fix_b:
@@ -6460,14 +6252,14 @@ def cnvrt(data, *args, **kwargs):
     # dbug(lol[:3])
     # dbug(sortby)
     # dbug(lol[:3])
-    """--== post raw cnvr validation ==--"""
+    """--== pre raw cnvrt validation ==--"""
     if isempty(lol):
         dbug(f"lol: {lol} appears to be empty...returning...")
         return
     if isempty(lol[0]):
         dbug(f"lol[0]: {lol[0]} appears to be empty... lol: {lol}...returning...")
         return
-    if isempty(lol[0][0]):
+    if lol[0][0] is None or len(str(lol[0][0])) == 0:
         dbug(f"lol[0][0]: {lol[0][0]} appears to be empty... lol: {lol}...returning...")
         return
     """--== pre-raw... now make sure colnames has been done ==--"""
@@ -6490,68 +6282,67 @@ def cnvrt(data, *args, **kwargs):
     # dbug(f"orig_colnames: \n{orig_colnames} \ncolnames: \n{colnames} \nlol[0]: \n{lol[0]}")
     """--== raw_lol is now complete without sortby, filterby, selected, and pivot or colnames ==--"""
     dtype = data_type(lol)
-    # dbug(f"dtype: {dtype} lol[:2]: {lol[:2]}")
-    # raw_lol = lol
-    # dbug(lol[:5], 'ask')
-    # dbug(f"lol[:5]: {lol[:5]} len(lol): {len(lol)}",'ask')
     """--== neg, rnd, human ==--"""
     # dbug(neg)
-    # if isinstance(human, list):
-    if not isempty(rnd) or not isempty(human) or not isempty(neg):
-        # note: rnd can be a dict or int or bool
-        rnd_l = []
-        if isinstance(rnd, dict):
-            rnd_l = list(rnd.keys())
-        # note: human can be list or bool
-        # dbug(f"note: neg: {neg} can be a list or bool")
-        # dbug(f"neg: {neg} human: {human} rnd: {rnd}")
-        new_lol = []
-        for row in lol:
-            new_row = []
-            for col_num, elem in enumerate(row):
-                # dbug(f"chkg colnames[col_num]: {colnames[col_num]} in human: {human} elem: {elem}")
-                if isnumber(elem, 'human'):
-                    my_human = my_neg = ""
-                    # my_rnd = ""
-                    my_rnd = rnd
-                    if isinstance(human, bool) and human:
-                        my_human = human
-                    if isinstance(rnd, bool) and rnd:
-                        my_rnd = rnd
-                    if isinstance(neg, bool) and neg:
-                        my_neg = neg
-                    # dbug(neg)
-                    # dbug(type(neg))
-                    if isinstance(human, list) or isinstance(neg, list) or not isempty(rnd_l):
-                        # dbug(orig_colnames)
-                        # dbug(human, 'ask')
-                        # dbug(col_num)
-                        # dbug(colnames)
-                        if len(colnames) == len(orig_colnames):
-                            # dbug("we are here")
-                            if isinstance(human, list) and colnames[col_num] in human:
-                                my_human = True
-                        if isinstance(human, list) and orig_colnames[col_num] in human:
-                            my_human = True
-                            # dbug(my_human, 'ask')
-                        if isinstance(neg, list) and orig_colnames[col_num] in neg:
-                            my_neg = True
-                            # dbug(my_neg)
-                        if orig_colnames[col_num] in rnd_l:
-                            my_rnd = rnd[orig_colnames[col_num]]  # get the val
-                    # dbug(f"elem: {elem} my_human: {my_human} my_rnd: {my_rnd}  my_neg: {my_neg}")
-                    elem = cond_num(elem, human=my_human, rnd=my_rnd, neg=my_neg)
+    # printit(" ".join(lol[1]), 'boxed', title='debugging', footer=dbug('here'))
+    if not pivot_b:
+        # if isinstance(human, list):
+        if not isempty(rnd) or not isempty(human) or not isempty(neg):
+            # note: rnd can be a dict or int or bool
+            rnd_l = []
+            if isinstance(rnd, dict):
+                rnd_l = list(rnd.keys())
+            # note: human can be list or bool
+            # dbug(f"note: neg: {neg} can be a list or bool")
+            # dbug(f"neg: {neg} human: {human} rnd: {rnd}")
+            new_lol = []
+            for row in lol:
+                new_row = []
+                for col_num, elem in enumerate(row):
+                    prefix, suffix = split_codes(elem)
+                    # dbug(repr(prefix))
+                    elem = escape_ansi(elem)
                     # dbug(elem)
-                row[col_num] = elem
-                new_row.append(elem)
-            new_lol.append(new_row)
-        lol = new_lol
-        # dbug(lol)
-    """--== rnd ==--"""
-    #if not isempty(rnd):
-    #    # not sure why this is here - commenting it out 20250105
-    #    dbug(rnd)
-    #    pass
+                    # dbug(repr(suffix))
+                    # dbug(f"chkg colnames[col_num]: {colnames[col_num]} in human: {human} elem: {elem}")
+                    if isnumber(elem, 'human'):  # whether it is human readable or not
+                        my_human = my_neg = ""
+                        # my_rnd = ""
+                        my_rnd = rnd
+                        if isinstance(human, bool) and human:
+                            my_human = human
+                        if isinstance(rnd, bool) and rnd:
+                            my_rnd = rnd
+                        if isinstance(neg, bool) and neg:
+                            my_neg = neg
+                        # dbug(neg)
+                        # dbug(type(neg))
+                        if isinstance(human, list) or isinstance(neg, list) or not isempty(rnd_l):
+                            if len(colnames) == len(orig_colnames):
+                                # dbug("we are here")
+                                if isinstance(human, list):
+                                    # dbug(f"chkg colnames[{col_num}]: {colnames[col_num]} in human: {human}")
+                                    if colnames[col_num] in human:
+                                        # dbug(f"human: {human} colnames[{col_num}]: {colnames[col_num]}")
+                                        my_human = True
+                            if isinstance(human, list) and orig_colnames[col_num] in human:
+                                my_human = True
+                                # dbug(my_human, 'ask')
+                            if isinstance(neg, list) and orig_colnames[col_num] in neg:
+                                my_neg = True
+                                # dbug(my_neg)
+                            if orig_colnames[col_num] in rnd_l:
+                                my_rnd = rnd[orig_colnames[col_num]]  # get the val
+                        # dbug(f"elem: {elem} my_human: {my_human} my_rnd: {my_rnd}  my_neg: {my_neg}")
+                        elem = cond_num(elem, human=my_human, rnd=my_rnd, neg=my_neg)
+                        # dbug(elem)
+                    elem = prefix + str(elem) + suffix  # put the color codes back
+                    row[col_num] = elem
+                    new_row.append(elem)
+                new_lol.append(new_row)
+            lol = new_lol
+            # dbug(lol)
+    # printit(" ".join(lol[1]), 'boxed', title='debugging', footer=dbug('here'))
     """--== sortby ==--"""
     # must be before selected or col_limit
     # dbug(sortby)
@@ -6576,11 +6367,6 @@ def cnvrt(data, *args, **kwargs):
         # dbug(sortby)
         # dbug(reverse)
         """--== sep_line ==--"""
-        # dbug(data_type(lol))
-        # dbug(dtype)
-        # dbug(lol)
-        # dbug(lol[0])
-        # dbug(sortby)
         if sortby in (lol[0]):
             sortby_i = lol[0].index(sortby)
         else:
@@ -6607,10 +6393,6 @@ def cnvrt(data, *args, **kwargs):
                 sortby_i = 0
             # dbug(sortby_i)
         if isnumber(my_lol[0][sortby_i]):
-            # my_lol = sorted(my_lol, key=lambda x: x[sortby_i])
-            # dbug(sortby)
-            # dbug(my_lol[0][sortby_i])
-            # dbug(my_lol)
             for row in my_lol:
                 str(row[sortby_i]).replace("%", "")
                 if not isnumber(row[sortby_i]):
@@ -6699,16 +6481,8 @@ def cnvrt(data, *args, **kwargs):
                 dbug(f"Here is a list of missing selected cols missing from colnames\n  missing selected_cols: {missing_cols_l}\n  colnames available lol[0]: {lol[0]} {called_from()}" )
                 return None
         else:
-            # dbug(f"pivot_b: {pivot_b}\n lol[:2]: {lol[:2]}\n selected_cols: {selected_cols}\n colnames: {colnames}\n usr_colnames: {usr_colnames}")
-            # my_colnames = [lol[0][0]] + selected_cols
-            # dbug("do selected cols only and add them in order specified")
             # next line is foo-magic: nest list comprehension. Inner loop builds a row of selected cols, outer loop appends each row which builds an lol of columns and rows
             new_lol = [[ln[lol[0].index(i)] for i in selected_cols] for ln in lol]
-            """--== SEP_LINE ==--"""
-            # my_lol = remap_keys(lol, selected_cols)
-            # # my_lol.insert(0, my_colnames)
-            # gtable(my_lol, 'prnt', title=f'debugging pivot_b: {pivot_b}', footer=dbug('here')) 
-            # dbug("hold on ... wait just one minute.... this works but it does not change the outcome and requires an external remap_keys()", 'ask')
             """--== SEP_LINE ==--"""
             # dbug(new_lol)
             # dbug(f"pivot_b: {pivot_b}\n new_lol[:2]: {lol[:2]}\n selected_cols: {selected_cols}\n colnames: {colnames}\n usr_colnames: {usr_colnames}")
@@ -6769,7 +6543,7 @@ def cnvrt(data, *args, **kwargs):
         # dbug(col1_name)
         my_colnames = [col1_name] + selected_cols
         # dbug(my_colnames)
-        lol = pivot(lol)
+        lol = pivot(lol)  # <-- where the rubber hits the road
         # dbug(f"after pivot\n colnames: {colnames}\n lol[:2]: {lol[:2]}\n usr_colnames: {usr_colnames}\n selected_cols: {selected_cols}")
         # dbug(lol[:3])
         # colnames = lol[0]
@@ -6785,11 +6559,6 @@ def cnvrt(data, *args, **kwargs):
                 # dbug(lol[0])
                 # dbug(lol[:2], 'lst')
                 dbug(f"Problem... pivot_b: {pivot_b} len(lol[0]): {len(lol[0])} is not equal to length of user colnames: {len(usr_colnames)} {called_from()}... skipping inserting colnames")
-                # lol[0] = usr_colnames
-                # dbug(lol[0])
-                # dbug(lol[:2], 'lst')
-            # dbug(f"after pivot\n colnames: {colnames}\n lol[0]: {lol[:2]}\n usr_colnames: {usr_colnames}\n selected_cols: {selected_cols}")
-        # dbug(f"after pivot\n colnames: {colnames}\n lol[0]: {lol[:2]}\n usr_colnames: {usr_colnames}\n selected_cols: {selected_cols}")
         if len(post_selected) > 0:
             selected_cols = [colname.strip() for colname in selected_cols]
             missing_cols_l = [item for item in selected_cols if item not in lol[0]]
@@ -6804,14 +6573,82 @@ def cnvrt(data, *args, **kwargs):
                 lol = [[ln[lol[0].index(i)] for i in post_selected] for ln in lol]
                 lol.insert(0, my_colnames)
         # dbug(f"after pivot\n colnames: {colnames}\n lol[0]: {lol[:2]}\n usr_colnames: {usr_colnames}\n selected_cols: {selected_cols}")
-    # dbug(f"lol[:3]: {lol[:3]} len(lol): {len(lol)} {called_from()}", 'ask')
+        colnames = my_colnames 
+    """--== post-pivot neg, rnd, human ==--"""
+    if pivot_b:
+        orig_colnames = lol[0]
+        # if isinstance(human, list):
+        if not isempty(rnd) or not isempty(human) or not isempty(neg):
+            # note: rnd can be a dict or int or bool
+            rnd_l = []
+            if isinstance(rnd, dict):
+                rnd_l = list(rnd.keys())
+            # note: human can be list or bool
+            # dbug(f"note: neg: {neg} can be a list or bool")
+            # dbug(f"neg: {neg} human: {human} rnd: {rnd}")
+            new_lol = []
+            for row in lol:
+                new_row = []
+                for col_num, elem in enumerate(row):
+                    # dbug(f"chkg colnames[col_num]: {colnames[col_num]} in human: {human} elem: {elem}")
+                    if isnumber(elem, 'human'):  # whether it is human readable or not
+                        my_human = my_neg = ""
+                        # my_rnd = ""
+                        my_rnd = rnd
+                        if isinstance(human, bool) and human:
+                            my_human = human
+                        if isinstance(rnd, bool) and rnd:
+                            my_rnd = rnd
+                        if isinstance(neg, bool) and neg:
+                            my_neg = neg
+                        # dbug(neg)
+                        # dbug(type(neg))
+                        if isinstance(human, list) or isinstance(neg, list) or not isempty(rnd_l):
+                            if len(colnames) == len(orig_colnames):
+                                # dbug("we are here")
+                                if isinstance(human, list):
+                                    # dbug(f"chkg colnames[{col_num}]: {colnames[col_num]} in human: {human}")
+                                    if colnames[col_num] in human:
+                                        # dbug(f"human: {human} colnames[{col_num}]: {colnames[col_num]}")
+                                        my_human = True
+                            if isinstance(human, list) and orig_colnames[col_num] in human:
+                                my_human = True
+                                # dbug(my_human, 'ask')
+                            if isinstance(neg, list) and orig_colnames[col_num] in neg:
+                                my_neg = True
+                                # dbug(my_neg)
+                            if orig_colnames[col_num] in rnd_l:
+                                my_rnd = rnd[orig_colnames[col_num]]  # get the val
+                        # dbug(f"elem: {elem} my_human: {my_human} my_rnd: {my_rnd}  my_neg: {my_neg}")
+                        elem = cond_num(elem, human=my_human, rnd=my_rnd, neg=my_neg)
+                        # dbug(elem)
+                    row[col_num] = elem
+                    new_row.append(elem)
+                new_lol.append(new_row)
+            lol = new_lol
+            # dbug(lol)
     """--== return ==--"""
     my_rtrn = lol  # the default is lol
     if rtrn_type in ('lol'):
         # dbug(f"lol[:3]: {lol[:3]} len(lol): {len(lol)}", 'ask')
         my_rtrn = lol
     if rtrn_type in ('df'):
-        my_rtrn = pd.DataFrame(lol)
+        # TODO fix this
+        if len(colnames) ==  0 and 0:
+            dbug(colnames)
+            colnames = lol[0]
+            df = pd.DataFrame(lol[1:])
+            first_row_length = len(df.iloc[0])
+            dbug(df.iloc[0])
+            dbug(f"first_row_length: {first_row_length} len(colnames): {len(colnames)}")
+            df.columns = colnames
+            dbug(df.info())
+            dbug(df)
+            # df = df.rename(columns={'oldName1': 'newName1', 'oldName2': 'newName2'})
+            my_rtrn = df
+        else:
+            my_rtrn = pd.DataFrame(lol)
+            dbug(my_rtrn)
     if rtrn_type in ('lod'):
         my_lod = []
         for row in my_lol[1:]:
@@ -6833,7 +6670,7 @@ def cnvrt(data, *args, **kwargs):
         # dbug(my_dod)
         my_rtrn = my_dod
     # dbug(f"lol[:3]: {lol[:3]} len(lol): {len(lol)} {called_from()} my_rtrn: {my_rtrn}", 'ask')
-    if rtrn_type in ('dov', 'dict'):
+    if rtrn_type in ('dov', 'dict', 'dod'):
         # dbug(f"dtype: {dtype} lol[:3]: {lol[:3]} len(lol): {len(lol)} {called_from()}", 'ask')
         my_rtrn = {}
         if dtype in ("los"):
@@ -6847,16 +6684,22 @@ def cnvrt(data, *args, **kwargs):
                 my_rtrn[indx] = my_string[0]
             # dbug(my_rtrn)
         if all(len(elem) == 2 for elem in lol):
+            # dbug("this is key and value dictionary?")
             for elem in lol:
                 my_rtrn[elem[0]] = elem[1]  
         if my_rtrn == {}:
-            if len(lol) > 2:
-                dbug("Unable to convert to a dictionary of values (dov) as there are more than 2 rows in the cnvrt'ed lol")
-                my_rtrn = None
-            else:
-                # my_rtrn = {}
-                for n, key in enumerate(lol[0]):
-                    my_rtrn[key] = lol[1][n]
+            colnames = lol[0]
+            for n, row in enumerate(lol[1:]):
+                row_d = {}
+                for num,col in enumerate(row):
+                    row_d[colnames[num]] = col
+                my_rtrn[str(n)] = row_d
+            # this creates a dod with row num as the id 
+            # dbug(my_rtrn)
+        if len(lol) > 2 and isempty(my_rtrn):
+            dbug("Unable to convert to a dictionary of values (dov) as there are more than 2 rows in the cnvrt'ed lol")
+            my_rtrn = None
+        # dbug(my_rtrn)
     if rtrn_type in ("sqlite", "sql"):
         if my_fname != "":
             db_fname = os.path.splitext(os.path.expanduser(my_fname))[0] + ".db"  # remove ".dat" and add ".db"
@@ -6890,6 +6733,13 @@ def cnvrt(data, *args, **kwargs):
     # gtable(my_rtrn, 'prnt', 'hdr', cnvrt_b=False, title=f"debugging {called_from()}", footer=dbug('here'), col_limit=25, wrap=True)
     return my_rtrn
     # ### EOB def cnvrt(data, *args, **kwargs): # ###
+
+
+def cnvrt_qnd(*args, **kwargs):
+    my_lol = [["one", "two", "three"], [1,2,3], ['foo',"bar", "foobar"]]
+    df = cnvrt(my_lol, rtrn='df')
+    dbug(df.info())
+    return
 
 
 # #########################################################################
@@ -6944,8 +6794,9 @@ def gtable(lol, *args, **kwargs):
         - no_hdr: bool         # removes header/colnames row from the table
         - purify: bool         # default=False - assumes provided data (lol) has all ready been purified
         - no_prcnt: bool       # default=False - whether to strip off percent symbol
-        - conditions_lol: lol  # WIP (Work in Progress) see: function def data_conditions(data, conditions_lol)
+        - conditions: list     # WIP (Work in Progress) see: function def data_conditions(data, conditions)
         - pivot: bool          # will try to pivot a list (or dictionary) - only works if num of rows is 2 and num of elems in each row are equal
+        - rtrn: str            # if rtrn='lol' or rtrn='data' then this function will return converted data only
     returns lines: list
     Notes:
         - if colnames="firstrow" then the firstrow will be extracted and used for the header
@@ -6968,8 +6819,8 @@ def gtable(lol, *args, **kwargs):
     lfill_color = kvarg_val("lfill_color", kwargs, dflt=color)
     # rfill_color = kvarg_val("rfill_color", kwargs, dflt=color)
     box_color = kvarg_val(['box_color', 'border_color', 'box_clr', 'boxclr', 'bxclr'], kwargs, dflt="bold white on rgb(40,40,40)")
-    header = bool_val(['header', 'headers', 'hdr'], args, kwargs, dflt=False)
-    end_hdr = bool_val(['end_hdr', "endhdr", 'hdr_last'], args, kwargs, dflt=False)
+    header = arg_val(['header', 'headers', 'hdr'], args, kwargs, dflt=False)
+    end_hdr = arg_val(['end_hdr', "endhdr", 'hdr_last'], args, kwargs, dflt=False)
     # dbug(header)
     # header_color
     header_color = kvarg_val(['header_color', 'hdr_color'], kwargs, dflt="white! on grey40")
@@ -6979,49 +6830,49 @@ def gtable(lol, *args, **kwargs):
     selected_cols = kvarg_val(['selected_cols', 'selectedcols', 'slctd_cols', 'slctdcols', 'select', 'selected', 'select_cols'], kwargs, dflt=[])
     # dbug(selected_cols)
     excluded_cols = kvarg_val(['excluded_cols', 'excludedcols', 'xcld_cols', 'excdcols', 'exclude', 'excluded'], kwargs, dflt=[])
-    centered_b = bool_val(['center', 'centered'], args, kwargs, dflt=False)
+    centered_b = arg_val(['center', 'centered'], args, kwargs, dflt=False)
     # dbug(centered_b)
-    shadowed = bool_val(['shadow', 'shadowed'], args, kwargs, dflt=False)
-    prnt = bool_val(['prnt', 'print', 'prn'], args, kwargs, dflt=False)
+    shadowed = arg_val(['shadow', 'shadowed'], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print', 'prn'], args, kwargs, dflt=False)
     rjust_cols = kvarg_val(['rjust_cols'], kwargs, dflt=[])
     col_colors = kvarg_val(['col_colors', 'colors', "col_color", 'col_clrs', 'col_clr'], kwargs, dflt=["white!", "cyan", "red", "green", "blue", "red!", "green!", "yellow!"])
     # col_colors = kvarg_val(['col_colors', "col_color"], kwargs, dflt=[])
     title = kvarg_val('title', kwargs, dflt="")
     # dbug(title)
     footer = kvarg_val('footer', kwargs, dflt="")
-    index_b = bool_val(['indexes', 'index', 'idx', 'id', 'indx'], args, kwargs, dflt=False)
+    index_b = arg_val(['indexes', 'index', 'idx', 'id', 'indx'], args, kwargs, dflt=False)
     box_style = kvarg_val(['style', 'box_style'], kwargs, dflt='single')
     alt_color = kvarg_val(['alt_color', 'alt_clr', "altclr"], kwargs, dflt="on rgb(40,40,40)")
     # alt_color = kvarg_val(['alt_color', 'alt_clr', "altclr"], kwargs, dflt="on rgb(55,25,55)")
     if len(alt_color.split()) > 2 and not alt_color.strip().startswith("on"):
         alt_color = "on " + alt_color
-    alt = bool_val('alt', args, kwargs, dflt=False)
+    alt = arg_val('alt', args, kwargs, dflt=False)
     max_col_len = kvarg_val(['max_col', 'max_col_len', 'col_limit', 'max_limit', 'max_len', 'col_len'], kwargs, dflt=299)  # arbitrary
     # dbug(max_col_len)
     max_col_len = int(max_col_len)
-    wrap_b = bool_val(["wrap", "wrapit"], args, kwargs, dflt=False)
+    wrap_b = arg_val(["wrap", "wrapit"], args, kwargs, dflt=False)
     # dbug(wrap_b)
-    neg = bool_val('neg', args, kwargs, dflt=False)  # if a list is supplied here the syntax is [colname, colname, colanme...]
+    neg = arg_val('neg', args, kwargs, dflt=False)  # if a list is supplied here the syntax is [colname, colname, colanme...]
     # dbug(neg)
     rnd = kvarg_val(['rnd', 'round'], kwargs, dflt="")
     # dbug(rnd)
-    human = bool_val(['h', 'human', "H"], args, kwargs, dflt=False)
+    human = arg_val(['h', 'human', "H"], args, kwargs, dflt=False)
     # dbug(human)
     # nan = kvarg_val(['nan'], kwargs, dflt="")
     sortby = kvarg_val(["sortby", "sort_by", "sorton", "sort_on", "sort", 'sorted_by', 'sortedby'], kwargs, dflt='')
     # sortby_n = kvarg_val(["sortbyn", "sort_byn", "sortby_n", "sortby_n", "sort_n"], kwargs, dflt='')
     filterby_d = kvarg_val(['filterby', 'filter_by'], kwargs, dflt={})  # column_to_search: pattern
-    ci_b = bool_val(["case_insensitive", "ci", "ignorecase", "ignore_case", "ic", 'ci_b'], args, kwargs, dflt=True)
-    # ci_b = bool_val(["case_insensitive", "ci"], args, kwargs, dflt=False)
-    # rgx_b = bool_val(["rgx", "regex", "exact", 'rgex'], args, kwargs, dflt=False)  # forces a regex search using supplied filterby pattern
+    ci_b = arg_val(["case_insensitive", "ci", "ignorecase", "ignore_case", "ic", 'ci_b'], args, kwargs, dflt=True)
+    # ci_b = arg_val(["case_insensitive", "ci"], args, kwargs, dflt=False)
+    # rgx_b = arg_val(["rgx", "regex", "exact", 'rgex'], args, kwargs, dflt=False)  # forces a regex search using supplied filterby pattern
     write_csv = kvarg_val(["write_csv", 'csv_file'], kwargs, dflt='')  # write a csv file with gtable data
     write_out = kvarg_val(["write_out", 'out_file'], kwargs, dflt='')  # write table out to file
     cell_pad = kvarg_val(['cell_pad', 'cellpad', 'pad'], kwargs, dflt=' ')
-    strip_b = bool_val(['strip'], args, kwargs, dflt=False)
+    strip_b = arg_val(['strip'], args, kwargs, dflt=False)
     # delimiter = kvarg_val(["delimiter", "delim"], kwargs, dflt=",")  # only needed if lol is a filename and not the default
     blanks = kvarg_val(["blank", "blanks"], kwargs, dflt="")
-    skip = bool_val(['skip'], args, kwargs, dflt=False)  # skip non-compliant lines/rows?
-    # ignore_b = bool_val(['ignore'], args, kwargs, dflt=False)  # skip non-compliant lines/rows?
+    skip = arg_val(['skip'], args, kwargs, dflt=False)  # skip non-compliant lines/rows?
+    # ignore_b = arg_val(['ignore'], args, kwargs, dflt=False)  # skip non-compliant lines/rows?
     cols = kvarg_val(["cols", "columns", "chunks", "splits"], kwargs, dflt=1)
     # dbug(cols)
     # dbug(kwargs)
@@ -7029,22 +6880,27 @@ def gtable(lol, *args, **kwargs):
     # dbug(f"width: {width} cols: {cols} {called_from()}")
     sep = kvarg_val(["sep", "separation"], kwargs, dflt="")
     cols_limit = kvarg_val(["cols_limit", "max_cols", "max_cols"], kwargs, dflt=0)
-    lol_b = bool_val(["lol", 'data'], args, kwargs, dflt=False)
+    lol_b = arg_val(["lol", 'data'], args, kwargs, dflt=False)
     rtrn = kvarg_val(["rtrn", "return", "rtrn_type"], kwargs, dflt="")
     if rtrn in ("lol", 'data'):
         lol_b = True
-    # reverse_b = bool_val(["rev", "rvsd", "reverse", "reversed"], args, kwargs, dflt=False)  # TODO - ie lol.reverse()
-    nohdr_b = bool_val(["nohdr", "no_hdr", "nocolnames"], args, kwargs, dflt=False)  # removes first line (hdr/colnames) from table
-    fix_b = bool_val(['fix'], args, kwargs, dflt=False)  # make all rows same number of columns as first row
+    # reverse_b = arg_val(["rev", "rvsd", "reverse", "reversed"], args, kwargs, dflt=False)  # TODO - ie lol.reverse()
+    nohdr_b = arg_val(["nohdr", "no_hdr", "nocolnames"], args, kwargs, dflt=False)  # removes first line (hdr/colnames) from table
+    fix_b = arg_val(['fix'], args, kwargs, dflt=False)  # make all rows same number of columns as first row
     # dbug(fix_b)
-    purify_b = bool_val(["purify", "purify_b", "decomment"], args, kwargs=False)  # assumes that provided data has already been "purified" ie decommented
-    # conditions_lol = kvarg_val(["conditions", "conditions_lol", "triggers", "conditionals"], kwargs, dflt=[])  # WIP
-    boxed_b = bool_val(['box', 'boxed'], args, kwargs, dflt=False)
+    purify_b = arg_val(["purify", "purify_b", "decomment"], args, kwargs=False)  # assumes that provided data has already been "purified" ie decommented
+    conditions = kvarg_val(["conditions", "conditions_lol", "triggers", "conditionals"], kwargs, dflt=[])  # WIP
+    boxed_b = arg_val(['box', 'boxed'], args, kwargs, dflt=False)
     mstr_box_clr = kvarg_val(['mstr_clr', 'mstr_box_clr', 'mstrbxclr'], kwargs, dflt="")
-    pivot_b = bool_val(['pivot', 'invert'], args, kwargs, dflt=False)
+    pivot_b = arg_val(['pivot', 'invert'], args, kwargs, dflt=False)
     # cnvrt_b = arg_val(['cnvrt_b'], args, kwargs, dflt=True)  # THIS IS STRICKLY FOR TESTING!! see the end of cnvrt()
     """--== Validate ==--"""
-    # dbug(lol[:2])
+    dtype = data_type(lol)
+    # dbug(dtype)
+    # if dtype in ("lol"):
+    #     dbug(f"dtype: {dtype} lol[:2]: {lol[:2]} {called_from()}")
+    # else:
+    #     dbug(f"dtype: {dtype} len(lol): {len(lol)} {called_from()}")
     if not isinstance(selected_cols, list) and not isinstance(selected_cols, dict):
         dbug(f"selected_cols: {selected_cols} must be a list or a dictionary ... please investigate... returning...")
         return
@@ -7055,9 +6911,9 @@ def gtable(lol, *args, **kwargs):
     if isempty(lol):
         dbug(f"Submission is empty... called_from: {called_from()} returning...", 'center')
         return None
-    no_prcnt = bool_val(["strip_percent", "strip_prcnt", "no_prcnt", "no_percent"], args, kwargs, dflt=False)
+    no_prcnt = arg_val(["strip_percent", "strip_prcnt", "no_prcnt", "no_percent"], args, kwargs, dflt=False)
     if int(max_col_len) < 1:
-        max_col_len = 299  # arbitrary
+        max_col_len = 999  # arbitrary
     # dbug(max_col_len)
     if not isempty(rnd) and not isnumber(rnd) and not isinstance(rnd, dict):
         dbug(f"rnd: {rnd} option has to an int or a dictionary")
@@ -7115,39 +6971,50 @@ def gtable(lol, *args, **kwargs):
             dbug(f"submitted data: {lol} appears to be a string instead of a data set....")
         return
     """--== now cnvrt data set to an lol, selecting, filtering, setting col_limit, pivoting etc ==--"""
-    # dbug(lol[:3])
+    # dbug(dtype)
+    # if dtype in ('lol'):  # for debugging only
+        # dbug(lol[:2])
+    # if dtype in ("dov"):
+        # if pivot_b and isempty(colnames):
+            # colnames = list(lol.keys())
+    # printit(" ".join(lol[1]), 'boxed', title="debugging", footer=dbug('here'))
     # dbug(rnd)
     # dbug(f"pivot_b: {pivot_b} {called_from()} submitting colnames: {colnames}")
-    # dbug(selected_cols)
-    # dbug(f"type(lol): {type(lol)} {called_from()}")
-    # dbug(f"colnames: {colnames} lol[:3]: {lol[:3]} {called_from()}")
-    # dbug(neg)
-    # dbug(f"lol: {lol} {called_from()}")
-    # dbug(data_type(lol))
-    # if not cnvrt_b:
-    # dbug(f"dtype: {dtype} lol: {lol} if wrap: {wrap_b} is True then don't limit col length")
     if wrap_b:
         # dbug(f"dtype: {dtype} lol: {lol} if wrap: {wrap_b} is True then don't limit col length")
         lol = cnvrt(lol, colnames=colnames, fix=fix_b, indx=index_b, blanks=blanks, purify=purify_b,
                         filterby=filterby_d, ci_b=ci_b, sortby=sortby, no_prcnt=no_prcnt,
                         pivot=pivot_b, selected_cols=selected_cols,
                         human=human, rnd=rnd, neg=neg)
+        # printit(" ".join(lol[1]), 'boxed', title="debugging", footer=dbug('here'))
     else:
         # dbug(wrap_b)
         # dbug(selected_cols)
+        # dbug(lol[:3])
         lol = cnvrt(lol, colnames=colnames, fix=fix_b, indx=index_b, blanks=blanks, purify=purify_b,
                         filterby=filterby_d, ci_b=ci_b, sortby=sortby, no_prcnt=no_prcnt,
                         pivot=pivot_b, col_limit=max_col_len, selected_cols=selected_cols,
                         human=human, rnd=rnd, neg=neg)
-    # dbug(f"lol[:3]: {lol[:3]} {called_from()}")
-    # dbug(lol[:2], 'ask')
+        # printit(" ".join(lol[1]), 'boxed', title="debugging", footer=dbug('here'))
+    if isempty(lol):
+        # dbug(f"after cnvrt with filterby_d: {filterby_d} lol appears empty...returning...")
+        return
+    # dbug(f"lol[:3]: {lol[:3]} {called_from()} pivot_b: {pivot_b} colnames: {colnames}")
+    # printit(" ".join(lol[1]), 'boxed', title="debugging", footer=dbug('here'))
+    # dbug(lol[:1], 'ask')
+    """--== conditionals ==--"""
+    # dbug(f"colnames: {colnames} lol[0]: {lol[0]} pivot_b: {pivot_b}")
+    if not isempty(conditions):
+        # dbug(f"colnames: {colnames} lol[0]: {lol[0]} ... cnvrt is done with pivot: {pivot_b}")
+        # dbug(len(lol))
+        lol = conditionals(lol, conditions, pivot=pivot_b, colnames=colnames)
     """--== try to prevent hdr and record 1 duplicate ==--"""
     # this is kind of a kludge but I don't know a better way (yet 20250116) it does not take into account selected_cols???
     colnames = [colname[:max_col_len] for colname in colnames]
     # dbug(f"colnames: {colnames}")
     # dbug(f"  lol[0]: {lol[0]}")
     if not isempty(colnames):
-        # dbug("step one colnames is not empty")
+        # dbug(f"step one colnames: {colnames} is not empty lol[:2]: {lol[:2]} {called_from()}")
         if colnames == lol[0] and len(lol) > 1:
             # dbug("colnames was provided so trimming off hdr in lol")
             lol = lol[1:]
@@ -7165,26 +7032,6 @@ def gtable(lol, *args, **kwargs):
     if not isempty(colnames) and colnames != lol[0]:
         # dbug(f"this is after cnvrt - and this needed for multi-col cols: {cols} inserting colnames: {colnames} as they do not equal lol[0]: {lol[0]}")
         lol.insert(0, colnames)
-    """--== fix for dat if firstline has title (all elems endwith ':') ==--"""
-    # this should be done in cat_file()
-    # # dbug(lol[:3])
-    # # if islol(lol):
-    # if data_type(lol, 'lol'):
-    #     # dbug(type(lol))
-    #     # dbug(lol[:3])
-    #     # dbug(colnames)
-    #     # dbug(lol[0])
-    #     if all([str(elem).endswith(':') for elem in lol[0]]):
-    #         # dbug("OK, we got here")
-    #         lol[0] = [item.rstrip(':') for item in lol[0]]
-    #         if title == "":
-    #             title = lol[0][0]
-    #         lol[0] = lol[0][1:]
-    #         colnames = lol[0]
-    #         colnames = [elem.strip() for elem in colnames]
-    #         # dbug(title)
-    #         # dbug(colnames)
-    # # dbug(colnames)
     """--== mark sortby ==--"""
     if not isempty(sortby):
         # dbug(f"This marks the sortby: {sortby} col by adding an arrow... it works but I might not keep it {called_from()}")
@@ -7228,10 +7075,11 @@ def gtable(lol, *args, **kwargs):
     for row in lol:
         max_row_lines.append(1)  # initializes a max_row_lines number for each row default = 1
     # dbug(lol[:3])
-    # """--== limit length of each elem to max_col_len ==--"""
+    # """--== limit length of each elem to max_col_len or wrap elements ==--"""
     # TODO make this part of cnvrt
     new_lol = []
     # dbug(max_col_lens)
+    # dbug(max_col_len)
     # dbug(lol[:4])
     for row in lol:
         # truncate elems in each row if needed
@@ -7250,7 +7098,7 @@ def gtable(lol, *args, **kwargs):
                         # dbug(elem)
                         # elem = wrapit(elem, length=int(max_col_len - 5))
                         elem = gwrap(elem, length=int(max_col_len - 5))
-                        # dbug(elem)
+                        # dbug(elem, 'boxed', title=f"max_col_len: {max_col_len} len_elem: {nclen(elem)}")
             if isinstance(elem, dict):
                 elem = str(elem)
             if isinstance(elem, list):
@@ -7279,20 +7127,17 @@ def gtable(lol, *args, **kwargs):
         new_lol.append(new_row)
         # End of loop for adding elems to this row
     lol = new_lol
-    # dbug(lol[:3])
-    # """--== deal with first row being None ,1 ,2, 3, etc ==--"""
+    """--== deal with first row being None ,1 ,2, 3, etc ==--"""
     # TODO make this part of cnvrt which is coming up in future lines ??? or since mult col might play into this
-    # dbug(dtype)
     if lol[0][0] is None:
         # not sure about this yet ... was a df maybe??
         lol = lol[1:]  # drop that first row - assumes second row is colnames
         # Removing element from list of lists
         del_col = 0
         [j.pop(del_col) for j in lol]  # does the drop "in-place"
-    # dbug(lol)
     # dbug(lol[:3])
     # """--== Local Functions ==--"""
-    def bld_row_line(row):
+    def _bld_row_line(row):
         # dbug(funcname(), 'ask')
         lfill_color = color
         for col_num, elem in enumerate(row):
@@ -7314,14 +7159,14 @@ def gtable(lol, *args, **kwargs):
                     line_num = row_num + 1
                 if line_num % 2:
                     # mycolor = mycolor + " " + alt_color
-                    dbug(mycolor)
+                    # dbug(mycolor)
                     myCOLOR = sub_color(mycolor)
             fill_len = max_elem_lens[col_num] - nclen(elem)
             fill = " " * fill_len
             myfill = fill
             mypad = cell_pad
             elem = str(elem)
-            # dbug(elem)
+            # dbug(repr(elem))
             if col_num in rjust_cols or isnumber(elem, 'human'):
                 # right justify this elem
                 justified_elem = myfill + str(elem)
@@ -7346,10 +7191,11 @@ def gtable(lol, *args, **kwargs):
                 # dbug(f"mycolor: {mycolor} lfill_color: {lfill_color} rfill_color: {rfill_color}")
                 line = gline(max_width, lc=vc, msg=msg, pad="", rc=vc, box_color=box_color, color=mycolor, lfill_color=lfill_color, rfill_color=rfill_color)
                 lines.append(line)
+        # dbug(msg)
         return msg
-        # ### EOB def bld_row_line(row): ### #
+        # ### EOB def _bld_row_line(row): ### #
     # dbug(lol[:3])
-    # """--== Process ==--"""
+    """--== Process ==--"""
     # dbug(f"This is after cnvrt? pivot_b: {pivot_b} colnames: {colnames} lol[0]: {lol[0]}")
     if pivot_b and isempty(colnames):
         # dbug(f"pivot_b: {pivot_b} num_rows: {len(lol)} num_cols: {len(lol[0])} colnames: {colnames} lol[0]: {lol[0]}")
@@ -7358,11 +7204,7 @@ def gtable(lol, *args, **kwargs):
         colnames = lol[0]
         colnames = [str(elem).strip() for elem in colnames]
     num_cols = len(lol[0])
-    # dbug(len(selected_cols))
-    # dbug(num_cols)
-    # dbug(lol[:3])
-    # dbug(len(lol))
-    # """--== excluded_cols ==--"""
+    """--== excluded_cols ==--"""
     # TODO make this part of cnvrt
     if len(excluded_cols) > 0:
         new_lol = []
@@ -7383,15 +7225,15 @@ def gtable(lol, *args, **kwargs):
     """--== Recurse if needed - multi cols ==--"""
     # dbug(width)
     if width > 0 and cols == 0:
-        # dbug(f"This is a crazy kludge but it seems to work. The idea is to get the length of top line a single full table and use it to calc cols from given width: {width}"
+        # dbug(f"This is a crazy kludge but it seems to work. The idea is to get the length of top line a single full table and use it to calc cols from given width: {width}")
         if title != "no_recurse" or width > 0 and cols > 0:
-            dbug(f"width: {width} cols: {cols} title: {title}")
+            # dbug(f"width: {width} cols: {cols} title: {title}")
             top_line = gtable(lol[:3], 'noprnt', title="no_recurse")[0]
             # dbug(f"[{top_line}]")
-            tbl_width = nclen(top_line)
-            dbug(tbl_width)
-            cols = math.ceil(int(width) / tbl_width)
-            dbug(f"width: {width} cols: {cols} title: {title}")
+            tbl_width = nclen(top_line) + 4  # the 2 is for sep/padding distance
+            # dbug(tbl_width)
+            cols = math.floor(int(width) / tbl_width)
+            # dbug(f"width: {width} cols: {cols} title: {title}")
     if cols > 1:
         max_my_table_len = 0
         # dbug(f"user wants multiple cols: {cols}")
@@ -7404,11 +7246,6 @@ def gtable(lol, *args, **kwargs):
         # lol_no_hdr = lol[1:]
         # dbug(f"len(lol): {len(lol)} cols: {cols} cols_limit: {cols_limit}")
         # dbug(lol)
-        # dbug(colnames)
-        # dbug(pivot_b)
-        # dbug(lol)
-        # dbug(len(lol))
-        # dbug(cols)
         if pivot_b:
             len_orig_lol = len(lol) - 1  # removing colnames/hdr from count
             if cols > len_orig_lol:
@@ -7445,7 +7282,9 @@ def gtable(lol, *args, **kwargs):
         scr_cols = int(get_columns())
         # max_ln_len = maxof(lines)  # they all should be the same length
         max_ln_len = nclen(lines[0])
-        if max_ln_len > scr_cols:
+        # print(lines[0])
+        # ruleit()
+        if max_ln_len > scr_cols and prnt:
             num_cols = len(lol[0])
             num_rows = len(lol)
             pivot_msg = ""
@@ -7455,20 +7294,21 @@ def gtable(lol, *args, **kwargs):
             suggested_cols = math.floor(scr_cols/max_my_table_len)
             if suggested_cols < cols:
                 suggested_cols_msg = f"You might try reducing the number of cols: {cols} perh  aps try cols = {suggested_cols}"
-            dbug(f"The length of lines: {max_ln_len} is greater than the available screen columns: {scr_cols}. Called_from: {called_from()}. {pivot_msg} {suggested_cols_msg}... returning")
+                dbug(f"The length of lines: {max_ln_len} is greater than the available screen columns: {scr_cols}. Called_from: {called_from()}. {pivot_msg} col_limit: {max_col_len} {suggested_cols_msg}... returning")
             # dbug(f"Try cols = {suggested_cols}")
+            # dbug(f"Returning None ... {called_from()}... prnt: {prnt} col_limit: {max_col_len}", 'ask')
             return None
-        # printit(lines, 'boxed', title="debugging", footer=dbug('here'))
-        # dbug("Returning lines...")
         if boxed_b:
-            # dbug(f"Sending to boxed strip=False my_txt_center: {my_txt_center} centered_b: {centered_b}")
+            dbug(f"Sending to boxed strip=False my_txt_center: {my_txt_center} centered_b: {centered_b}")
             my_txt_center = 99
             # lines = gblock(lines)
             # dbug("printing lines")
             # dbug(centered_b)
             lines = boxed(lines, centered_txt=my_txt_center, strip=False, title=mstr_title, footer=mstr_footer, box_clr=mstr_box_clr)
+        # print(lines[0])
+        # ruleit()
         lines = printit(lines, prnt=prnt, centered=centered_b)
-        # dbug("returning")
+        # dbug(f"returning lines {called_from('verbose')}")
         return lines
         # ### EOB if cols > 1: ### #
     # """--== get max_elem_lens[col] length for each col ==--"""
@@ -7499,9 +7339,6 @@ def gtable(lol, *args, **kwargs):
         for col_num, elem in enumerate(row):
             # for each elem in row
             # dbug(len(row))
-            # dbug("------")
-            # dbug(elem)
-            # dbug(type(elem))
             my_elem = elem
             if not isinstance(elem, list):
                 if "\n" in str(my_elem):
@@ -7537,7 +7374,7 @@ def gtable(lol, *args, **kwargs):
         max_width = nclen(footer) + 4
     # """--== Build Table ==--"""
     for row_num, row in enumerate(lol):
-        # dbug(f"row_num: {row_num} row: {row}")
+        # printit(f"row_num: {row_num} row: {" ".join(row)}", title="debugging")
         msg = ""
         # """--== is this a multi_line row, if so then make it multi_line ==--"""
         # TODO isnt this done by cnvrt now? 202240919
@@ -7567,7 +7404,7 @@ def gtable(lol, *args, **kwargs):
                     new_row.append(new_elem)
                 # this is one of the multi_line rows to add - there will be max_row_lines added
                 elem_line_num += 1
-                last_msg = bld_row_line(new_row)
+                last_msg = _bld_row_line(new_row)
                 # dbug(last_msg)
             # dbug(f"End loop for adding multi_line rows last_msg: {last_msg}")
         # """--== deal with hdr ==--"""
@@ -7800,11 +7637,11 @@ def add_cols(data, new_cols={}, *args, **kwargs):
         - created 20240819
     """
     """--== Config ==--"""
-    prnt = bool_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
     new_cols_d = kvarg_val(['new_cols', 'new_col', 'add_cols', 'add_col'], kwargs, dflt=new_cols)
     title = kvarg_val(['title'], kwargs, dflt="")
     footer = kvarg_val(['title'], kwargs, dflt="")
-    centered_b = bool_val(['centered', 'center', 'cntr', 'cntrd'], args, kwargs, dflt=False)
+    centered_b = arg_val(['centered', 'center', 'cntr', 'cntrd'], args, kwargs, dflt=False)
     """--== Validation ==--"""
     dtype = data_type(data)
     # if not islol(data) or isempty(data):
@@ -7863,11 +7700,9 @@ def nestlvl(lst, *args, **kwargs):
         This helps determine rows and columns of boxes (cell dimension=1) or tables (cell dimension=2)
     """
     """--== Config ==--"""
-    verbose = bool_val(["verbose"], args, kwargs, dflt=False)
+    verbose = arg_val(["verbose"], args, kwargs, dflt=False)
     # """--== SEP_LINE ==--"""
     # rocs is row(s) of cols ... ie data table
-    # box is a simple list of strings
-    # for reference:
     add_this = 1
     if not isinstance(lst, list) and not isinstance(lst, dict):
         return 0
@@ -7916,17 +7751,17 @@ def htmltable(data, *args, **kwargs):
         browseit(html_code)
     """
     """--== Config ==--"""
-    end_hdr = bool_val(["end_hdr"], args, kwargs, dflt=False)
+    end_hdr = arg_val(["end_hdr"], args, kwargs, dflt=False)
     col_colors = kvarg_val(['col_colors', 'colors', "col_color"], kwargs, dflt=["white!", "cyan", "red", "green!", "rgb(100,100,255)", "red!", "green!", "yellow!"])
     width = kvarg_val(['width'], kwargs, dflt="")
     title = kvarg_val(["title"], kwargs, dflt="")
     # dbug(title)
     footer = kvarg_val(["footer"], kwargs, dflt="")
     # dbug(footer)
-    page_cntr = bool_val(["pg_cntr", 'page_cntr', 'page_center', 'centered'], args, kwargs, dflt=False)
-    show = bool_val(["show", "debug"], args, kwargs, dflt=False)
-    styles_b = bool_val(["styles", "style"], args, kwargs, dflt=True)
-    pivot_b = bool_val(["pivot"], args, kwargs, dflt=True)
+    page_cntr = arg_val(["pg_cntr", 'page_cntr', 'page_center', 'centered'], args, kwargs, dflt=False)
+    show = arg_val(["show", "debug"], args, kwargs, dflt=False)
+    styles_b = arg_val(["styles", "style"], args, kwargs, dflt=True)
+    pivot_b = arg_val(["pivot"], args, kwargs, dflt=True)
     """--== Convert ==--"""
     # htmltable now launching cnvrt 
     # if not isinstance(data, dict):
@@ -8001,7 +7836,7 @@ def htmltable(data, *args, **kwargs):
         html += "\n<center id='page_cntr'>\n"
     # html += "<div class='mycanvass'>\n"
     """--== Functions (Internal) ==--"""
-    def do_table(data, *args, **kwargs):
+    def _do_table(data, *args, **kwargs):
         """--== Inner Table ==--"""
         # dbug(funcname())
         # dbug(type(data))
@@ -8025,7 +7860,7 @@ def htmltable(data, *args, **kwargs):
             else:
                 my_footer = ""
             # dbug(my_footer)
-            rtrn_code = do_table(my_data, title=my_title, footer=my_footer)
+            rtrn_code = _do_table(my_data, title=my_title, footer=my_footer)
             # dbug("Returning my_data")
             return rtrn_code
         """--== SEP_LINE ==--"""
@@ -8087,7 +7922,7 @@ def htmltable(data, *args, **kwargs):
                 html += "    <td id='outer' style='border: none;'>"
                 html += "\n<center>\n"
                 # dbug(table)
-                html += do_table(table)
+                html += _do_table(table)
                 html += "\n</center>\n"
                 html += "    </td id='outer'>"
             html += "  </tr id=multi_row>\n"
@@ -8101,14 +7936,14 @@ def htmltable(data, *args, **kwargs):
             for table in data:
                 html += "\n    <td id='outer' style='border: none;'>"
                 html += "\n<center>\n"
-                html += do_table(table)
+                html += _do_table(table)
                 html += "\n</center>\n"
                 html += "\n    </td id='outer'>"
         else:
             # not multitable
             html += "    <td>\n"
             html += "<center>\n"
-            html += do_table(data, title=title, footer=footer)
+            html += _do_table(data, title=title, footer=footer)
             html += "\n</center>\n"
             html += "    </td>"
         # stop a single row
@@ -8148,53 +7983,47 @@ def chunkit(data, size, *args, **kwargs):
     # dbug(type(data))
     # dbug(size)
     # """--== Config ==--"""
-    full_b = bool_val(["full", "even", "equal"], args, kwargs, dflt=False)
-    cols_b = bool_val(["cols", "chunks", "columns"], args, kwargs, dflt=False)
+    full_b = arg_val(["full", "even", "equal"], args, kwargs, dflt=False)
+    cols_b = arg_val(["cols", "chunks", "columns"], args, kwargs, dflt=False)
     # """--== Init ==--"""
+    dtype = data_type(data)
+    # dbug(dtype)
     if cols_b:
         size = len(data) // size
     # dbug(cols_b)
     # dbug(size)
     """--== Validate ==--"""
+    if dtype in ('empty'):
+        dbug("data appears empty... returning...")
+        return
     if size == 0:
         arb_num = 20
         dbug(f"size: {size} should not be 0 ... changing to arbitrary arb_num: {arb_num}")
         size = arb_num  # blatantly arbitrary
-    if not isinstance(data, (list, dict)):
+    if not isinstance(data, (str, list, dict)):
         dbug("Submitted variable must be a list or a dictionary ... returning...")
         return
+    """--== Convert ==--"""
     if isinstance(data, dict):
         dbug(f"type(data): {type(data)} is a dictionary... converting to pivoted lol")
         data = cnvrt(data, 'pivot')
-    """--== Validate ==--"""
-    # if size < 1:
-    #     dbug(f"Size: {size} needs to be greater than 0... returning data unchanged...")
-    #     return data
-    # """--== Convert ==--"""
-    # chunks_l = []
-    # if isinstance(data, dict):
-    #     my_cnt = 1
-    #     chunk_d = {}
-    #     for k,v  in data.items():
-    #         if my_cnt == size:
-    #             my_cnt = 1
-    #             chunk_d[k] = v
-    #             chunks_l.append(chunk_d)
-    #             chunk_d = {}
-    #         else:
-    #             my_cnt += 1
-    #             chunk_d[k] = v
-    #     if len (chunk_d) > 0:
-    #         chunks_l.append(chunk_d)
-    #     return chunks_l
-    # """--== Process ==--"""
+    """--== Process ==--"""
     # dbug(data)
+    # dbug(dtype)
     # dbug(size)
+    if dtype in ('lob'):
+        # Ummm .. this might be useful for all dtypes TODO
+        new_list = [data[i:i + size] for i in range(0, len(data), size)]
+        # dbug(f"returning new_list {called_from('verbose')}")
+        return new_list
     def divide_chunks(data, size):
-        # looping till length data
+        # this works for an lol but not for a lob (yet)
+        # looping till we reach length data
         # dbug(f"size: {size} should NOT be 0")
         # dbug(data)
         for i in range(0, len(data), size):
+            # i_dtype = data_type(i)
+            # dbug(i_dtype)
             # dbug(f"i: {i} size: {size}")
             end = i + size
             # dbug(end)
@@ -8270,10 +8099,11 @@ def split_codes(val, *args, **kwargs):
     # dbug(kwargs)
     # dbug('ask')
     # """--== Config ==--"""
-    asdict_b = bool_val(['elem', 'with_elem', 'asdict', 'dict'], args, kwargs, dflt=False)
-    allcodes_b = bool_val(["all", "allcodes", "all_codes"], args, kwargs, dflt=False)
+    asdict_b = arg_val(['elem', 'with_elem', 'asdict', 'dict'], args, kwargs, dflt=False)
+    allcodes_b = arg_val(["all", "allcodes", "all_codes"], args, kwargs, dflt=False)
     """--== Init ==--"""
     val = clr_coded(val)  # in case this is a clr_coded(string)
+    elem = val
     # """--== Process ==--"""
     if allcodes_b:  # used by gwrap()
         # dbug(repr(val))
@@ -8284,17 +8114,22 @@ def split_codes(val, *args, **kwargs):
     pat = r"(?P<prefix>\x1b[\[\d\;]+m)(?P<elem>.*)(?P<suffix>\x1b.*m)"
     # pat = r".*?(?P<prefix>\x1b.*m)(?P<elem>.*)(?P<suffix>\x1b.*m)"
     regex = re.match(pat, str(val))
+    elem = escape_ansi(val)
     # dbug(regex)
     if regex:
         my_d = regex.groupdict()
         # dbug(my_d)
     else:
         elem = escape_ansi(val)
-        # elem = escape_ansi(elem)  # incase it is double wrapped with ansii code
+        elem = escape_ansi(elem)  # incase it is double wrapped with ansii code
+        if '\x1b[0m' in elem:
+            dbug(f"repr(elem) {repr(elem)}", 'ask')
         my_d = {'prefix': "", 'elem': elem, 'suffix': ""}
         # dbug(my_d)
+    # sometimes codes remain (like double resets so....
+    # elem = escape_ansi(elem)
     if asdict_b:
-        # dbug(f"Returning: my_d: {my_d}")
+        # dbug(f"Returning: repr(my_d): {repr(my_d)}")
         return my_d  # also includes ['elem': elem] ... see above
     else:
         return [my_d['prefix'], my_d['suffix']]  # returning a list with prefix and postfix code
@@ -8338,36 +8173,45 @@ def cond_num(elem, *args, **kwargs):
     # dbug(args)
     # dbug(kwargs)
     """--== Config ==--"""
-    clr_b = bool_val(["neg", "color", "clr", "colorize", "pos"], args, kwargs, dflt=False)  # "neg" and 'pos'are remanants of past code
+    clr_b = arg_val(["neg", "color", "clr", "colorize", "pos"], args, kwargs, dflt=False)  # "neg" and 'pos'are remanants of past code
     rnd = kvarg_val(['round', 'rnd'], kwargs, dflt="")
     # dbug(rnd)
     neg_color = kvarg_val(['neg_color'], kwargs, dflt='red! on rgb(0,0,0)')
     pos_color = kvarg_val(['pos_color'], kwargs, dflt='green! on rgb(0,0,0)')
-    human = bool_val(["human", "h"], args, kwargs, dflt=False)
+    human = arg_val(["human", "h"], args, kwargs, dflt=False)
     nan = kvarg_val(["nan", "NaN"], kwargs, dflt="")
-    rset = bool_val(['rset', 'reset'], args, kwargs, dflt=False)  # DO NOT change this to True - trust me!
-    no_prcnt = bool_val(["strip_percent", "strip_prcnt", "no_prcnt", "no_percent"], args, kwargs, dflt=False)
-    commas_b = bool_val(["comma", "commas"], args, kwargs, dflt=False)
-    pcnt_b = bool_val(["pcnt", "%", 'percent', 'prcnt'], args, kwargs, dflt=False)
+    rset = arg_val(['rset', 'reset'], args, kwargs, dflt=False)  # DO NOT change this to True - trust me!
+    no_prcnt = arg_val(["strip_percent", "strip_prcnt", "no_prcnt", "no_percent"], args, kwargs, dflt=False)
+    commas_b = arg_val(["comma", "commas"], args, kwargs, dflt=False)
+    pcnt_b = arg_val(["pcnt", "%", 'percent', 'prcnt'], args, kwargs, dflt=False)
     uncond_b = arg_val(['uncond', 'u', 'un','un-cond','uncondition'], args, kwargs, dflt=False)
     """--== uncond if requested ==--"""
     if uncond_b:
         elem = escape_ansi(str(elem)).strip()
         if isnumber(elem):
+            elem = str(elem)
             if elem.endswith("T"):
-                elem = float(elem[-1])
+                elem = elem.rstrip("T")
                 elem = elem * 1000000000000
+            elem = str(elem)
             if elem.endswith("B"):
-                elem = float(elem[-1])
+                elem = elem.rstrip("B")
+                elem = float(elem)
                 elem = elem * 1000000000
+            elem = str(elem)
             if elem.endswith("M"):
-                elem = float(elem[-1])
+                elem = elem.rstrip("M")
+                elem = float(elem)
                 elem = elem * 1000000
+            elem = str(elem)
             if elem.endswith("K") or elem.endswith("k"):
-                elem = float(elem[-1])
+                elem = elem.lower().rstrip("k")
+                elem = float(elem)
                 elem = elem * 1000
+            elem = str(elem)
             if elem.endswith("G"):
-                elem = float(elem.rstrip("G"))
+                elem = elem.rstrip("G")
+                elem = float(elem)
                 elem = elem * 1000000000
             return float(elem)
         else:
@@ -8381,7 +8225,19 @@ def cond_num(elem, *args, **kwargs):
     # orig_elem = elem
     elem = str(elem)
     # dbug(elem)
-    elem_CODES = split_codes(elem)
+    # elem_CODES = split_codes(elem)
+    # dbug(elem_CODES)
+    my_elem_CODES = split_codes(elem, 'elem')
+    # if '\x1b[0m' in elem:
+        # dbug('ask')
+    elem = my_elem_CODES['elem']
+    if '\x1b[0m' in elem:
+        dbug(f"Arggg.. repr(elem): {repr(elem)} {called_from('verbose')}")
+    # dbug(repr(elem))
+    elem_CODES = [my_elem_CODES['prefix'], my_elem_CODES['suffix']]
+    # if '\x1b[0m' in my_elem_CODES['suffix']:
+        # dbug('ask')
+    # dbug(my_elem_CODES)
     # if elem_CODES[0] != "":
         # dbug(elem_CODES)
     # last_msg = ""
@@ -8442,7 +8298,7 @@ def cond_num(elem, *args, **kwargs):
             prefix = "+"
             elem = elem.lstrip("+")
         # dbug(elem)
-        elem_val = escape_ansi(elem)
+        elem_val = escape_ansi(elem) # making sure
         # dbug(elem_val)
         # dbug(rnd)
         if rnd == 0:
@@ -8460,7 +8316,7 @@ def cond_num(elem, *args, **kwargs):
                 if isnumber(elem):
                     elem_val = int(elem_val)
             # dbug(f"chkg elem_val: {elem_val} for pos/neg")
-            if elem_val < 0:
+            if elem_val < 0 or (elem_val == 0 and str(elem_val).startswith("-")):
                 prefix = NEG_COLOR
                 # dbug(f"setting {NEG_COLOR}color{RESET} for elem_val: {elem_val} elem: {elem")
             else:
@@ -8468,9 +8324,10 @@ def cond_num(elem, *args, **kwargs):
                 # dbug(f"POS_COLOR: {POS_COLOR} {repr(POS_COLOR)}")
         # dbug(elem_val)
         if human:
-            # dbug(f"working on humanizing elem_val: {elem_val} suffix: {suffix}", 'ask')
+            # dbug(f"working on humanizing elem_val: {elem_val} suffix: {suffix}")
             if not str(elem_val).endswith(("B", "M", "K", "G", "T", "Kb", "Mb", "%")):
                 if float(elem_val) >= 1000000000000:
+                    # dbug(f"elem_val: {elem_val} is over a trillion")
                     elem_val = float(elem_val) / 1000000000000
                     elem_val = str(round(elem_val, 2)) + "T"
             if not str(elem_val).endswith(("B", "M", "K", "G", "T", "Kb", "Mb", "%")):
@@ -8483,7 +8340,7 @@ def cond_num(elem, *args, **kwargs):
                         elem_val = float(elem_val) / 1000000
                         elem_val = str(round(elem_val, 2)) + "M"
                 except Exception as Error:
-                    dbug(f"Error: {Error} elem_val: {elem_val}")
+                       dbug(f"Error: {Error} elem_val: {elem_val} repr(elem_val): {repr(elem_val)}")
             if not str(elem_val).endswith(("B", "M", "K", "G", "T", "Kb", "Mb", "%")):
                 if float(elem_val) >= 1000:
                     # dbug(elem_val)
@@ -8497,19 +8354,7 @@ def cond_num(elem, *args, **kwargs):
                 elem_val = "'" + elem_val + "'"
             if str(elem_val).replace(".", "").isnumeric():
                 elem_val = f"{float(elem_val):,}"
-            # dbug(elem_val)
-            # if clr_b and str(elem_val).endswith(("B", "M", "K", "G", "T", "Kb", "Mb", "%")):
-            #     dbug(elem_val)
-            #     raw_val = elem_val[:-1]
-            #     dbug(raw_val)
-            #     prefix = POS_COLOR
-            #     # dbug(pos_color)
-            #     # dbug(neg_color)
-            #     if float(raw_val) < 0:
-            #         dbug(f"raw_val: {raw_val} is neg")
-            #         prefix = NEG_COLOR
-            #     my_elem = prefix + str(elem_val) + suffix
-            #     dbug(my_elem)
+            # dbug(f"Done umanizing elem_val: {elem_val}")
         if isnumber(elem_val) and commas_b:
             # dbug(elem_val)
             elem_val = f"{float(elem_val):,}"
@@ -8529,7 +8374,8 @@ def cond_num(elem, *args, **kwargs):
         if len(elem) > len(escape_ansi(elem)):
             # dbug("Adding RESET")
             elem += RESET
-    # dbug(f"Returning elem: {elem}", 'ask')
+    # if "2.3" in elem:
+    #     dbug(f"Returning elem: [{elem}]", 'ask')
     return elem
     # ###  EOB def cond_num(elem, *args, **kwargs): ### #
 
@@ -8584,16 +8430,6 @@ def data_conditions(data, conditions_lol):
         # dbug(f"converting to list of lists")
         conditions_lol = [[conditions_lol]]  # making sure it is an lol
     colnames = data[0]
-    # for row in data[1:]:
-    # for cond in conditions_lol:
-    #     dbug(cond)
-    #     dbug(type(cond))
-    #     if len(cond) == 2:
-    #          if isinstance(cond[0], str):
-    #             raw_formula = cond[0]
-    #             dbug(raw_formula)
-    #             formula = raw_formula.replace('col', 'row')
-    #             dbug(formula)
     """--== Init ==--"""
     rows_lol = data  # TODO change (eliminate this)
     colnames = rows_lol[0]
@@ -8699,35 +8535,44 @@ data_cond = data_conditions
 
 
 # ##################################################
-def conditionals(data, conditions, *args, **kwargs):
+def conditionals(data, my_conditions, *args, **kwargs):
     # ##############################################
     """
     purpose: to apply conditions to all rows after colnames
     requires:
-        - data: list         # list of rows (of columns) or some other variations of data (it will get converted to an lol for processing and return)
-        - conditions: list   # list of conditions (see usage)
+        - data: list          # list of rows (of columns) or some other variations of data (it will get converted to an lol for processing and return)
+        - my_conditions: list # list of conditions (see usage)
     options:
         - prnt: bool
+        - pivot: boot
     usage:
         - syntax of a condition: str   # if condition /then color_coded  or calc equals column
             - 'if col(xxx) = 5 then [yellow]col(yyy)[/]'  # if/then condition color coding example
             - 'col(xxx) * 4 equals col(yyy)'              # calc equals condition example (if col(yyy) does not exist it will be added to the data)
             - 'col(xxx) < 1.5 then delete                 # this will delete a row that matches the condition of col(xxx) < 1.5 it acts as a conditional filter on data
+            - see the notes below!!!
     notes:
+        - this function literally does eval() on the left side of the equation for every row and (after the col(XXX) has been replaced with that the val held in that column)
+            - as a somewhat non-intuitive example ... lets say you have two columns named "Key" and "Value" and lets say
+              you want to make the value flash green when the key is "PE_Ratio" here is the condition to use
+                     "'col(Key)' == 'PE_Ratio' and col(Value) < 15 then [flash green]col(Value)[/]"
+                or another example:
+                     "col(price) < col(trgt) and 'col(action)' == 'put' then [flash green]col(price)[/]"
         - this replaces data_conditions() and add_cols() which will get deprecated
         - I struggle with the name for this function
         - if there are (nested) parentheses in the colname then double ecape the ().
             - for example colname is 'RSI (14)' then use something like this for the condition: 'col(RSI \\(14\\)) > 70 then [red!]col(RSI \\(14\\))[/]', 
     """
-    """--== local imports ==--"""
-    # from gtoolz import clr_coded, escape_ansi
-    """--== debugging ==--"""
-    # dbug(f"{funcname()} called_from: {called_from()}")
+    """--== Debugging ==--"""
+    # dbug(called_from())
     """--== Config ==--"""
-    prnt = bool_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
     footer = kvarg_val(['footer'], kwargs, dflt="")
     title = kvarg_val(['title'], kwargs, dflt="")
-    centered_b = bool_val(['cntrd', 'centered', 'cntr', 'center'], args, kwargs, dflt=False)
+    centered_b = arg_val(['cntrd', 'centered', 'cntr', 'center'], args, kwargs, dflt=False)
+    pivot_b = arg_val(['pivot'], args, kwargs, dflt=False)
+    # colnames = arg_val(['colnames', 'columns'], args, kwargs, dflt=[])
+    # dbug(colnames)
     """--== Validate ==--"""
     if isempty(data):
         dbug(f"data appears empty - called_from: {called_from()} ... returning...")
@@ -8737,12 +8582,12 @@ def conditionals(data, conditions, *args, **kwargs):
         data_lol = cnvrt(data)
     else:
         data_lol = data
-    if isinstance(conditions, str):
-        conditions = [conditions]
-    # dbug(conditions, 'lst')
+    if isinstance(my_conditions, str):
+        my_conditions = [my_conditions]
+    # dbug(my_conditions, 'lst')
     """--== convert old data_conditions syntax to this syntax ==--"""
     new_lol = []
-    for cond in conditions:
+    for cond in my_conditions:
         # dbug(cond)
         new_cond = cond
         if len(cond) == 4:
@@ -8759,34 +8604,38 @@ def conditionals(data, conditions, *args, **kwargs):
             new_cond += add_this
         # dbug(new_cond)
         new_lol.append(new_cond)
-    conditions = new_lol
-    # dbug(conditions, 'lst', 'ask')
+    my_conditions = new_lol
+    # dbug(my_conditions, 'lst', 'ask')
     """--== make data a lod ==--"""
     # dbug(data_lol)
+    # if isempty(colnames):
     colnames = data_lol[0]
-    # data_lod = [dict(zip(colnames, row)) for row in data_lol] 
-    # dbug(data_lod)
-    # cmp1_col = "one"
-    # cmp1_indx = colnames.index(cmp1_col)
-    # operator = "<"
-    # dbug(cmp1_indx)
-    # cmp2 = 0
-    # clr = 'red!'
-    # trgt_col = 'one'
-    # trgt_indx = colnames.index(trgt_col)
+    """--== deal with pivot ==--"""
+    # dbug(pivot_b)
+    if pivot_b:
+        # dbug("I am not terribly pleased with this strategy but it seems to work-we undo pivot and run conditionals, then redo pivot")
+        # colnames = [row[0] for row in data_lol]    
+        undo_pvt_lol = pivot(data_lol)
+        # dbug(undo_pvt_lol[0])
+        cond_lol = conditionals(undo_pvt_lol, my_conditions)
+        rtrn_lol = pivot(cond_lol)
+        return rtrn_lol
+    # orig_colnames = colnames
+    # dbug(f"colnames: {colnames} orig_colnames: {orig_colnames}") 
     """--== Init ==--"""
     phrases = []
     trgt = ""
-    new_columns = []
+    # new_columns = []
     new_lol = [data_lol[0]]
     """--== Process ==--"""
+    # dbug(colnames)
     for row in data_lol[1:]:
         skip_row_flag = False
         orig_row = row
         # dbug(f"======= handlng row: {row} colnames: {colnames} ============")
         new_row = row
         # add_row = ['to_calc'] * len(colnames)  # init new row to add
-        for cond_num, condition in enumerate( conditions):
+        for cond_num, condition in enumerate(my_conditions):
             # dbug(condition)
             orig_condition = condition  # this is for debugging
             """--== loop init ==--"""
@@ -8800,6 +8649,9 @@ def conditionals(data, conditions, *args, **kwargs):
             # this is a kludge for (double) escaped nested parens "(" ")" ie col(foo \\(what_ever\\) bar)
             condition = condition.replace('\\(', '_[_')
             condition = condition.replace('\\)', '_]_')
+            #condition = condition.replace('"', '')
+            #condition = condition.replace("'", '')
+            condition = condition.replace("if ","")
             # dbug(condition)
             # kludge continues below
             """--== pattern matches ==--"""
@@ -8807,12 +8659,15 @@ def conditionals(data, conditions, *args, **kwargs):
             matches = re.compile(pattern).findall(condition)
             # dbug(matches)
             """--== loop for each match found in this condition ==--"""
-            # this substitutes the tral value of each col(XXX) in the condition #
+            # this substitutes the true value of each col(XXX) in the condition #
             for num, match in enumerate(matches, start=1):
                 this_indx = None
                 my_val = None
                 # dbug(type(my_val))
-                # dbug(match)
+                if match[0] in ('"', "'") and  match[0] == match[-1]:
+                    # dbug(f"Need to dequote this match: {match}")
+                    match = match[1:-1]
+                    # dbug(match, 'ask')
                 # kludge for escaped () continued
                 if "_[_" in match:
                     # dbug(match, 'ask')
@@ -8823,11 +8678,16 @@ def conditionals(data, conditions, *args, **kwargs):
                     condition = condition.replace("_]_", ")")
                     # dbug(condition)
                 if match in colnames:
+                    # dbug(f"match: {match} colnames: {colnames}")
                     this_indx = colnames.index(match)
+                    # dbug(f"match: {match} colnames: {colnames} this_indx: {this_indx}")
                     this_val = str(new_row[this_indx]).strip()  # I have seen leading spaces which caused a prob - just get rid of leading/trailing spaces
                     my_val = escape_ansi(this_val)
                 else:
-                    # dbug(match)
+                    # if ' equals ' not in condition:
+                    #     dbug(f"I do not recognize this col to match: {match} and there is not ' equals ' in the condition: {condition}...\npossible colnames: {data_lol[0]}\ncontinuing on...")
+                    #     return
+                    # dbug(f"match: {match}... establishing a new_colname called match: {match}")
                     new_colname = match
                     colnames.append(new_colname)
                     this_indx = colnames.index(new_colname)
@@ -8858,7 +8718,8 @@ def conditionals(data, conditions, *args, **kwargs):
                 if isempty(my_val) or my_val == "-":
                     my_val = 0
                 if isnumber(my_val, 'human'):
-                    my_val = re.sub('[BMKk%]+', "", str(my_val))
+                    # if isnumber(my_val):
+                    my_val = re.sub('[BMKk%,]+', "", str(my_val))
                     my_val = float(my_val)
                 if my_val is None or my_val == "None":
                       dbug(my_val, 'ask')
@@ -8875,6 +8736,9 @@ def conditionals(data, conditions, *args, **kwargs):
                     # phrases = raw_condition.split(" equals ")
                     phrases = condition.split(" equals ")
                     # dbug(phrases)
+                if len(phrases) < 2:
+                    dbug(f"Perhaps you forgot the word 'then' or 'equals' in the condition: {condition}... continuing on...")
+                    continue
                 cmp = phrases[0]
                 if len(phrases) == 2:
                     trgt = phrases[1]
@@ -8882,93 +8746,48 @@ def conditionals(data, conditions, *args, **kwargs):
             """--== now run the rslt test or calc ==--"""
             cmp = escape_ansi(cmp)
             rslt = False
+            # dbug(cmp)
             try:
-                rslt = eval(cmp)  # where the rubber hits the road
+                rslt = eval(f"{cmp}")  # where the rubber hits the road
                 # dbug(f"cmp: {cmp} rslt: {rslt}")
-            except Exception as Error:
-                dbug(orig_condition)
-                dbug(raw_condition)
-                dbug(condition)
-                dbug(phrases)
-                dbug(f"cmp: {cmp} got an exception Error: {Error} ")
+            except Exception:  # as Error:
+                # dbug(f"Failed to eval(cmp) cmp: {cmp} rslt: {rslt}")
+                # dbug(orig_condition)
+                # dbug(raw_condition)
+                # dbug(condition)
+                # dbug(phrases)
+                # dbug(f"cmp: {cmp} got an exception Error: {Error} ")
                 continue
             # """--== replace the trgt in new_row with new value ==--"""
             trgt_indx = indxs[-1]  # this assumes that the target is the last column value
             if ' then ' in condition:
                 if rslt:  # if the rslt is True ie eval(cmp) is True...  then replace the trgt in the row with new_val
                     if trgt in ('delete', 'skip', 'remove', 'ignore', 'filter'):
-                        # dbug(f"We should skip the row where this condition is true rslt: {rslt}")
+                        # dbug(f"We should skip the row where this condition ie delete,skip,remove,etc is true rslt: {rslt}")
                         skip_row_flag = True 
                         # new_row = ""
                     else:
                         # dbug(trgt)
                         prefix, suffix = split_codes(trgt)
+                        # dbug(repr(prefix))
+                        # dbug(repr(suffix))
                         orig_trgt = escape_ansi(orig_row[trgt_indx])
                         # dbug(orig_trgt)
+                        # dbug(repr(prefix))
                         new_val = f"{prefix}{orig_trgt}{suffix}"
+                        # dbug(new_val)
                         # new_val = f"{orig_trgt}"
                         new_row[trgt_indx] = new_val  # the last indx is the trgt or rslt indx
                         # new_row[trgt_indx] = clr_coded(new_row[trgt_indx])  # the last indx is the trgt or rslt indx
-                        # dbug(f"cmp: {cmp} new_val: {new_val}")
+                        # dbug(f"cmp: {cmp} new_val: {new_val} repr(new_val): {repr(new_val)}")
+                        # dbug(new_row)
             if ' equals ' in condition:
                 new_val = rslt
                 new_row[trgt_indx] = new_val
         """--== add the new_row into new_lol ==--"""
         if not skip_row_flag:
             new_lol.append(new_row)
-    # """--== init for new columns ==--"""
-    # if len(new_columns) > 0:
-    #     dbug(f"new_columns: {new_columns} has entires")
-    #     # orig_colnames = data_lol[0]
-    #     orig_colnames = new_lol[0]
-    #     dbug(orig_colnames)
-    #     new_cols_d = {}
-    #     for condition in new_columns:
-    #         try:
-    #             formula, new_col = condition.split(' equals ')
-    #         except Exception:  #  as Error:
-    #             # dbug(f"Column not found... assuming new column name. condition: {condition} Error: {Error}" )
-    #             continue
-    #         pattern = r"col\((.*?)\)"
-    #         try:
-    #             matches = re.compile(pattern).findall(new_col)
-    #         except Exception as Error:
-    #             dbug(f"Failed to find pattern: {pattern} in new_col: {new_col} Error: {Error}")
-    #             continue
-    #         new_cols_d[matches[0]] = formula
-    #     new_colnames = list(new_cols_d.keys())
-    #     my_lol = [orig_colnames + new_colnames]
-    #     dbug(my_lol)
-    #     new_lol = my_lol
-    #     dbug(new_lol)
-    #     """--== process ==--"""
-    #     # for row in data_lol[1:]:
-    #     for row in new_lol[1:]:
-    #       new_row = row
-    #       add_row = ["to_calc"] * len(new_colnames)
-    #       for new_col, formula in new_cols_d.items():
-    #           indx = new_colnames.index(new_col)
-    #           # build a new elem for that new_col
-    #           pattern = r"col\((.*?)\)"
-    #           matches = re.compile(pattern).findall(formula)
-    #           for match in matches:
-    #               this_indx = orig_colnames.index(match)
-    #               my_val = escape_ansi(row[this_indx])
-    #               if isnumber(my_val):
-    #                   my_val = float(my_val)
-    #               formula = formula.replace(f'col({match})', str(my_val))
-    #           # dbug(formula)
-    #           new_elem = eval(escape_ansi(formula))
-    #           # dbug(new_elem)
-    #           # dbug(f"new_col: {new_col} my_val: {new_elem}")
-    #           # add new_elem value
-    #           add_row[indx] = new_elem
-    #       new_row += add_row
-    #       # dbug(new_row, 'ask')
-    #       my_lol.append(new_row)
-    #     # dbug(my_lol[:5])
-    #     new_lol = my_lol
-    # dbug(new_lol, 'lst')
+            # printit(" ".join(new_row), 'boxed', title="debugging", footer=dbug('here'))
     """--== return ==--"""
     if prnt:  # or 1:  # is for debugging
         if footer == "":
@@ -8996,7 +8815,7 @@ def get_random_line(file, prnt=False, *args, **kwargs):
     if isinstance(file, str):
         file = os.path.expanduser(file)
         if not file_exists(file):
-            dbug("Failed to find file: {file}")
+            dbug(f"Failed to find file: {file} {called_from('verbose')}")
     if isinstance(file, list):
         contents_l = purify_file(file)
     else:
@@ -9025,7 +8844,7 @@ def run_cmd_threaded(cmd, *args, **kwargs):
     # """--== Debugging ==--"""
     # dbug("who uses this?")
     # """--== Config ==--"""
-    lst = bool_val(['lst', 'list'], args, kwargs, dflt=False)
+    lst = arg_val(['lst', 'list'], args, kwargs, dflt=False)
     """--== Process ==--"""
     t = ThreadWithReturn(target=run_cmd, args=(cmd,))
     t.start()
@@ -9065,13 +8884,13 @@ def run_cmd(cmd, *args, prnt=False, runas="", **kwargs):
     # dbug(funcname)
     # dbug(cmd)
     # """--== Config ==--"""
-    return_l = bool_val(['list', 'lines', 'lst'], args, kwargs)
-    return_rc = bool_val(['rc', 'return_rc', 'rtrn_rc'], args, kwargs, dflt=False)
-    both = bool_val(['both'], args, kwargs, dflt=False)
+    return_l = arg_val(['list', 'lines', 'lst'], args, kwargs)
+    return_rc = arg_val(['rc', 'return_rc', 'rtrn_rc'], args, kwargs, dflt=False)
+    both = arg_val(['both'], args, kwargs, dflt=False)
     runas = kvarg_val(["runas", "sudo"], kwargs, dflt=runas)
-    errors_b = bool_val(["errors", "err", "errs", "error"], args, kwargs, dflt=False)
-    background_b = bool_val(["bg", 'nohup', 'background'], args, kwargs, dflt=False)
-    prnt = bool_val(['prnt', 'print', 'show'], args, kwargs)
+    errors_b = arg_val(["errors", "err", "errs", "error"], args, kwargs, dflt=False)
+    background_b = arg_val(["bg", 'nohup', 'background'], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print', 'show'], args, kwargs)
     fork_b = arg_val(['fork'], args, kwargs, dflt=False)
     """--== SEP_LINE ==--"""
     out = ""
@@ -9141,10 +8960,6 @@ def run_cmd(cmd, *args, prnt=False, runas="", **kwargs):
         if errors_b:
             out += err
     except Exception:
-        # dbug(Error, 'ask')
-        # if process fails then run one of these
-        # out = os.system(cmd)
-        # out = os.popen(cmd)
         out = subprocess.check_output(cmd.split(), universal_newlines=True)
         return out
     # dbug(f"cmd.split():{cmd.split()} process:{process}")
@@ -9160,10 +8975,6 @@ def run_cmd(cmd, *args, prnt=False, runas="", **kwargs):
             rc = 0
         return (out, rc)
     if both:
-        # dbug("returns a tuple")
-        # use: r = run_cmd(cmd, 'both')
-        # output = r[0]
-        # rc = r[1]
         return (out, rc)
     # dbug(out)
     return out
@@ -9188,9 +8999,9 @@ def grep_lines(lines, pattern, *args, **kwargs):
     # dbug(called_from())
     # dbug(pattern)
     # """--== Config ==--"""
-    ic = bool_val(['ic', 'ci', 'case_insensitive', 'ignore_case'], args, kwargs)
-    rtrn_b = bool_val(['rtrn_bool', 'rtrn_d', 'bool', 'rtrn'], args, kwargs, dflt=False)
-    csv_b = bool_val(['csv'], args, kwargs, dflt="")
+    ic = arg_val(['ic', 'ci', 'case_insensitive', 'ignore_case'], args, kwargs)
+    rtrn_b = arg_val(['rtrn_bool', 'rtrn_d', 'bool', 'rtrn'], args, kwargs, dflt=False)
+    csv_b = arg_val(['csv'], args, kwargs, dflt="")
     # """--== Xlate filename to lines ==--"""
     if isinstance(lines, str):
         # dbug(lines)
@@ -9268,11 +9079,11 @@ def list_files(dirs, file_pat="*", *args, **kwargs):
     # dbug(file_pat)
     # """--== Config ==--"""
     ptrns = kvarg_val(['file_pat', 'patterns', 'pattern', 'ptrn', 'ptrns', 'pat'], kwargs, dflt=[file_pat])
-    links = bool_val('links', args, kwargs, dflt=False)  # should links be followed
-    dirs_b = bool_val(["dirs_b", "dirs"], args, kwargs, dflt=False)
-    dirs_only = bool_val(["dirsonly", "dirs_only", "dironly", "dir_only"], args, kwargs, dflt=False)
+    links = arg_val('links', args, kwargs, dflt=False)  # should links be followed
+    dirs_b = arg_val(["dirs_b", "dirs"], args, kwargs, dflt=False)
+    dirs_only = arg_val(["dirsonly", "dirs_only", "dironly", "dir_only"], args, kwargs, dflt=False)
     sortby = kvarg_val(['sortby'], kwargs, dflt='name')
-    mtime = bool_val(["with_mtime", "with_mdate", "mtime", "long", "ll"], args, kwargs, dflt=False)
+    mtime = arg_val(["with_mtime", "with_mdate", "mtime", "long", "ll"], args, kwargs, dflt=False)
     # dbug(with_mtime)
     # """--== Inits ==--"""
     msgs = []
@@ -9357,6 +9168,7 @@ def select_file(path="./", *args, pattern="*", **kwargs):
         - footer: str
         - sortby: str                 # default='name - or choose "mtime" | "mdate" |"date" then this will sortby mtime
         - width=0
+        - timeout: int                # question times out after declared seconds with "" as answer
     use: f = select_file("/home/user","*.txt")
     returns filename selected
     Note: this uses list_files() and gselect()
@@ -9365,7 +9177,7 @@ def select_file(path="./", *args, pattern="*", **kwargs):
     # dbug(called_from())
     # prnt=True, color="", boxed=False, box_color="", title="", footer="", shadow=False, center=False, displaywidth=0, rtrn="value", **kwargs):
     # """--== Config ==--"""
-    # prnt = bool_val(["prnt", "print"], args, kwargs, dflt=True)
+    # prnt = arg_val(["prnt", "print"], args, kwargs, dflt=True)
     color = kvarg_val(["color", 'clr'], kwargs, dflt="")
     # boxed = kvarg_val(["boxed", "box"], kwargs, dflt=False)
     box_color = kvarg_val(['box_color', 'box_clr', 'bx_clr'], kwargs, dflt="")
@@ -9373,21 +9185,23 @@ def select_file(path="./", *args, pattern="*", **kwargs):
     footer = kvarg_val("footer", kwargs, dflt="")
     colnames = kvarg_val("colnames", kwargs, dflt=["Select", "File"])
     # dbug(colnames)
-    shadow = bool_val(["shadow", "shadowed"], args, kwargs, dflt=False)
-    centered = bool_val(["center", 'centered'], args, kwargs, dflt=False)
+    shadow = arg_val(["shadow", "shadowed"], args, kwargs, dflt=False)
+    centered = arg_val(["center", 'centered'], args, kwargs, dflt=False)
     width = kvarg_val(["width", 'display_width', 'displaywidth', 'length'], kwargs, dflt=0)
+    # dbug(width)
     ptrns = kvarg_val(['pattern', 'patterns', 'pat', 'ptrn', 'ptrns'], kwargs, dflt=pattern)
     prompt = kvarg_val('prompt', kwargs, dflt="Please select file: ")
-    mtime = bool_val(['ll', 'long', 'long_list', 'mtime', 'with_mtime'], args, kwargs, dftt=False)
+    mtime = arg_val(['ll', 'long', 'long_list', 'mtime', 'with_mtime'], args, kwargs, dftt=False)
     # dbug(mtime)
-    # choose = bool_val(['choose', 'select', 'pick'], args, kwargs, dflt=True)
-    dirs_b = bool_val(['dirs_b', 'dirs', 'dir'], args, kwargs, dflt=False)
-    dirs_only = bool_val(['dirs_only', 'dirsonly', 'dironly', 'dir_only', 'only_dirs'], args, kwargs, dflt=False)
+    # choose = arg_val(['choose', 'select', 'pick'], args, kwargs, dflt=True)
+    dirs_b = arg_val(['dirs_b', 'dirs', 'dir'], args, kwargs, dflt=False)
+    dirs_only = arg_val(['dirs_only', 'dirsonly', 'dironly', 'dir_only', 'only_dirs'], args, kwargs, dflt=False)
     sortby = kvarg_val(['sortby'], kwargs, dflt='name')
     cols = kvarg_val(['cols'], kwargs, dflt=0)
-    basefiles_b = bool_val(['base','basefiles', 'basenames', 'show_base', 'show_basefiles'], args, kwargs, dflt=True)
+    basefiles_b = arg_val(['base','basefiles', 'basenames', 'show_base', 'show_basefiles'], args, kwargs, dflt=True)
     rtrn_type = kvarg_val(['rtrn', 'rtrn_type', 'rtrntype', 'return_type'], kwargs, default="")
     dflt = kvarg_val(["dflt", "default"], kwargs, dflt="")
+    timeout = arg_val(['timeout', 'time'], args, kwargs, default=0)
     # """--== Process ==--"""
     file_l = list_files(path, ptrns=ptrns, dirs_b=dirs_b, dirs_only=dirs_only, sortby=sortby, with_mtime=mtime)
     # dbug(file_l)
@@ -9402,10 +9216,6 @@ def select_file(path="./", *args, pattern="*", **kwargs):
         files_lol.append([num, file])
         base_files_lol.append([num, os.path.basename(file)])
         select_files_d[os.path.basename(file)] = file
-    # dbug(files_lol)
-    # my_files_lol = pivot(files_lol)
-    # ans = gselect(my_files_lol, 'prnt', cols=cols)
-    # dbug(colnames)
     # dbug(cols)
     select_files = files_lol
     if basefiles_b:
@@ -9413,7 +9223,8 @@ def select_file(path="./", *args, pattern="*", **kwargs):
         select_files = base_files_lol
     # dbug(select_files)
     ans = gselect(select_files, 'prnt', rtrn="v", cols=cols, colnames=colnames, color=color, box_color=box_color,
-                  shadow=shadow, width=width, centered=centered, prompt=prompt, title=title, footer=footer, dflt=dflt)
+                  shadow=shadow, width=width, centered=centered, prompt=prompt, title=title, footer=footer, dflt=dflt, timeout=timeout)
+    # dbug(ans)
     if str(ans).lower() in ("q", "quit", ""):
         # dbug(f"No file selected... returning {called_from()}", centered=centered)
         return
@@ -9422,16 +9233,6 @@ def select_file(path="./", *args, pattern="*", **kwargs):
     else:
         if ans in select_files_d:
             ans = select_files_d[ans]
-    # if width == 0:
-    #     width = int(get_columns() * .8)
-    # if title == "":
-    #     title = " File Selection "
-    # # dbug(file_d)
-    # if len(file_d) == 1:
-    #     return file_d
-    # ans = gselect(file_d, rtrn=rtrn, width=width, box_color=box_color, color=color, centered=centered, shadow=shadow, title=title, footer=footer, prompt=prompt, cols=cols)
-    # if mtime:
-    #     ans = ans.split()[0]
     # dbug(f"Returning ans: {ans}",'ask')
     return ans
     # ### EOB def select_file(path="./", *args, pattern="*", **kwargs): # ###
@@ -9518,27 +9319,47 @@ def cinput(prompt, *args, **kwargs):
     aka: centered input
     purpose: gets input from user using provided promt - centers the prompt on the screen
     options:
-        - shift: int   # allows you to shift the position of the prompt (from the center) eg shift=-5
+        - shift: int              # allows you to shift the position of the prompt (from the center) eg shift=-5
         - quit|exit|close: bool   # will quit with do_close() if availaable or just sys.exit()
-        - dflt: str    # you can provide a default if user hits only <ENTER> 
+        - dflt: str               # you can provide a default if user hits only <ENTER> 
+        - timeout: int            # question will timeout after declared seconds with dlft as the answer
+        - centered: bool          # default is true but can be set to False which makes it act like input but with the options provided here
     returns: user response
     """
+    """--== Debugging ==--"""
+    # dbug(called_from())
     # """--== Config ==--"""
-    quit_b = bool_val(['quit', 'exit', 'close'], args, kwargs, dflt=False)
+    quit_b = arg_val(['quit', 'exit', 'close'], args, kwargs, dflt=False)
     shift = kvarg_val('shift', kwargs, dflt=0)
     dflt_s = kvarg_val(["default", "dflt"], kwargs, dflt="")
+    timeout = arg_val(["timeout", "time"], args, kwargs, dflt=0)
+    centered_b = arg_val(["centered", "center", "cntrd", "cntr"], args, kwargs, dflt=True, opposites=['nocntr','no_center','nocenter','no_cntr'])
     # dbug(shift)
     # """--== Process ==--"""
     if prompt == "":
         prompt = "Hit Enter to continue..." + dflt_s
     # dbug(prompt)
-    prompt = printit(prompt, prnt=False, centered=True, rtrn='str', shift=shift)
-    # dbug(prompt)
-    # dbug(repr(prompt))
-    # dbug(dflt_s)
-    ans = input(prompt) or dflt_s
+    prompt = printit(prompt, prnt=False, centered=centered_b, rtrn='str', shift=shift)
+    if timeout > 0:
+        import select
+        # Note: select returns 3 objects (is_readable,is_writable, return_errors) as it is designed for lots of different kinds of input (like testing sockets)
+        print(prompt, end='', flush=True)
+        # input = sys.stdin.readline().strip()
+        r,w,e = select.select([sys.stdin], [], [], timeout)
+        if (r):  # this is needed - trust me
+            # Read the input and print result
+            ans = sys.stdin.readline().strip()
+        # Run else when time is over
+        else:
+            # printit(f"Sorry, time: {timeout} is up...", centered=centered_b)
+            print(" ")
+            ans = dflt_s
+        # return ans
+    else:
+        ans = input(prompt) or dflt_s
     # dbug(ans)
-    if quit_b and ans.lower() == "q":
+    if quit_b and ans.lower() in ("q", ""):
+        # dbug(quit_b)
         try:
             do_close("[red]Exiting[/] as requested...", 'centered')
         except Exception:
@@ -9611,14 +9432,14 @@ def pbar(amnt, full_range=100, *args, bar_width=40, show_prcnt=True, **kwargs):
     # dbug(suffix)
     # brackets = kvarg_val(["brackets"], kwargs, dflt=["", ""])
     brackets = kvarg_val(["brackets"], kwargs, dflt=["[", "]"])
-    show_prcnt = bool_val("show_prcnt", args, kwargs, dflt=show_prcnt)
-    prnt = bool_val(["prnt", 'print', 'show'], args, kwargs, dflt=False)
-    centered_b = bool_val(["centered", 'center'], args, kwargs, dflt=False)
-    boxed_b = bool_val(['boxed', 'box'], args, kwargs, dflt=False)
+    show_prcnt = arg_val("show_prcnt", args, kwargs, dflt=show_prcnt)
+    prnt = arg_val(["prnt", 'print', 'show'], args, kwargs, dflt=False)
+    centered_b = arg_val(["centered", 'center'], args, kwargs, dflt=False)
+    boxed_b = arg_val(['boxed', 'box'], args, kwargs, dflt=False)
     title = kvarg_val('title', kwargs, dflt="")
     footer = kvarg_val('footer', kwargs, dflt="")
     box_clr = kvarg_val(['box_clr', 'box_color'], kwargs, dflt="")
-    show_highlow = bool_val(['show_hl', 'show_highlow', 'show_lh', 'show_lowhigh', 'show_range', 'show_rng', 'hl', 'lh', 'range', 'rng', 'shwlh'], args, kwargs, dflt=False)
+    show_highlow = arg_val(['show_hl', 'show_highlow', 'show_lh', 'show_lowhigh', 'show_range', 'show_rng', 'hl', 'lh', 'range', 'rng', 'shwlh'], args, kwargs, dflt=False)
     # """--== Init ==--"""
     actual = None
     if not boxed_b and not isempty(title) and isempty(prompt):
@@ -9751,7 +9572,7 @@ def progress(progress, *args, **kwargs):
     color = kvarg_val(['color', 'text_color', 'txt_color', 'txt_clr'], kwargs, dflt="")
     done_color = kvarg_val(['done_color'], kwargs, dflt="")
     undone_color = kvarg_val(['fill_color', 'fcolor', 'fclr', 'undone_color'], kwargs, dflt="")
-    prnt = bool_val(['print', 'prnt'], args, kwargs, opposites=["noprnt", "no_prnt", "noprint", "no_print"], dflt=True)
+    prnt = arg_val(['print', 'prnt'], args, kwargs, opposites=["noprnt", "no_prnt", "noprint", "no_print"], dflt=True)
     COLOR = sub_color(color)
     DONE_COLOR = sub_color(done_color)
     UNDONE_COLOR = sub_color(undone_color)
@@ -9774,15 +9595,12 @@ def progress(progress, *args, **kwargs):
     # done_chr = done_color + done_chr
     undone_chr = kvarg_val(['fill_chr', 'fc', 'undone_chr'], kwargs, dflt=" ")
     status = kvarg_val(['status', 'done_msg', 'done_txt', 'done_text', 'post_prompt', 'suffix'], kwargs, dflt="")
-    center_b = bool_val(["centered", "center"], args, kwargs, dflt=False)
+    center_b = arg_val(["centered", "center"], args, kwargs, dflt=False)
     shift = kvarg_val("shift", kwargs, dflt=0)
-    # elapsed_b = bool_val(["elapsed", "elpsdd"], args, kwargs, dflt=False)  # TODO
+    # elapsed_b = arg_val(["elapsed", "elpsdd"], args, kwargs, dflt=False)  # TODO
     # """--== SEP_LINE ==--"""
     if isinstance(progress, int):
         progress = float(progress)
-        # if not isinstance(progress, float):
-        # progress = 0
-        # status = "error: progress var must be float\r\n"
     # """--== SEP_LINE ==--"""
     if progress < 0:
         progress = 0
@@ -9925,12 +9743,12 @@ def new_add_content(file, new_content="", *args, **kwargs):
     dbug(new_content)
     dbug(f"This needs to be to be factored with similar funcs. Funcname: {funcname()} Called_from: {called_from()}... everything should come here and then rename to add_content")
     # """--== Config ==--"""
-    prnt = bool_val(["prnt", "print", "verbose", "show"], args, kwargs, dflt=False)
+    prnt = arg_val(["prnt", "print", "verbose", "show"], args, kwargs, dflt=False)
     my_add_content = kvarg_val(["new_content", "add", "insert", "new", "add_content"], kwargs, dflt=new_content)
     # show = kvarg_val('show', kwargs, dflt=False)
     # dbug(prnt)
-    boxed_b = bool_val(["box", 'boxed'], args, kwargs, dflt=False)
-    centered_b = bool_val(["center", 'centered', "cntr", "cntrd"], args, kwargs, dflt=False)
+    boxed_b = arg_val(["box", 'boxed'], args, kwargs, dflt=False)
+    centered_b = arg_val(["center", 'centered', "cntr", "cntrd"], args, kwargs, dflt=False)
     position = kvarg_val('position', kwargs, dflt=None)
     after = kvarg_val("after", kwargs, dflt="")
     before = kvarg_val("before", kwargs, dflt="")
@@ -9966,11 +9784,6 @@ def new_add_content(file, new_content="", *args, **kwargs):
         # note:
         # before_pos
         # after_pos
-        # if isinstance(sort, int)
-        #   if not isempty(after) and not isempty(before)
-        #     my_l = sorted(lines, key=lambda x: x[:sort])
-        # else:
-        #     my_l =sorted(lines)
         """
         # debug #
         dbug(contents)
@@ -9978,9 +9791,6 @@ def new_add_content(file, new_content="", *args, **kwargs):
         dbug(position)
         ### configs ###
         after = kvarg_val("after", kwargs, dflt="")
-        # before = kvarg_val("before", kwargs, dflt="")
-        # replace = kvarg_val("replace", kwargs, dflt="")
-        # pattern = kvarg_val(['pat', 'pattern'], kwargs, dflt ="")
         ### inits ###
         len_orig_contents = len(contents)
         new_contents = []
@@ -10052,10 +9862,6 @@ def new_add_content(file, new_content="", *args, **kwargs):
     if file_exists(file):
         file_content = cat_file(file)
         dbug(file_content, 'boxed')  # , 'lst')
-        # for row in file_content:
-            # dbug(row)
-        # file_content = [",".join(row) for row in file_content if not isempty(row)]
-        # dbug(file_content, 'boxed', 'lst', 'ask')
     """--== if content is dictionary ==--"""
     if isinstance(my_add_content, dict):
         # turn the dict into a string of lines using the values, set colnames/header=keys
@@ -10253,14 +10059,14 @@ def addit(contents="", new_contents="", *args, **kwargs):
         - drafted on 20240814 lots of tweaks since... I almost trust it now
     """
     """--== Config ==--"""
-    prnt = bool_val(['prnt', 'print'], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print'], args, kwargs, dflt=False)
     contents = kvarg_val(['content', 'contents'], kwargs, dflt=contents)
     filename = kvarg_val(['filename', 'fname', 'file'], kwargs, dflt="")
     new_contents = kvarg_val(['add_content', 'add_contents', 'new', 'new_content', 'new_contents', 'insert'], kwargs, dflt=new_contents)
-    sort_b = bool_val(['sort', 'sorted'], args, kwargs, dflt=False)
-    bak_b = bool_val(['bak', 'backup'], args, kwargs, dflt=False)
+    sort_b = arg_val(['sort', 'sorted'], args, kwargs, dflt=False)
+    bak_b = arg_val(['bak', 'backup'], args, kwargs, dflt=False)
     arch_d = kvarg_val(['arch', 'archive', 'archops', 'arch_ops'], kwargs, dflt=None)  # dictionary of options
-    write_b = bool_val(['write', 'write_file'], args, kwargs, dflt=True, opposites=['nowrite'])
+    write_b = arg_val(['write', 'write_file'], args, kwargs, dflt=True, opposites=['nowrite'])
     after = kvarg_val(['after', 'begin', 'start'], kwargs, dflt="")
     before = kvarg_val(['before', 'end'], kwargs, dflt="")
     replace = kvarg_val(['replace', 'pat', 'pattern', 'rplc'], kwargs, dflt="")
@@ -10422,9 +10228,6 @@ def addit(contents="", new_contents="", *args, **kwargs):
         sorted_block = new_lines
         # dbug("chk now", 'ask')
         end_contents = contents[before_pos + 1:]
-        # printit(beg_contents, 'boxed', title='beg_contents', footer=dbug('here'))
-        # printit(sorted_block, 'boxed', title="sorted", footer=dbug('here'))
-        # printit(end_contents, 'boxed', title='end_contents', footer=dbug('here'))
         # add 'em up #
         contents = beg_contents + sorted_block + end_contents
     os.chdir(cur_dir)  # this is important!
@@ -10474,13 +10277,13 @@ def arch(filename="", *args, **kwargs):
     # dbug(funcname())
     # dbug(kwargs)
     """--== Config ==--"""
-    prnt = bool_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
     day_limit = kvarg_val(['days', 'age'], kwargs, dflt=0)
     file_limit = kvarg_val(['files', 'keep', 'limit'], kwargs, dflt=None)
     seconds_limit = kvarg_val(['seconds', 'ttl'], kwargs, dflt=0)
     arch_dir = kvarg_val(['arch_dir', 'archdir', 'dir'], kwargs, dflt='ARCH')
-    stats_b = bool_val(['stats'], args, kwargs, dflt=False)
-    bak_b = bool_val(['bak', 'back', 'bakup', 'backup'], args, kwargs, dflt=False)
+    stats_b = arg_val(['stats'], args, kwargs, dflt=False)
+    bak_b = arg_val(['bak', 'back', 'bakup', 'backup'], args, kwargs, dflt=False)
     # arch_b = kvarg_val(['arch'], args, kwargs, dflt=False)  # this is a WIP
     """--== Validation ==--"""
     if not file_exists(filename) or os.stat(filename).st_size == 0:
@@ -10582,14 +10385,6 @@ def try_it(func, *args, attempts=1, **kwargs):
         my_func()
     """
     def inner(*args, **kwargs):
-        # for n in range(attempts):
-        #     try:
-        #         r = func(*args, **kwargs)
-        #         dbug(f"Returning r: {r}")
-        #     except Exception as e:
-        #         dbug(f"Error: {e} in: {func}")
-        #         return None
-        #     return r
         rsps = func(*args, **kwargs)
         return rsps
     r = inner(*args, **kwargs)
@@ -10694,7 +10489,7 @@ def comma_join(data, *args, **kwargs):
     # dbug(args)
     # dbug(kwargs)
     # """--== Config ==--"""
-    newline_b = bool_val(["newlines", "newline"], args, kwargs, dflt=False)
+    newline_b = arg_val(["newlines", "newline"], args, kwargs, dflt=False)
     # """--== Init ==--"""
     line = ""
     elems = []
@@ -10764,7 +10559,7 @@ def get_elems(lines, *args, index=False, col_limit=20, **kwargs):
     col_limit = kvarg_val(["col_limit", 'collimit' 'colmax', 'col_max'], kwargs, dflt=0)  # not used yet TODO
     index = kvarg_val(["index", 'indx', 'idx'], kwargs, dflt="")  # not used yet TODO
     # dbug(delimiter)
-    lst_b = bool_val(["list", "lst"], args, kwargs, dflt=False)
+    lst_b = arg_val(["list", "lst"], args, kwargs, dflt=False)
     """--== Imports ==--"""
     # import pyparsing as pp
     # """--== Init ==--"""
@@ -10805,12 +10600,6 @@ def get_elems(lines, *args, index=False, col_limit=20, **kwargs):
                     if elem[0] in ("'",'"') and elem[-1] == elem[0]:
                         # dbug(f"dequote repr(elem): {repr(elem)}")
                         elem = elem[1:-1]
-                        # now lets just make absolutlely sure *avoiding double quote wraped elems
-                        # if elem[0] in ("'",'"') and elem[-1] == elem[0]:
-                        #     dbug(f"dequote 2nd round repr(elem): {repr(elem)}")
-                        #     elem = elem[1:-1]
-                    # else:
-                    #     dbug(f"letting elem: {elem} go through without dequote elem[0]: {elem[0]} elem[-1]: {elem[-1]}")
                     elems[i] = elem
                 # dbug(new_line)
             new_lines.append(elems)
@@ -10928,9 +10717,9 @@ def get_html_tables(url="", *args, **kwargs):
     """--== Debugging ==--"""
     # dbug(funcname())
     """--== Config ==--"""
-    prnt = bool_val(["prnt", "print", "show", "verbose"], args, kwargs, dflt=False)
-    spinner_b = bool_val(["spinner"], args, kwargs, dflt=False)
-    selenium_b = bool_val(["selenium"], args, kwargs, dflt=False)
+    prnt = arg_val(["prnt", "print", "show", "verbose"], args, kwargs, dflt=False)
+    spinner_b = arg_val(["spinner"], args, kwargs, dflt=False)
+    selenium_b = arg_val(["selenium"], args, kwargs, dflt=False)
     # """--== Validation(s) ==--"""
     # """--== Init ==--"""
     tables = []
@@ -11061,10 +10850,6 @@ def display_in_cols(lst, cols=0, reverse="", on="value"):
             cols = math.ceil(screen_cols / max_elem_len)
         else:
             cols = max_elem_len
-        # dbug(f"screen_cols: {screen_cols} cols: {cols} max_elem_len: {max_elem_len}")
-        # cols -= 1
-    # cols = int(cols)
-    # dbug(cols,ask=True)
     col = 0
     rows_num = math.ceil(tot_num / cols)
     # dbug(tot_num)
@@ -11193,15 +10978,15 @@ def add_or_replace(filename, action="end", pattern="", new_line="", *args, backu
     # dbug('ask')
     dbug(f"This needs to be to be re-factored with similar funcs. like new_add_content... Funcname: {funcname()} Called_from: {called_from()}")
     # """--== Config ==--"""
-    prnt = bool_val(['prnt', 'print', 'show', 'verify', 'verbose'], args, kwargs, dflt=False)
-    ask = bool_val('ask', args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print', 'show', 'verify', 'verbose'], args, kwargs, dflt=False)
+    ask = arg_val('ask', args, kwargs, dflt=False)
     # dbug(f'ask: {ask}')
-    shadow_b = bool_val('shadowed', args, kwargs, dflt=False)
-    center_b = bool_val('centered', args, kwargs, dflt=False)
-    prnt = bool_val(['prnt', 'print', 'show', 'verify', 'verbose'], args, kwargs, dflt=False)
-    backup = bool_val(["bak", "backup", "bakup"], args, kwargs, dflt=backup)
-    write_b = bool_val(["write"], args, kwargs, dflt=True)
-    lst = bool_val(["lst", "list"], args, kwargs, dflt=False)
+    shadow_b = arg_val('shadowed', args, kwargs, dflt=False)
+    center_b = arg_val('centered', args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print', 'show', 'verify', 'verbose'], args, kwargs, dflt=False)
+    backup = arg_val(["bak", "backup", "bakup"], args, kwargs, dflt=backup)
+    write_b = arg_val(["write"], args, kwargs, dflt=True)
+    lst = arg_val(["lst", "list"], args, kwargs, dflt=False)
     # """--== Init ==--"""
     linenum = 0
     # cnt = 0
@@ -11417,9 +11202,9 @@ def rootname(filename, *args, **kwargs):
     returns: ROOT_NAME: str
     """
     """--== Config ==--"""
-    dir = bool_val(['dir'], args, kwargs, dflt=False)
-    base = bool_val(['base', 'basename'], args, kwargs, dflt=False)
-    full_base = bool_val(['fbase', 'fbasename', 'full_base', 'full_basename'], args, kwargs, dflt=False)
+    dir = arg_val(['dir'], args, kwargs, dflt=False)
+    base = arg_val(['base', 'basename'], args, kwargs, dflt=False)
+    full_base = arg_val(['fbase', 'fbasename', 'full_base', 'full_basename'], args, kwargs, dflt=False)
     """--== Validation ==--"""
     if isempty(filename):
         return
@@ -11518,7 +11303,7 @@ def data_type(data, expected="", *args, **kwargs):
         prnt = True
         expected=""
     else:
-        prnt = bool_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
+        prnt = arg_val(['prnt', 'print', 'show', 'verbose'], args, kwargs, dflt=False)
     # dbug(prnt)
     block_b = arg_val(['block', 'blk', 'block_b'], args, kwargs, dflt=False)  # what does this do?
     """--== Convert ==--"""
@@ -11583,15 +11368,24 @@ def data_type(data, expected="", *args, **kwargs):
                     continue
                 else:
                     dtype = 'doD'
-                    dbug(f"problem my_len: {my_len} last_len: {last_len} dtype: {dtype}")
+                    # dbug(f"problem my_len: {my_len} last_len: {last_len} dtype: {dtype}")
                     break
         if all(map(lambda x: isinstance(x, list), list(data.values()))):
             dtype = 'dol'
     # dbug(f"dtype: {dtype} {called_from()}")
     if isinstance(data, list):
+        data = [item for item in data if not isempty(item)]  # cleanup data getting rid of empty items
+        if isempty(data):
+            dtype = "empty"
+            return dtype
+        for my_x in data:
+            if nclen(my_x) < 1:
+                dbug(f"promblem len(my_x): {len(my_x)} my_x: {my_x} len(data): {len(data)} dtype: {dtype} dat_type(my_x): {data_type(my_x)}")
+                continue
         # ddbug(f"data: {data}", 'ask')
         dtype = 'lom'  # list of mixed until proven otherwise
-        # dbug(dtype)
+        # dbug(f"dtype: {dtype} {called_from('verbose')}")
+        # if all(isinstance(item, list) for item in data if not isempty(item)):
         if all(isinstance(item, list) for item in data):
             # ddbug(f"every elem of the list is a list {called_from()}")
             dtype = 'lol'
@@ -11606,18 +11400,38 @@ def data_type(data, expected="", *args, **kwargs):
                         dtype = "los"
                     block_b = False
             else:
-                # dbug(f"is this a list of blocks (blocks here means all the strings are the same length (nclen <-- no-color or no-code length) {called_from()}")
+                # dbug(f"len(data): {len(data)} is this a list of blocks (blocks here means all the strings are the same length (nclen <-- no-color or no-code length) {called_from()}")
                 for block in data:
-                  for line_s in block:
-                      block_b = True  # until proven false below
-                      if not nclen(line_s) == nclen(block[0]):
-                          # dbug(f"line_s: {line_s} is not == nclen(block[0]): {nclen(block[0])} block[0]: {block[0]}")
-                          block_b = False
-                          break
-                  if not block_b:
-                      break
+                    # if not isempty(block):
+                        # printit(data, 'prnt', 'boxed', title="debugging", footer=dbug('here')) 
+                    # else:
+                       # # dbug("found an empty 'block")
+                       # continue
+                    for line_s in block:
+                        block_b = True  # until proven false below
+                        # if isempty(line_s):
+                        #     # dbug("found an empty line_s")
+                        #     continue
+                        if not nclen(line_s) == nclen(block[0]):
+                            # dbug(f"line_s: {line_s} is not == nclen(block[0]): {nclen(block[0])} block[0]: {block[0]}")
+                            block_b = False
+                            break
+                    if not block_b:
+                        break
                 if block_b:
-                  dtype = "lob"
+                    dtype = "lob"
+        # else:
+            # dbug(dtype)
+            # dbug(nclen(data))
+            # printit(data[0])
+            # dbug(repr(data[0]))
+            # dbug(data_type(data[0]))
+            # my_lens = []
+            # for item in data:
+            #     item_len = nclen(item)
+            #     my_lens.append(item_len)
+            # ddbug(my_lens)
+            # dbug('ask')
         if all(isinstance(item, dict) for item in data):
             dtype = 'lod'
             first_keys = list(data[0].keys())
@@ -11649,107 +11463,6 @@ def data_type(data, expected="", *args, **kwargs):
     # ### EOB def data_type(data, *args, **kwargs): ### #
 
 
-# #################
-# def islol(my_lol, *args, **kwargs):
-#     # #############
-#     """
-#     purpose: determine is my_lol is actually a list of lists
-#     required: list - my_lol
-#     options: none
-#     return: bool True | False
-#     note:
-#         - if you want to know if your matrix is a list of list of a list of list (eg: rows, columns, of boxes)
-#           use: islolol = all([islol(elem) for elem in mtrx])   # True or False... is this a list of lists within an lol
-#         - this will be deprecated as data_type will replace it
-#     """
-#     """--== Debugging ==--"""
-#     dbug(called_from())
-#     # """--== Config ==--"""
-#     # show = bool_val(["show"], args, kwargs, dflt=False)
-#     # any_b = bool_val(["any"], args, kwargs, dflt=False)
-#     all_b = bool_val(["all"], args, kwargs, dflt=True)
-#     # scope = kvarg_val(["scope"], kwargs, dflt="all")
-#     # dbug(all_b)
-#     # """--== SEP_LINE ==--"""
-#     #  count = sum( [ len(listElem) for listElem in my_lol)
-#     if not isinstance(my_lol, list):
-#         # dbug(f"Woops... this should be a list my_l: [{my_lol}] type(my_lol): {type(my_lol)}")
-#         return False
-#     # dbug(my_lol)
-#     # dbug(type(my_lol))
-#     if all_b:
-#         my_islol = all(isinstance(elem, list) for elem in my_lol)  # True or False... is this a list of lists
-#     else:
-#         my_islol = any(isinstance(elem, list) for elem in my_lol)  # True or False... is this a list of lists
-#     return my_islol
-# 
-# 
-# def islod(my_lod, *args, **kwargs):
-#     """
-#     purpose: is this a list of dictionaries 
-#     options: None
-#     returns: bool
-#     notes:
-#         - this will be deprecated as data_type will replace it
-#     """
-#     """--== Debugging ==--"""
-#     dbug(called_from())
-#     """--== Process ==--"""
-#     for elem in my_lod:
-#         if not isinstance(elem, dict):
-#             return False
-#     return True
-# 
-# 
-# def islos(my_los=["a", "list", "of", "strings"], *args, **kwargs):
-#     """
-#     purpose: determines if my_los is a list of strings
-#     returns: bool
-#     notes:
-#         - this will be deprecated as data_type will replace it
-#     """
-#     # """--== Debugging ==--"""
-#     dbug(called_from())
-#     # dbug(my_los)
-#     # dbug(args)
-#     # dbug(kwargs)
-#     # """--== Config ==--"""
-#     show = bool_val(["show"], args, kwargs, dflt=False)
-#     # any_b = bool_val(["any"], args, kwargs, dflt=False)
-#     all_b = bool_val(["all"], args, kwargs, dflt=True)
-#     # scope = kvarg_val(["scope"], kwargs, dflt="all")
-#     # """--== validate ==--"""
-#     if my_los is None:
-#         # dbug("my_los: {my_los} is None ")
-#         return False
-#     if not isinstance(my_los, list):
-#         # dbug("my_los: {my_los} is not a list ")
-#         return False
-#     # """--== Init ==--"""
-#     scope = "all"
-#     # dbug(type(my_los))
-#     # """--== validate ==--"""
-#     if not all_b:
-#         any_b = True
-#     if not isinstance(my_los, list) and len(str(my_los)) > 1:
-#         # yes, it must first be a list - otherwise a simple single string would pass
-#         # dbug(my_los)
-#         return False
-#     rtrn = False
-#     # """--== SEP_LINE ==--"""
-#     if show:
-#         dbug(my_los)
-#     if all_b or scope in ("all"):
-#         # dbug(my_los)
-#         if all([isinstance(x, str) for x in my_los]):
-#             # dbug("Yes this is a los")
-#             rtrn = True
-#     if show:
-#         dbug(f"Returning rtrn: {rtrn} any_b: {any_b} all_b: {all_b} scope: {scope} ")
-#     # dbug(f"Returning rtrn: {rtrn}")
-#     return rtrn
-
-
 # ##############
 def maxof(my_l, *args, **kwargs):
     # ##########
@@ -11779,10 +11492,10 @@ def maxof(my_l, *args, **kwargs):
         # dbug(my_l)
         return 0
     # """--== Config ==--"""
-    height_b = bool_val(["height", "max_height", "rows", "row_len"], args, kwargs, dflt=False)
-    length_b = bool_val(["length", "max_len", "len", 'elem_len', 'elems', 'cols'], args, kwargs, dflt=False)
-    elems_b = bool_val(["number", "num", "items", "elems", "max_num_elems", 'max_elems'], args, kwargs, dflt=False)
-    lst_b = bool_val(['lst', 'list'], args, kwargs, dflt=False)
+    height_b = arg_val(["height", "max_height", "rows", "row_len"], args, kwargs, dflt=False)
+    length_b = arg_val(["length", "max_len", "len", 'elem_len', 'elems', 'cols'], args, kwargs, dflt=False)
+    elems_b = arg_val(["number", "num", "items", "elems", "max_num_elems", 'max_elems'], args, kwargs, dflt=False)
+    lst_b = arg_val(['lst', 'list'], args, kwargs, dflt=False)
     # """--== Init ==--"""
     max_height = 0
     max_len = 0
@@ -11906,15 +11619,15 @@ def gblock(msgs_l, *args, **kwargs):
     position = kvarg_val(["just", "justify", "position", "pos"], kwargs, dflt=1)  # can be str | list
     positions = kvarg_val(["positions"], kwargs, dflt=[1, 2, 3])  # list ... applies when msgs_l is actually an list of lists of boxes
     pad = kvarg_val(["pad", "fill"], kwargs, dflt=" ")
-    prnt = bool_val(["prnt", "print", "show"], args, kwargs, dflt=False)
-    boxed_b = bool_val(['boxed', 'box'], args, kwargs, dflt=False)
-    centered_b = bool_val(['centered', 'center'], args, kwargs, dflt=False)
+    prnt = arg_val(["prnt", "print", "show"], args, kwargs, dflt=False)
+    boxed_b = arg_val(['boxed', 'box'], args, kwargs, dflt=False)
+    centered_b = arg_val(['centered', 'center'], args, kwargs, dflt=False)
     txt_center = kvarg_val(["text_center", "text_centered", "lines_centered", "txt_center", 'txt_centered'], kwargs, dflt=0)
     title = kvarg_val(['title'], kwargs, dflt="")
     footer = kvarg_val(['footer'], kwargs, dflt="")
     box_color = kvarg_val(["box_color", 'box_clr'], kwargs, dflt="white! on black")
     color = kvarg_val(["color", 'clr'], kwargs, dflt="")
-    centered = bool_val(["centered", 'ccentered'], args, kwargs, dflt=False)
+    centered = arg_val(["centered", 'ccentered'], args, kwargs, dflt=False)
     # possiblilities: left, center, right, top, middle, bottom
     # """--== Validations ==--"""
     if msgs_l is None:
@@ -11997,13 +11710,6 @@ def gblock(msgs_l, *args, **kwargs):
             # printit(new_msgs_l, 'boxed', title="debugging boxed", footer=dbug('here'))
             # dbug(f"stop {called_from()}", 'ask')
             return(new_msgs_l)
-            # my_lines = []
-            # for msg in msgs_l:
-            #     dbug(msg)
-            #     if len(msg) > 1:
-            #         my_lines += gblock(gcolumnize(msg), length=width)  # , height=height)
-            #     my_lines = printit(my_lines, boxed=boxed_b, centered=centered_b, title=title, footer=footer, box_color=box_color, color=color, prnt=prnt, txt_center=txt_center)
-            # dbug("returning my_lines")
             return my_lines
         # dbug("Treating msgs_l as a lol ... not a simple list? ", 'ask' )
         # if any([islol(elem) for elem in msgs_l]):
@@ -12179,6 +11885,13 @@ def gblock(msgs_l, *args, **kwargs):
     # ### EOB def gblock(msgs_l, *args, **kwargs): ### #
 
 
+def gblock_qnd(*args, **kwargs):
+    box1 = boxed("blah blah blah")
+    box2 = boxed(["blah", "blah", "blah"])
+    block1 = gblock([box1, box2], 'prnt')
+    gblock(box1 + block1 + box2, 'prnt')
+
+
 # #####################################################
 def find_file_in_dirs(filename, dirs_l=[], prnt=False):
     # #################################################
@@ -12207,7 +11920,6 @@ def find_file_in_dirs(filename, dirs_l=[], prnt=False):
     # ### EOB def find_file_in_dirs(filename, dirs_l=[], prnt=False): ### #
 
 
-
 def usr_input(prompt="Your input: ", *args, **kwargs):
     """
     purpose: allow user input with editing - see usr_update() as that is likely what you want
@@ -12219,6 +11931,7 @@ def usr_input(prompt="Your input: ", *args, **kwargs):
         - shift: int
         - update: dict
         - length: int = 0       # all lines will display with the same length
+        - timeout: int      # question will timeout after declared seconds with the default as the answer
     returns: edit or input data as str or dict if update option
     Notes: 
         - this function is typically called by usr_update()
@@ -12231,15 +11944,16 @@ def usr_input(prompt="Your input: ", *args, **kwargs):
     # """--== Import ==--"""
     import readline
     # """--== Config ==--"""
-    centered_b = bool_val(["centered", "center", "cntr"], args, kwargs, dflt=False)
+    centered_b = arg_val(["centered", "center", "cntr"], args, kwargs, dflt=False)
     shift = kvarg_val(["shift", "shft"], kwargs, dflt=0)
     # dbug(shift)
     prompt = kvarg_val("prompt", kwargs, dflt=prompt)
     default = kvarg_val(["dflt", 'default'], kwargs, dflt=None)
-    edit = bool_val(["edit", "editable", 'edt'], args, kwargs, dflt=False)
+    edit = arg_val(["edit", "editable", 'edt'], args, kwargs, dflt=False)
     update = kvarg_val(["update"], kwargs, dflt={})
     max_val_len = kvarg_val(["max_v", "max_v_len", "max_val", "max_val_len"], kwargs, dflt=0)
-    noedit_b = bool_val(["noedit", "no_edit", "noinput", "no_input"], args, kwargs, dflt=False)
+    noedit_b = arg_val(["noedit", "no_edit", "noinput", "no_input"], args, kwargs, dflt=False)
+    timeout = arg_val(["timeout"], args, kwargs, dflt=0)
     # """--== Validate ==--"""
     if edit and default is None and len(update) == 0:
         dbug("Edit has been invoked but there is no default|dflt which is needed or make default='' ...")
@@ -12270,9 +11984,10 @@ def usr_input(prompt="Your input: ", *args, **kwargs):
         if centered_b:
             prompt = centered(prompt, shift=shift)
         if noedit_b:
+            # dbug('no edit')
             printit(prompt)
             return default
-        response = input(prompt) or default
+        response = cinput(prompt, 'nocenter', timeout=timeout) or default
     """--== update dictionary values ==--"""
     if len(update) > 0:
         response = usr_update(update, centered=centered_b, shift=shift, edit=edit)
@@ -12289,12 +12004,12 @@ def usr_input(prompt="Your input: ", *args, **kwargs):
                 # ruleit(center=True)  # debugging
                 prompt = centered(prompt, shift=shift)[0]
             if noedit_b:
-                # yes, you may want to display the question but not allow an edit...
+                dbug("yes, you may want to display the question but not allow an edit...")
                 # dbug(prompt + default)
                 printit(prompt + default)
                 return default
             # dbug(prompt)
-            response = input(prompt)
+            response = cinput(prompt, timeout=timeout)
         finally:
             if edit:
                 readline.set_startup_hook(None)
@@ -12322,10 +12037,11 @@ def usr_update(my_d, *args, **kwargs):
           - fix: list       # default=[]      - list of keys to prompt user for change; if empty, use all the my_d keys
           - centered: bool  # default=False   - whether to center everything on the screen
           - edit: bool      # defualt=False   - whether to allow text edit in place or the default of input replacement input
-          - no_edits: list  # default=[]      - list of keys that are presented but not editable
+          - no_edits: list  # default=[]      - list of keys that are presented but not editable - note: case sensitive exact match is required here
           - quit: bool      # default=False   - whether to immediately quit on an entry of "q" or "Q", or "quit"
           - textedit: list  # default=[]      - the list contains any keys that you want to use for your external text editor to modify or input the value
                                                 This option is useful for very long text value changes.
+          - timeout: int    # question will timeout after declared seconds with the default as the answer
     returns: my_d (with user updates)
     Notes:
         - what is in the passed dict values is what will be presented as the default.
@@ -12340,13 +12056,14 @@ def usr_update(my_d, *args, **kwargs):
     """--== Config ==--"""
     # max_size = kvarg_val(["max", " max_size"], kwargs, dflt=40)
     fix_l = kvarg_val(["fix", "fix_list", "fix_l", "to_fix", "fix_lst", "update", "to_update", "update_lst"], kwargs, dflt=[])
-    edit_b = bool_val(["edit", "editable", "edit_txt", "edit_text"], args, kwargs, dflt=False)
-    centered_b = bool_val(["center", "centered", "cntr"], args, kwargs, dflt=False)
-    noedits_l = kvarg_val(["noedits", "no_edits", "excludes", 'except'], kwargs, dflt=[])  # which keys will not be allowed editing of any form but will be presented/displayed
-    quit_b = bool_val(["quit", "q", "exit"], args, kwargs, dflt=False)
-    chunks_b = bool_val(["chunks"], args, kwargs, dflt=False)
+    edit_b = arg_val(["edit", "editable", "edit_txt", "edit_text"], args, kwargs, dflt=False)
+    centered_b = arg_val(["center", "centered", "cntr"], args, kwargs, dflt=False)
+    noedits_l = kvarg_val(["noedits", "no_edits", "excludes", 'except', 'noedit', 'no_edit', 'skip'], kwargs, dflt=[])  # which keys will not be allowed editing of any form but will be presented/displayed
+    quit_b = arg_val(["quit", "q", "exit"], args, kwargs, dflt=False)
+    chunks_b = arg_val(["chunks"], args, kwargs, dflt=False)
     texteditor_l = kvarg_val(["texteditor", "tedit", "tedit_l", "tedits"], kwargs, dflt=[])
     ask_b = arg_val(['ask'], args, kwargs, dflt=False)
+    timeout = arg_val(['timeout'], args, kwargs, dflt=0)
     # dbug(centered_b)
     # """--== Init ==--"""
     if quit_b:
@@ -12375,6 +12092,7 @@ def usr_update(my_d, *args, **kwargs):
         # dbug(f"k: {k} v: {v}")
         if v == "":  # this actually will get taken care of in usr_input but doing it anyway
             v = " "
+        # dbug(f"chkg is k: {k} in noedits_l: {noedits_l}")
         if k in noedits_l:
             noedit = True
             # dbug(f"making noedit: {noedit} k: {k}")
@@ -12408,11 +12126,11 @@ def usr_update(my_d, *args, **kwargs):
             continue
         if edit_b:
             my_prompt = prompt + f"[{k:<{max_k}}]: "
-            ans = usr_input(prompt=my_prompt, default=v, centered=centered_b, max_v=max_v, edit=edit_b, noedit=noedit)
+            ans = usr_input(prompt=my_prompt, default=v, centered=centered_b, max_v=max_v, edit=edit_b, noedit=noedit, timeout=timeout)
         else:
             # dbug(f"max_k: {max_k} max_v: {max_v} k: {k} v: {v}")
             my_prompt = prompt + f"[{k:<{max_k}}]: "
-            ans = usr_input(edit=edit_b, prompt=my_prompt, centered=centered_b, dflt=v, max_v=max_v, noedit=noedit)
+            ans = usr_input(edit=edit_b, prompt=my_prompt, centered=centered_b, dflt=v, max_v=max_v, noedit=noedit, timeout=timeout)
             ans = str(ans)
         if quit_b:
             if ans in ("q", "Q", "quit"):
@@ -12493,7 +12211,7 @@ def remap_keys(my_d, remap_d, *args, **kwargs):
         - 20220423 gwm
     """
     """--== Config ==--"""
-    mapped_only_b = bool_val(["mapped_only", "mapped"], args, kwargs, dflt=True)
+    mapped_only_b = arg_val(["mapped_only", "mapped"], args, kwargs, dflt=True)
     rnd = kvarg_val("rnd", kwargs, dflt=0)
     # ask_b = arg_val(['ask'], args, kwargs, dflt=False)
     """--== Validate ==--"""
@@ -12526,13 +12244,9 @@ def remap_keys(my_d, remap_d, *args, **kwargs):
             new_d[elem] = elem
         remap_d = new_d
         mapped_only_b = True
-    # """--== Process ==--"""
+    """--== Process ==--"""
     # dbug(my_d_dtype)
     # ok this is a special circumstance... if my_d is an lol then select and change the hdr (colnames) and select values appropriately
-    # if islol(my_d):
-    # dbug(islol(my_d))
-    # dbug(len(my_d))
-    # dbug(called_from())
     if data_type(my_d, 'lol'):
         # dbug(islol(my_d))
         # dbug(my_d_dtype)
@@ -12591,14 +12305,6 @@ def remap_keys(my_d, remap_d, *args, **kwargs):
     return new_d
     # ### EOB def remap_keys(my_d, remap_d, *args, **kwargs): ### #
 
-def remap_keys_qnd(*args, **kwargs):
-    # my_lol = [["col1", "col2", "col3"], [1, 2, 3], ["one", "two", "three"]]
-    # gtable(my_lol, 'prnt', title='debugging', footer=dbug('here'))
-    # remap_d = {'col1':'column 1','col3':'column 3','col2':'column_2'}
-    # new_lol = remap_keys(my_lol, remap_d)
-    # gtable(new_lol, 'prnt', title='debugging', footer=dbug('here'))
-    pass
-    return
 
 # #####################################################
 def bld_plug_map(trgt_data, src_data, *args, **kwargs):
@@ -12646,12 +12352,6 @@ def bld_plug_map(trgt_data, src_data, *args, **kwargs):
         gcolumnize([src_cols_box, double_action_box, trgt_cols_box], 'prnt', centered=True)
         # trgt_selection = gselect(trgt_selections, prompt="This trgt key will be used to plug a new value from the source data: ", colnames=["Choice", "Column Name"])
         """--== sep_line ==--"""
-        # dbug(plug_map_d)
-        # if not isempty(plug_map_d):
-        #     selected_l = [f"src colname \'{k}\' value-->trgt colname \'{v}\' value" for k,v in plug_map_d.items()]
-        #     printit(selected_l, 'boxed', 'centered', bxclr="yellow! on black!", title="Selected", footer=dbug('here'))
-        #     # gcolumnize(selected_l, cols=2, prnt=True, boxed=True, centered=True, title="Selected", footer=dbug('here'), sep='solid')
-        """--== sep_line ==--"""
         ans = cinput("Enter: source colname choice, target colname choice\nFor example: 1,1\nYour selections [q]uit: ")
         # dbug(ans)
         if ans in ("q", "Q"):
@@ -12687,25 +12387,25 @@ def quick_plot(data, *args, **kwargs):
         - centered: bool
         - title: str
         - footer: str
-        - choose: bool       # invokes gselect multi mode to allo"w selections of columns to display in the plot (graph)
-        - selections: list   # you can declare what columns to plot
-        - web: bool          # displays to your browser instead of a plot figure
-        - dat: bool | str    # I sometimes use a commented firstline for headers -
-                             # using 'dat' declares this to be true, if character is used ie dat=":"
-                             # then that will be used as the delimiter
-        - type: str          # default=line, bar, barh, hist, box, kde, density, area, pie, scatter, hexbin
+        - choose: bool             # invokes gselect multi mode to allow selections of columns to display in the plot (graph)
+        - selections: list         # you can declare what columns to plot
+        - web: bool                # displays to your browser instead of a plot figure
+        - dat: bool | str          # I sometimes use a commented firstline for headers -
+                                   # using 'dat' declares this to be true, if character is used ie dat=":"
+                                   # then that will be used as the delimiter
+        - type: str                # default=line, bar, barh, hist, box, kde, density, area, pie, scatter, hexbin
         - colnames: list | str     # default = [] if it is a str="firstrow" then the firstrow obviously will be treated as colnames
-        - mavgs: bool        # 50 day and 200 day moving averages added to plot
-        - box_text: str | list # string or lines to add to a box in fuger default=""
-        - subplot: str       # sub plot with area under filled using colname = subplot
-        - save_file: str     # name of file to save the plot figure to.  default=""
-        - delimiter: str     # assumes a filename for data (above) and use delimiter to seperate elements in each line of the file
-        - hlines: dict       # dictionary eg: {"target": 44, "strike": 33, ...} can be one or several
-        - pblines: bool      # pullback_lines - only useful for stock history charts
-        - rnd: int           # round numbers to int - only useful if show or prnt is invoked for gtable display (see option show | prnt)
-        - show | prnt: bool  # shows/prints a limited (see tail option) amount of data in a table centered (for debugging or checking)
-        - tail: int          # for the last n rows of the df default=15
-        - fix: bool          # fix will convert all lines/rows to have same number of columns as the first line in a list of lists
+        - mavgs: bool              # 50 day and 200 day moving averages added to plot
+        - box_text: str | list     # string or lines to add to a box in fuger default=""
+        - subplot: str             # sub plot with area under filled using colname = subplot
+        - save_file: str           # name of file to save the plot figure to.  default=""
+        - delimiter: str           # assumes a filename for data (above) and use delimiter to seperate elements in each line of the file
+        - hlines: dict             # dictionary eg: {"target": 44, "strike": 33, ...} can be one or several
+        - pblines: bool            # pullback_lines - only useful for stock history charts
+        - rnd: int                 # round numbers to int - only useful if show or prnt is invoked for gtable display (see option show | prnt)
+        - show | prnt: bool        # shows/prints a limited (see tail option) amount of data in a table centered (for debugging or checking)
+        - tail: int                # for the last n rows of the df default=15
+        - fix: bool                # fix will convert all lines/rows to have same number of columns as the first line in a list of lists
     # returns: df
     returns:
         - lol  # list of rows each of which is a list of columns
@@ -12735,39 +12435,39 @@ def quick_plot(data, *args, **kwargs):
         dbug(f"Problem with plt... Error: {Error}")
         return
     # """--== Config ==--"""
-    show = bool_val(["show"], args, kwargs, dflt=False)
-    choose = bool_val(["choose", "multi", 'multiple'], args, kwargs, dflt=False)
+    show = arg_val(["show"], args, kwargs, dflt=False)
+    choose = arg_val(["choose", "multi", 'multiple'], args, kwargs, dflt=False)
     selections = kvarg_val(["selections", "select", "choices", "selected"], kwargs, dflt=[])
     selections = [selection.lower() for selection in selections]  # my preference and avoids case confusion later
     # dbug(f"selections: {selections} {called_from()}")
     title = kvarg_val("title", kwargs, dflt="")
     footer = kvarg_val("footer", kwargs, dflt="")
     tail = kvarg_val("tail", kwargs, dflt=15)
-    centered_b = bool_val(["centered", "center"], args, kwargs, dflt=True)
-    web_b = bool_val(['web', 'browser'], args, kwargs, dflt=False)
+    centered_b = arg_val(["centered", "center"], args, kwargs, dflt=True)
+    web_b = arg_val(['web', 'browser'], args, kwargs, dflt=False)
     colnames = kvarg_val(['colnames', 'col_names', 'columns'], kwargs, dflt=[])
-    firstrow_b = bool_val(["firstrow", "first", "firstline"], args, kwargs, dflt=False)
+    firstrow_b = arg_val(["firstrow", "first", "firstline"], args, kwargs, dflt=False)
     # dbug(colnames)
     # kind = kvarg_val(['kind', 'type', 'style'], kwargs, dflt='line')  # line, bar, barh, hist, box, kde, density, area, pie, scatter, hexbin
     dat = kvarg_val(["dat"], kwargs, dflt=False)
-    dat = bool_val(["dat"], args, kwargs, dflt=dat)  # this needs to be here in combination w/above
-    mavgs = bool_val(["mavgs", "mavg", "moving_avgs"], args, kwargs, dflt=False)
+    dat = arg_val(["dat"], args, kwargs, dflt=dat)  # this needs to be here in combination w/above
+    mavgs = arg_val(["mavgs", "mavg", "moving_avgs"], args, kwargs, dflt=False)
     box_text = kvarg_val(["box_text", 'box_txt', "text", "txt"], kwargs, dflt="")
     savefile = kvarg_val(["save", "savefile", "save_file"], kwargs, dflt="")
     hlines = kvarg_val(["trgt", "target", 'strike', "line", "hline", "hlines"], kwargs, dflt=0)  # must be a dictionary
     subplot = kvarg_val(["subplot", "sub_plot", "sub"], kwargs, dflt="")
     subplot = subplot.lower()  # this avoids case confusion later
     # dbug(subplot)
-    pb_lines = bool_val(["pb_lines", "pblines", "pullback_lines", "plines"], args, kwargs, dflt=False)  # only useful for stock history charts
+    pb_lines = arg_val(["pb_lines", "pblines", "pullback_lines", "plines"], args, kwargs, dflt=False)  # only useful for stock history charts
     delimiter = kvarg_val(["delim", "delimiter", "dlmtr"], kwargs, dflt=",")
-    # index_b = bool_val(["index", "indexes", "idx"], args, kwargs, dflt=False)
+    # index_b = arg_val(["index", "indexes", "idx"], args, kwargs, dflt=False)
     rnd = kvarg_val(["rnd", "round"], kwargs, dflt=0)
-    fix_b = bool_val(['fix', 'fix_b'], args, kwargs, dflt=True)
+    fix_b = arg_val(['fix', 'fix_b'], args, kwargs, dflt=True)
     # """--== Inits ==--"""
     selections_l = []
     hline_name = "HLine"
     simple_list = False
-    # """--== Convert to df ==--"""
+    """--== Convert to df ==--"""
     # dbug(data)
     # dbug(type(data), 'ask')
     # dtype = data_type(data, 'prnt')
@@ -12829,27 +12529,15 @@ def quick_plot(data, *args, **kwargs):
             # dbug(colnames)
             if colnames in ("firstrow", "firstline", "rowone", "first"):
                 colnames = df.iloc[0].tolist()  # first row for the header/colnames
-                # dbug(colnames)
-                # suggested oneliner: df.rename(columns=df.iloc[0]).drop(df.index[0])
-            # dbug(colnames)
-            # dbug(df.info)
             df.columns = colnames
         src = "list"
         # if colnames[0] != df.index.name:
         if not simple_list:
             # this therefore should be a lol
-            # dbug(colnames)
-            # dbug(df.info)
-            # dbug(colnames)
             df = df.set_index(colnames[0])  # set the index to the first column
-            # dbug(f"colnames: {colnames} df.index.name: {df.index.name}")  # index: {index}")
-            # dbug(df.info)
-            # dbug('ask')
-    # dbug("All conversions done except colnames... ")
-    # """--== Process ==--"""
-    # dbug(df.head(3))
-    # show = True  # for debugging
-    # dbug(colnames)
+    """--== Process ==--"""
+    dbug(df.head(3))
+    dbug(colnames)
     if colnames != []:
         if colnames in ("firstrow", 'firstline', "first", "rowone"):
             # dbug(df)
@@ -12870,6 +12558,7 @@ def quick_plot(data, *args, **kwargs):
             df.columns = colnames
     # dbug(f"Now all conversions done including colnames: {colnames}  df:{df}")
     colnames = df.columns.to_list()
+    dbug(colnames)
     colnames = [colnames.lower() for colnames in colnames]  # my preference and makes the colnames more predictable
     # dbug(colnames)
     df_colnames = df.columns.to_list()
@@ -12992,12 +12681,7 @@ def quick_plot(data, *args, **kwargs):
         grid = (6, 1)  # aka shape
         top_loc = (0, 0)
         bot_loc = (5, 0)
-        # """--== SEP_LINE ==--"""
-        # df = df.temp_c.astype(float)
-        # df = df.temp_f.astype(float)
-        # df.plot(x="dtime", y=["temp_c", "temp_f"], kind='bar')
-        # plt.show()
-        # dbug('ask')
+        """--== SEP_LINE ==--"""
         top_plt = plt.subplot2grid(grid, top_loc, rowspan=5, colspan=1)  # THIS SEEMS PROBLEMATIC, NOT SURE WHY - if chromebook... reboot
         # dbug(selections_l)
         top_plt.plot(df[selections_l], label=selections_l)
@@ -13085,16 +12769,16 @@ def do_func_docs():
     purpose: to get function docs
     returns: prints selected function __doc__ boxed and centered
     """
-    # """--== SAMPLE TABLE ==--"""
+    """--== SAMPLE TABLE ==--"""
     # gtable(tst_d, 'prnt', 'wrap', title="Simple tst_d no col_limit so default?", footer=dbug('here'))
     # dbug('ask')
-    # """--== SAMPLE TABLE 2 ==--"""
+    """--== SAMPLE TABLE 2 ==--"""
     # gtable(tst_d, 'prnt', 'wrap', title='tst_d with list type items no  col_limit', footer=dbug('here'))
     # dbug('ask')
-    # """--== SAMPLE TABLE 3 ==--"""
+    """--== SAMPLE TABLE 3 ==--"""
     # gtable(tst_d, 'prnt', 'wrap', title="tst_d no col_limit", footer=dbug('here'))
     # dbug('ask')
-    # """--== SEP_LINE ==--"""
+    """--== SEP_LINE ==--"""
     # """--== Get a list of all func except a few... ==--"""
     my_lines = grep_lines(__file__, r"^def .*\(")
     my_funcs_l = [x.replace("def ", "") for x in my_lines]
@@ -13133,7 +12817,7 @@ def has_substr(text_s, chk_l, *args, **kwargs):
     notes:
         used in quick_plot()
     """
-    ci_b = bool_val(["ci", "case_insensitive"], args, kwargs, dflt=False)
+    ci_b = arg_val(["ci", "case_insensitive"], args, kwargs, dflt=False)
     if ci_b:
         text_s = text_s.lower()
     has_substr_b = False
@@ -13215,9 +12899,9 @@ def fix_docstring(docstring, *args, **kwargs):
     returns: list of "fixed" lines
     """
     """--== Config ==--"""
-    prnt_b = bool_val(['prnt', 'print'], args, kwargs, dflt=False)
-    centered_b = bool_val(['center', 'centered'], args, kwargs, dflt=False)
-    boxed_b = bool_val(['box', 'boxed'], args, kwargs, dflt=False)
+    prnt_b = arg_val(['prnt', 'print'], args, kwargs, dflt=False)
+    centered_b = arg_val(['center', 'centered'], args, kwargs, dflt=False)
+    boxed_b = arg_val(['box', 'boxed'], args, kwargs, dflt=False)
     length = kvarg_val(['length', 'width', 'wrap'], kwargs, dflt=0)  # default=0 (no wrap)
     title = kvarg_val(["title"], kwargs, dflt="")
     footer = kvarg_val(['footer'], kwargs, dflt="")
@@ -13252,7 +12936,7 @@ def get_mod_docs(mod=__file__, *args, fn="*", **kwargs):
     """--== Imports ==--"""
     # import inspect
     # from inspect import getmembers, isfunction
-    # boxed_b = bool_val(["boxed", "box"], args, kwargs, dflt=True)
+    # boxed_b = arg_val(["boxed", "box"], args, kwargs, dflt=True)
     """--== SEP_LINE ==--"""
     funcs = []
     exclude = ["main", "tst", "demo", "qnd"]
@@ -13286,55 +12970,7 @@ def get_mod_docs(mod=__file__, *args, fn="*", **kwargs):
         if not askYN("Continue? ", 'centered'):
            selected = "q" 
     return
-    # # exclude_l = ["main", 'tst', 'do_func_demos']
-    # # md = __import__(mod)
-    # funcs = grep_lines(__file__, "^def .*\(.*\):")
-    # # funcs_l = []
-    # # for func in funcs:
-    # with open(__file__, "r") as f:
-    #     for line in f:
-    #         dbug(line)
-    #         # dbug(func)
-    #         # myfunc = func.split('(')[0]
-    #         # dbug(myfunc)
-    #         this_func = re.match("^def (.*?\\().*:", line)
-    #         if this_func is None:
-    #             continue
-    #         dbug(this_func, 'ask')
-    # dbug(funcs,'ask')
-    # # funcs = [f for _, f in getmembers(md, isfunction) if f.__module__ == md.__name__]
-    # excludes = ['_demo', '_tst', 'main']
-    # # funcs = [f_o for f_o in funcs if not gcontains(f_o.__name__, excludes)]
-    # funcs = [f_o for f_o in funcs if not gcontains(funcs, excludes)]
-    # dbug(funcs, 'ask')
-    # cnt = 0
-    # dbug(len(funcs))
-    # for func in funcs:
-    #     dbug(func)
-    #     continue
-    #     dbug(f"Processing func: {func}")
-    #     # name = __file__
-    #     # diff = 20 - len(name)
-    #     # name = name + ":" + " "*diff
-    #     name = func + "(...)"
-    #     box1 = [name]
-    #     # doc = f_o.__doc__
-    #     doc = func.__doc__
-    #     dbug(doc)
-    #     doc_l = doc.split("\n")
-    #     doc_l = [ln.strip() for ln in doc_l if ln.strip() != '']
-    #     if boxed_b:
-    #         box2 = boxed(doc_l, width=80)
-    #     else:
-    #         # dbug(f"Here we go boxed_b {boxed_b}")
-    #         box2 = doc_l
-    #     lines = gcolumnize([box1, box2])
-    #     lines.append(("--------------"))
-    #     lines = [escape_ansi(ln) for ln in lines]
-    #     printit(lines)
-    #     cnt += 1
-    # return cnt
-    # # ### EOB def get_mod_docs(mod=__file__, fn="*"): ### #
+    # ### EOB def get_mod_docs(mod=__file__, fn="*"): ### #
 
 
 # ##################################
@@ -13369,9 +13005,9 @@ def columned(my_l, *args, **kwargs):
     # """--== Config ==--"""
     cols = kvarg_val(["cols", 'num_cols'], kwargs, dflt=0)
     # dbug(cols)
-    prnt = bool_val(['prnt', 'print'], args, kwargs, dflt=False)
-    boxed_b = bool_val(["boxed", "box"], args, kwargs, dflt=False)
-    centered_b = bool_val(["centered", "center"], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print'], args, kwargs, dflt=False)
+    boxed_b = arg_val(["boxed", "box"], args, kwargs, dflt=False)
+    centered_b = arg_val(["centered", "center"], args, kwargs, dflt=False)
     color = kvarg_val(["color", "clr"], kwargs, dflt="")
     box_color = kvarg_val(["box_color", "box_clr"], kwargs, dflt="")
     title = kvarg_val("title", kwargs, dflt="")
@@ -13379,7 +13015,7 @@ def columned(my_l, *args, **kwargs):
     justify = kvarg_val(["just", "justify"], kwargs, dflt='left')
     order = kvarg_val(["order", 'orient', 'orientation'], kwargs, dflt="v")
     # dbug(order)
-    pivot_b = bool_val(["pivot", "pivot_b", "invert"], args, kwargs, dflt=False)
+    pivot_b = arg_val(["pivot", "pivot_b", "invert"], args, kwargs, dflt=False)
     sep = kvarg_val(["sep"], kwargs, dflt=" | ")
     pad = kvarg_val(["pad"], kwargs, dflt=" ")
     blank = kvarg_val("blank", kwargs, dflt="...")
@@ -13506,12 +13142,12 @@ def dtree(dir_name="./", *args, **kwargs):
     # dbug(kwargs)
     # dbug(dir_name)
     # """--== Config ==--"""
-    prnt = bool_val(["prnt", "print", "show"], args, kwargs, dflt=False)
+    prnt = arg_val(["prnt", "print", "show"], args, kwargs, dflt=False)
     # dbug(prnt)
-    files_b = bool_val(["files", "f"], args, kwargs, dflt=False)
-    boxed_b = bool_val(["boxed", "box"], args, kwargs, dflt=False)
+    files_b = arg_val(["files", "f"], args, kwargs, dflt=False)
+    boxed_b = arg_val(["boxed", "box"], args, kwargs, dflt=False)
     box_clr = kvarg_val(['box_clr', 'box_color'], kwargs, dflt="white! on black")
-    centered_b = bool_val(["centered", "center", "cntr"], args, kwargs, dflt=False)
+    centered_b = arg_val(["centered", "center", "cntr"], args, kwargs, dflt=False)
     excludes = kvarg_val(["exclude", "excludes", "filer", "filters"], kwargs, dflt=[])
     length = kvarg_val(["length"], kwargs, dflt=3)
     title = kvarg_val("title", kwargs, dflt="")
@@ -13582,7 +13218,7 @@ def isinterect(list1, list2, *args, **kwargs):
     notes: used by boxed()
     """
     """--== Config ==--"""
-    lst_b = bool_val(['lst', 'list'], args, kwargs, dflt=False)
+    lst_b = arg_val(['lst', 'list'], args, kwargs, dflt=False)
     """--== Process ==--"""
     if lst_b:
         list3 = [value for value in list1 if value in list2]
@@ -13623,25 +13259,26 @@ def chklst(chk_l, chkd_l=[], *args, **kwargs):
         - select: bool        # default=False is select True then a while loop will accumulate chkd response and return that list when "q" or "Q" or "" is entered
         - stats_b: bool       # default=False - whether to display statistics (percent of checked) - only works when select is True
         - cls: bool           # default=False - only useful with option select, if set to True the screen will be cleared between selections
+        - timeout: int      # question will timeout after declared seconds with the default as the answer
     returns: list  # printable lines or if option select=True  a list of checked items (chkd_l)
     notes:
     useage:
-        | chk_l = ["one", "two", "three"]
-        | chkd_l = []
-        | chkd_l = chklst(chk_l, chkd_l, 'select', 'centered', 'stats')
+        chk_l = ["one", "two", "three"]
+        chkd_l = []
+        chkd_l = chklst(chk_l, chkd_l, 'select', 'centered', 'stats')
         # ### or ### #
-        | from gtoolz import cls, chklst, cinput
-        | ans = []
-        | chk_l = ["one", "two", "three"]
-        | chkd_l = []
-        | while ans not in ("q", "Q", ""):
-        |     cls()
-        |     chklst(chk_l, chkd_l, 'prnt', 'centered', 'boxed', title="What has been done", footer=dbug('here'))
-        |     ans =  cinput("Select which it you would like to work on (q)uit: ")
-        |     if ans in ("q", "Q", ""):
-        |         break
-        |     chkd_l.append(ans)
-        | chklst(my_l, chkd_l, 'prnt', title="Completed", footer=dbug('here'))
+        from gtoolz import cls, chklst, cinput
+        ans = []
+        chk_l = ["one", "two", "three"]
+        chkd_l = []
+        while ans not in ("q", "Q", ""):
+            cls()
+            chklst(chk_l, chkd_l, 'prnt', 'centered', 'boxed', title="What has been done", footer=dbug('here'))
+            ans =  cinput("Select which one you would like to work on (q)uit: ", timeout=timeout)
+            if ans in ("q", "Q", ""):
+                break
+            chkd_l.append(ans)
+        chklst(my_l, chkd_l, 'prnt', title="Completed", footer=dbug('here'))
     """
     # import unicodedata
     # """--== Debugging ==--"""
@@ -13653,9 +13290,9 @@ def chklst(chk_l, chkd_l=[], *args, **kwargs):
     # """--== Config ==--"""
     dflt = kvarg_val(["dflt", 'default'], kwargs, dflt='empty')
     xed_l = kvarg_val(["xed_l", "xs", "xes", "x's", "xed", "fail", "failed"], kwargs, dflt=[])
-    centered_b = bool_val(["centered", "center"], args, kwargs, dflt=False)
-    boxed_b = bool_val(["boxed", "box"], args, kwargs, dflt=False)
-    prnt = bool_val(["prnt", "print", "show"], args, kwargs, dflt=False)
+    centered_b = arg_val(["centered", "center"], args, kwargs, dflt=False)
+    boxed_b = arg_val(["boxed", "box"], args, kwargs, dflt=False)
+    prnt = arg_val(["prnt", "print", "show"], args, kwargs, dflt=False)
     # dbug(prnt)
     chkbox_clr = kvarg_val(["box_clr", "box_color", 'chkbox_clr', 'checkbox_clr'], kwargs, dflt="")
     master_box_clr = kvarg_val(["master_box_clr", "master_box_color", "mstrbox_clr", "masterbox_clr", 'main_box_clr', 'mainbox_clr'], kwargs, dflt="white! on black")
@@ -13664,16 +13301,17 @@ def chklst(chk_l, chkd_l=[], *args, **kwargs):
     chkmark_clr = kvarg_val(["checkmark_clr", 'chkmark_clr', 'checkmark_color', 'chkd_clr'], kwargs, dflt="green!")
     xmark_clr = kvarg_val(["xmark_clr", 'xmark_clr', 'xmark_color', 'xed_clr'], kwargs, dflt="red!")
     style = kvarg_val(["style"], kwargs, dflt="checkbox")
-    # ballot_b = bool_val(["ballot"], args, kwargs, dflt=True)
-    chkbox_b = bool_val(["check_box", 'chk_box', 'chkbox', 'chkbx', 'simple'], args, kwargs, dflt=False)
+    # ballot_b = arg_val(["ballot"], args, kwargs, dflt=True)
+    chkbox_b = arg_val(["check_box", 'chk_box', 'chkbox', 'chkbx', 'simple'], args, kwargs, dflt=False)
     title = kvarg_val("title", kwargs, dflt="")
     footer = kvarg_val("footer", kwargs, dflt="")
     cols = kvarg_val("cols", kwargs, dflt=1)
-    indx = bool_val(["numbered", "indx", "indexed", "nums"], args, kwargs, dflt=False)
-    select_b = bool_val(["select", 'menu'], args, kwargs, dflt=False)
+    indx = arg_val(["numbered", "indx", "indexed", "nums"], args, kwargs, dflt=False)
+    select_b = arg_val(["select", 'menu'], args, kwargs, dflt=False)
     prompt = "Selection: "
-    stats_b = bool_val(["stats", "score", "statistics"], args, kwargs=False)
-    cls_b = bool_val(["clear", 'cls'], args, kwargs, dflt=False)
+    stats_b = arg_val(["stats", "score", "statistics"], args, kwargs=False)
+    cls_b = arg_val(["clear", 'cls'], args, kwargs, dflt=False)
+    timeout = arg_val(['timeout'], args, kwargs, dflt=0)
     # dbug(style)
     # dbug("\u2713")  # check mark
     # dbug("\u2714")  # bold check mark
@@ -13681,6 +13319,24 @@ def chklst(chk_l, chkd_l=[], *args, **kwargs):
     # dbug("\u2716")  # bold X
     # dbug("\u2717")  # stylized X
     # dbug("\u2718")  # bold stylized X
+    """--== demo ==--"""
+    if chk_l == 'demo':
+        my_chk_l = ["one", "two", "three"]
+        my_chkd_l = []
+        my_chkd_l = chklst(my_chk_l, my_chkd_l) # , 'select', 'centered', 'stats')
+        # ### or ### #
+        from gtoolz import cls, chklst, cinput
+        ans = []
+        chk_l = ["one", "two", "three"]
+        chkd_l = []
+        while ans not in ("q", "Q", ""):
+            cls()
+            chklst(chk_l, chkd_l, 'prnt', 'centered', 'boxed', title="What has been done", footer=dbug('here'))
+            ans =  cinput("Select which item you would like to work on (q)uit: ", timeout=timeout)
+            if ans in ("q", "Q", ""):
+                break
+            chkd_l.append(ans)
+        chklst(chk_l, chkd_l, 'prnt', title="Completed", footer=dbug('here'))
     """--== Init ==--"""
     chk_l = [item.strip() for item in chk_l]    # make sure items are stripped
     chkd_l = [str(item).strip() for item in chkd_l]  # make sure items are stripped
@@ -13688,10 +13344,6 @@ def chklst(chk_l, chkd_l=[], *args, **kwargs):
     CHKBOX_CLR = gclr(chkbox_clr)
     CHKMARK_CLR = gclr(chkmark_clr)
     XMARK_CLR = gclr(xmark_clr)
-    # dbug(CHKBOX_CLR + "chkbox_clr" + RESET)
-    # dbug(CHKMARK_CLR + "chkmark_clr" + RESET)
-    # dbug(XMARK_CLR + "xmark_clr" + RESET)
-    # style_d syntax     [empty_box, chkd_box,  xed_box]
     # note 2716 is bold X 2718 is italisized X
     style_d = {'ballot': [f"{CHKBOX_CLR}{chr(9744)} {RESET}",
                           f"{CHKMARK_CLR}{chr(9745)} {RESET}",
@@ -13754,9 +13406,9 @@ def chklst(chk_l, chkd_l=[], *args, **kwargs):
                 stats_prcnt = round((int(len(chkd_l)) * 100 / int(len(chk_l))), 2)
                 printit(f"Stats: {len(chkd_l)}/{len(chk_l)} {stats_prcnt} %", centered=centered_b)
             if centered_b:
-                ans = cinput(prompt)
+                ans = cinput(prompt, timeout=timeout)
             else:
-                ans = input(prompt)
+                ans = cinput(prompt, centered=False, timeout=timeout )
             if isnumber(ans):
                 ans_num = int(ans) - 1
                 # dbug(ans_num)
@@ -13790,10 +13442,6 @@ def do_cli(cmd, args_s, *args, **kwargs):
         do_close()
     # dbug(cmd)
     # dbug(args_s)
-    # limit_cmds = ['printit', 'boxed', 'centered', 'chklst', 'gselect', 'gblock', 'gcolumnize', 'gtable']
-    # if cmd not in limit_cmds:
-        # dbug("cmd: {cmd} not found... ")
-    # else:
     args_d = get_args(args_s)
     args = args_d['args']
     kwargs = args_d['kwargs']
@@ -13842,13 +13490,14 @@ def data_stats(data, *args, **kwargs):
         - title: str
         - footer: str
         - excludes: list                                 # list of [colnames] to exclude
-        - includes: list=colnames                        # all colnames unless declared otherwise
+        - includes|selected: list=colnames               # all colnames unless declared otherwise
         - neg: bool                                      # default=True, shows negative values as red and positive values as gree
-        - human: bool                                    # default=True, displays large numbers with ("T","G","B"...) 
+        - human: bool|list                               # default=True, displays large numbers with ("T","G","B"...) 
         - centered: bool                                 # default=False
         - prnt: bool                                     # default=False
         - stats: list=['count','sum','avg',...           # choose specific stats to calculate
                        ...min, max, median, stdev]       # stdev = standard deviation
+        - rtrn_type: str default=""                      # default will return stats_d (all the possible stats) if this is set to 'table' | 'tbl' then it will return the table
         - pivot: bool=False                              # this will allow transposing the columns with the row ie: pivoting the table
     return: dictionary of dictionaries syntax = {colname: {'sum': val, 'avg': val, ...},...}
     notes:
@@ -13857,20 +13506,22 @@ def data_stats(data, *args, **kwargs):
     """--== Imports ==--"""
     import statistics
     """--== Config ==--"""
-    prnt = bool_val(['prnt', 'print'], args, kwargs, dflt=False)
-    centered_b = bool_val(['cntrd', 'cntr', 'centered', 'center'], args, kwargs, dflt=False)
+    prnt = arg_val(['prnt', 'print'], args, kwargs, dflt=False)
+    centered_b = arg_val(['cntrd', 'cntr', 'centered', 'center'], args, kwargs, dflt=False)
     title = kvarg_val(['title'], kwargs, dflt="Statistics")
     footer = kvarg_val(['footer'], kwargs, dflt="")
     rnd = kvarg_val(['rnd', 'round'], kwargs, dflt=2)
-    neg_b = bool_val(['neg', 'cond'], args, kwargs, dflt=True)
-    rnd = bool_val(['rnd'], args, kwargs, dflt=2)
+    neg_b = arg_val(['neg', 'cond'], args, kwargs, dflt=True)
+    rnd = arg_val(['rnd'], args, kwargs, dflt=2)
     excludes = kvarg_val(['exclude', 'excludes'], kwargs, dflt=[])
-    includes = arg_val(['include', 'includes', 'include_cols'], args, kwargs, dflt=[])
+    includes = arg_val(['include', 'includes', 'include_cols', 'selected'], args, kwargs, dflt=[])
     colors = kvarg_val(['colors', 'clrs'], kwargs, dflt=[])
     colnames = kvarg_val(['colnames'], kwargs, dflt=[])
     stats_l = arg_val(['stats'], args, kwargs, dflt=[])
-    pivot_b = bool_val(['pivot', 'pivot_b', 'transpose'], args, kwargs, dflt=False)
-    human = bool_val(["human", "H", "h"], args, kwargs, dfault=False)
+    pivot_b = arg_val(['pivot', 'pivot_b', 'transpose'], args, kwargs, dflt=False)
+    pivot_b = not pivot_b  # we want it in reversed order first to strech cols across the top - seems more natural that way
+    human = arg_val(["human", "H", "h"], args, kwargs, dfault=False)
+    rtrn_type = arg_val(['rtrn_type', 'rtype', 'return_type', 'type'], args,kwargs, dfl="stats")
     """--== Verify ==--"""
     if not isempty(args) and isinstance(args[0], list):
         dbug(f"Make this args[0]: {args[0]} a kwarg(s) ie:  includes={args[0]}....")
@@ -13892,7 +13543,8 @@ def data_stats(data, *args, **kwargs):
     # for my_stat in stats_l:
     for my_stat in poss_stats_l:
         row = [my_stat.capitalize()]
-        for col in colnames[1:]:
+        # for col in colnames[1:]:
+        for col in colnames:
             if col in excludes:
                 row.append(["-"*len(col)])
                 continue
@@ -13900,6 +13552,7 @@ def data_stats(data, *args, **kwargs):
                 continue
             colname_idx = colnames.index(col)
             # values1 = [float(escape_ansi(row[colname_idx])) for row in data if isnumber(row[colname_idx])]
+            # dbug(values1)
             values = [cond_num(row[colname_idx], 'uncond') for row in data if isnumber(row[colname_idx])]
             # dbug(values)
             if len(values) < 1:
@@ -13934,15 +13587,24 @@ def data_stats(data, *args, **kwargs):
                 my_max = max(values)
                 stats_d[col]['max'] = my_max
             if my_stat == 'stdev':
-                my_stdev = statistics.stdev(values)
-                my_stdev = round(float(my_stdev), rnd)
+                # dbug(len(values))
+                if len(values) > 1:  # you have to have at least two data points
+                    my_stdev = statistics.stdev(values)
+                    my_stdev = round(float(my_stdev), rnd)
+                else:
+                    my_stdev = 0
                 stats_d[col]['stdev'] =  my_stdev
-    colnames = ['columns'] + stats_l
+    # dbug(f"stats_l: {stats_l} colnames: {colnames}")
+    # colnames = ['columns'] + stats_l
+    # dbug(f"human: {human}, pivot_b: {pivot_b}")
+    my_table = gtable(stats_d, 'hdr', prnt=False, title=title, footer=footer, rnd=rnd, neg=neg_b, human=human, colors=colors, pivot=pivot_b, selected=stats_l)
     if prnt:
-        # dbug("selected = stats_l: {stats_l}")
-        gtable(stats_d, 'hdr', 'prnt', title=title, footer=footer, centered=centered_b,  rnd=rnd, neg=neg_b, human=human, colors=colors, pivot=pivot_b, selected=stats_l)
+        printit(my_table, centered=centered_b)
     # dbug(stats_d,'ask')
-    return stats_d
+    if rtrn_type in ('table', 'tbl'):
+        return (my_table)
+    else:
+        return stats_d
     # ### EOB def data_stats(data, *args, **kwargs): ### #
 
 
@@ -13956,9 +13618,6 @@ def main(args=""):  # ######
     # ### Note: {0}-cli <cmd. [<fargs>...] is handles by handeOPTS ### #
     #       ie: {0} <cmd> [<fargs>...]
     # dbug(args, 'ask')
-    # if args == "":
-        # main_args = docopt(handleOPTS.__doc__, version=SCRIPT + "\nversion: " + __version__)
-        # handleOPTS(main_args)
     """--== SEP_LINE ==--"""
     if not args['-T'] or '-cli' not in sys.argv[0]:
         do_logo("companionway", box_color="red! on black!")
