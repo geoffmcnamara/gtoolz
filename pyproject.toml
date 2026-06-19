@@ -9,7 +9,8 @@ description = "This package provides a multitude of functions or classes to mani
 readme = "README.md"
 requires-python = ">= 3.8"
 classifiers = [ "Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux",]
-dependencies = [ "docopt", "pandas",]
+# dependencies = [ "docopt", "pandas",]
+dependencies = [ "docopt",]
 
 [[project.authors]]
 name = "Geoff McNamara"
@@ -23,8 +24,8 @@ base_dir = "/home/geoffm/dev/python/gtoolz"
 orig_dir = "/home/geoffm/dev/python/gmodules"
 base_dir = "/home/geoffm/dev/python/gtoolz"
 
-[project.scripts]
-gtoolz-cli = "gtoolz:main"
+# [project.scripts]
+# gtoolz-cli = "gtoolz:main"
 
 [project.urls]
 Homepage = "https://github.com/geoffmcnamara/gtoolz"
