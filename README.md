@@ -4,18 +4,10 @@ This repository is for holding python(3+) tools that I frequently need
 
 ## Install
 
-pip install gtoolz
+You can install the latest version directly from GitHub:
 
-  or
-
-see: [https://github.com/geoffmcnamara/gtoolz]
-
-Note: In version 0.1.5 I lowered the required Pandas version. As a result you may have to install the latest version specifically:
-   eg: pip install gtoolz==0.1.5  # or latest version
-
-## Use
-
-Simply run gtoolz.py (or see ./test/test_gtoolz.py) to see some of the possible uses.
+```bash
+pip install git+[https://github.com/geoffmcnamara/gtoolz.git](https://github.com/geoffmcnamara/gtoolz.git)
 
 ## Features
 
