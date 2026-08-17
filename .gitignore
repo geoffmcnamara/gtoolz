@@ -66,9 +66,8 @@ Pipfile
 # C extensions
 *.so
 
-# Distribution / packaging / venv testing
+# Distribution / packaging 
 .Python
-venv/
 env/
 ENV/
 build/
@@ -85,8 +84,6 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-venv/
-.venv/
 
 # IDEs
 .vscode/

@@ -64,7 +64,8 @@ import ast
 
 
 # ### DUNDERS ### #
-__version__ = '0.1.6a0 ' + __file__  # VERSION
+VERSION = '0.1.6a0' 
+version = VERSION + __file__  # VERSION
 
 # ### GLOBALS ### #
 dtime = datetime.now().strftime("%Y%m%d-%H%M")
@@ -4090,6 +4091,8 @@ def do_logo(content="", *args, **kwargs):
     return lines
     # ### EOB def do_logo(content="", *args, hchr="-", prnt=True, figlet=False, center=True, box=True, shadow=False, color='red', **kwargs): ### #
 
+# alias
+do_open = do_logo
 
 # #########
 def cls():

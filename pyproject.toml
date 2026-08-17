@@ -13,3 +13,14 @@ dependencies = [
 [tool.setuptools]
 py-modules = ["gtoolz"]
 
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "$version"
+version = "0.1.6a0"
+version_scheme = "pep440"
+version_provider = "commitizen"
+version_files = [
+    "gtoolz.py:VERSION"
+]
+update_changelog_on_bump = true
+major_version_zero = true
