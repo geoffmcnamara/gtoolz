@@ -1345,6 +1345,9 @@ def called_from(*args, **kwargs):
     this_stack = inspect.stack()
     # dbug(stack[1][1])  # file name
     stack_num = 1
+    caller_filename = os.path.basename(this_stack[stack_num][1])
+    caller_funcname = this_stack[stack_num][3]
+    caller_lineno = this_stack[stack_num][3]
     for stack_num in range(2, len(this_stack)):  # start as 1 because 0 is itself 
         caller_filename = os.path.basename(this_stack[stack_num][1])
         caller_funcname = this_stack[stack_num][3]
@@ -6662,6 +6665,7 @@ def parse_codes(msg, rtrn_type='dict', *args, **kwargs):
     """
     # """--== Local Import(s) ==--""" #
     # from gtoolz import clr_coded
+    import wcwidth
     # """--== Config ==--""" #
     # ddbug(f"{rtrn_type=} {called_from('v')} {msg=}")
     rtrn_type = arg_val(["rtrn", "type", "rtrntype","rtrn_type"], args, kwargs, dflt=rtrn_type)
@@ -6670,7 +6674,8 @@ def parse_codes(msg, rtrn_type='dict', *args, **kwargs):
     # ddbug(f"{repr(msg)=}")
     rtrn = None
     # pat = r"\x1b\[[0-9;]+m"
-    pat = r"\x1b\[[0-9;]*m"
+    # pat = r"\x1b\[[0-9;]*m"
+    pat = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
     # ddbug(f"{pat=}")
     msg = str(msg)  # needed
     # """--== Convert ==--""" #
@@ -6696,6 +6701,8 @@ def parse_codes(msg, rtrn_type='dict', *args, **kwargs):
         rtrn = "".join(elems_l)
     if rtrn_type in ('nclen', 'len', 'length'):
         rtrn = len("".join(elems_l))
+        # final fix for unicode chars
+        rtrn = wcwidth.wcswidth("".join(elems_l))
         # dbug(type(rtrn))
     # ddbug(f"{rtrn_type=}")
     # """--== return ==--""" #
@@ -9401,7 +9408,7 @@ def gtable(lol, *args, **kwargs):
     skip = arg_val(['skip'], args, kwargs, dflt=False)  # skip non-compliant lines/rows?
     # ignore_b = arg_val(['ignore'], args, kwargs, dflt=False)  # skip non-compliant lines/rows?
     cols = kvarg_val(["cols", "columns", "chunks", "splits"], kwargs, dflt=1)
-    # dbug(cols)
+    # dbug(cols, 'ask')
     # dbug(kwargs)
     width = kvarg_val(['width', 'w'], kwargs, dflt=0)
     # dbug(f"width: {width} cols: {cols} {called_from()}")
@@ -9880,10 +9887,12 @@ def gtable(lol, *args, **kwargs):
         if cols > cols_limit and cols_limit > 1:
             cols = cols_limit
         # dbug(lol)
+        # dbug(f"{cols=}")
         if pivot_b:
             len_orig_lol = len(lol) - 1  # removing colnames/hdr from count
-            if cols > len_orig_lol:
+            if cols > len_orig_lol and len_orig_lol > 1:
                 cols = len_orig_lol
+        # dbug(f"{cols=}")
         size = math.ceil((len(lol) / cols))
         # dbug(size)
         # dbug(f"len(lol): {len(lol)} cols: {cols} cols_limit: {cols_limit} size: {size}")
@@ -9926,6 +9935,7 @@ def gtable(lol, *args, **kwargs):
         scr_cols = int(get_columns())
         max_ln_len = parse_codes(lines[0], 'nclen')
         if max_ln_len > scr_cols and prnt:
+            dbug(f"Line length {max_ln_len=} exceeds scr width {scr_cols=}....")
             num_cols = len(lol[0])
             num_rows = len(lol)
             pivot_msg = ""
@@ -9940,8 +9950,8 @@ def gtable(lol, *args, **kwargs):
             # dbug(f"Returning None ... {called_from()}... prnt: {prnt} col_limit: {max_col_len}", 'ask')
             return None
         if boxed_b:
-            dbug(f"Sending to boxed strip=False my_txt_center: {my_txt_center} centered_b: {centered_b}")
-            my_txt_center = 99
+            # dbug(f"Sending to boxed strip=False my_txt_center: {my_txt_center} centered_b: {centered_b} hmmmm {cols=}")
+            my_txt_center = 999  # arbitrary
             # lines = gblock(lines)
             # dbug("printing lines")
             # dbug(centered_b)
