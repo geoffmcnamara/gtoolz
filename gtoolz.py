@@ -65,7 +65,7 @@ import logging
 
 
 # ### DUNDERS ### #
-VERSION = '0.1.6' 
+VERSION = '0.1.7' 
 version = VERSION + __file__  # VERSION
 
 # ### GLOBALS ### #
