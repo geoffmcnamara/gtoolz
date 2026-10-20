@@ -30,6 +30,7 @@ CVS*
 *.*~
 *.swp
 .#*
+ARCH/
 
 # config files
 flake8
